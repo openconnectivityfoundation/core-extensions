@@ -256,6 +256,19 @@
         "allOf": [
           {
             "$ref": "https://raw.githubusercontent.com/openconnectivityfoundation/core/Bugzilla-2709/swagger2.0/oic.wk.d.swagger.json#/definitions/Device"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "s": {
+                "description": "Device status available from the OCF Cloud, which tracks if the device has opened TCP connection and is signed in",
+                "type": "string",
+                "enum": [
+                  "online",
+                  "offline"
+                ]
+              }
+            }
           }
         ],
         "example": {
@@ -263,7 +276,7 @@
             "oic.wk.d"
           ],
           "di": "53080a4f-5e3e-4291-802f-3436238232d2",
-          "s": 1,
+          "s": "online",
           "n": "Food safety sensor",
           "dmv": "2.0.0",
           "dmno": "Q101"
@@ -272,7 +285,7 @@
       "deviceWithLinks": {
         "allOf": [
           {
-            "$ref": "https://raw.githubusercontent.com/openconnectivityfoundation/core/Bugzilla-2709/swagger2.0/oic.wk.d.swagger.json#/definitions/Device"
+            "$ref": "#/components/schemas/device"
           },
           {
             "type": "object",
@@ -289,7 +302,7 @@
                 "oic.wk.d"
               ],
               "di": "53080a4f-5e3e-4291-802f-3436238232d2",
-              "s": 1,
+              "s": "online",
               "n": "Food safety sensor",
               "dmv": "2.0.0",
               "dmno": "Q101",
