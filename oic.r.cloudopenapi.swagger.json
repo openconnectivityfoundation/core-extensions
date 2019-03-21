@@ -1,0 +1,366 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OCF Cloud Open API",
+    "version": "0.0.1"
+  },
+  "paths": {
+    "/devices": {
+      "get": {
+        "tags": [
+          "Devices"
+        ],
+        "summary": "Get all devices",
+        "description": "Get all devices which are signed up to the OCF Cloud - either `online` or `offline`. To filter only devices with a specific status, use the query parameter `s`. Devices which are `online` are signed in to the system and are accessible. Offline devices are signed up to the system, but currently disconnected.\n",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/correlationId"
+          },
+          {
+            "$ref": "#/components/parameters/status"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of devices",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/device"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/devices/{deviceId}": {
+      "get": {
+        "tags": [
+          "Devices"
+        ],
+        "summary": "Get the device by ID",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/correlationId"
+          },
+          {
+            "$ref": "#/components/parameters/deviceId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Device and it's resources",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/deviceWithLinks"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/notFound"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/devices/{deviceId}/{resourceLinkHref}": {
+      "get": {
+        "tags": [
+          "Resources"
+        ],
+        "summary": "Retrieve resource values",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/correlationId"
+          },
+          {
+            "$ref": "#/components/parameters/deviceId"
+          },
+          {
+            "$ref": "#/components/parameters/resourceLinkHref"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource values",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/resourceRetrieveResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/notFound"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Resources"
+        ],
+        "summary": "Update resource values",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/correlationId"
+          },
+          {
+            "$ref": "#/components/parameters/deviceId"
+          },
+          {
+            "$ref": "#/components/parameters/resourceLinkHref"
+          }
+        ],
+        "requestBody": {
+          "description": "Map of resource values to be updated",
+          "content": {
+            "*/*": {
+              "schema": {
+                "$ref": "#/components/schemas/resourceUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Resource values updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/resourceRetrieveResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/notFound"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "parameters": {
+      "deviceType": {
+        "name": "rt",
+        "in": "query",
+        "description": "Filter devices by device type",
+        "style": "form",
+        "explode": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "resourceLinkHref": {
+        "name": "resourceLinkHref",
+        "in": "path",
+        "description": "Path to resource",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "correlationId": {
+        "name": "Correlation-Id",
+        "in": "header",
+        "description": "Cross request logging correlation id",
+        "schema": {
+          "type": "string"
+        },
+        "example": "53080a4f-5e3e-4291-802f-3436238232d1"
+      },
+      "deviceId": {
+        "name": "deviceId",
+        "in": "path",
+        "description": "Id of the device",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "status": {
+        "name": "s",
+        "in": "query",
+        "description": "Filter devices by device status",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "online",
+            "offline"
+          ]
+        }
+      }
+    },
+    "responses": {
+      "unauthorized": {
+        "description": "Unauthorized",
+        "content": {}
+      },
+      "notFound": {
+        "description": "Not found",
+        "content": {}
+      }
+    },
+    "schemas": {
+      "device": {
+        "allOf": [
+          {
+            "$ref": "https://raw.githubusercontent.com/openconnectivityfoundation/core/Bugzilla-2709/swagger2.0/oic.wk.d.swagger.json#/definitions/Device"
+          }
+        ],
+        "example": {
+          "rt": [
+            "oic.wk.d"
+          ],
+          "di": "53080a4f-5e3e-4291-802f-3436238232d2",
+          "s": 1,
+          "n": "Food safety sensor",
+          "dmv": "2.0.0",
+          "dmno": "Q101"
+        }
+      },
+      "deviceWithLinks": {
+        "allOf": [
+          {
+            "$ref": "https://raw.githubusercontent.com/openconnectivityfoundation/core/Bugzilla-2709/swagger2.0/oic.wk.d.swagger.json#/definitions/Device"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "links": {
+                "type": "array",
+                "items": {
+                  "$ref": "https://raw.githubusercontent.com/openconnectivityfoundation/core/Bugzilla-2709/swagger2.0/oic.wk.res.swagger.json#/definitions/oic.oic-link"
+                }
+              }
+            },
+            "example": {
+              "rt": [
+                "oic.wk.d"
+              ],
+              "di": "53080a4f-5e3e-4291-802f-3436238232d2",
+              "s": 1,
+              "n": "Food safety sensor",
+              "dmv": "2.0.0",
+              "dmno": "Q101",
+              "links": [
+                {
+                  "href": "/53080a4f-5e3e-4291-802f-3436238232d2/humidity",
+                  "rt": [
+                    "oic.r.humidity"
+                  ],
+                  "if": [
+                    "oic.if.s"
+                  ],
+                  "p": {
+                    "bm": 3
+                  },
+                  "eps": [
+                    {
+                      "ep": "coaps://[fe80::b1d6]:1111",
+                      "pri": 2
+                    },
+                    {
+                      "ep": "coap+tcp://[2001:db8:a::123]:2222",
+                      "pri": 3
+                    }
+                  ]
+                },
+                {
+                  "href": "/temperature",
+                  "rt": [
+                    "oic.r.temperature"
+                  ],
+                  "if": [
+                    "oic.if.s"
+                  ],
+                  "p": {
+                    "bm": 3
+                  },
+                  "eps": [
+                    {
+                      "ep": "coaps://[fe80::b1d6]:1111",
+                      "pri": 2
+                    },
+                    {
+                      "ep": "coap+tcp://[2001:db8:a::123]:2222",
+                      "pri": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "resourceUpdateRequest": {
+        "type": "object",
+        "description": "Values of resources to be updated",
+        "example": {
+          "desiredHumidity": 45
+        }
+      },
+      "resourceRetrieveResponse": {
+        "type": "object",
+        "description": "Values of resource",
+        "example": {
+          "types": [
+            "oic.r.humidity"
+          ],
+          "humidity": 40,
+          "desiredHumidity": 45
+        }
+      }
+    }
+  }
+}
