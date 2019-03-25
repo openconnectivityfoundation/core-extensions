@@ -1,0 +1,242 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "OCF Cloud Subscription API",
+    "version": "2019-03-25"
+  },
+  "paths": {
+    "/devices/subscriptions": {
+      "post": {
+        "description": "Subscribe to events against the set of Devices.\n",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/subscriptionrequest" },
+            "x-example": {
+              "observe": true,
+              "notificationuri": "https://devicesnotificationURI"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response to a requests to observe the set of Devices",
+            "x-example": {
+              "eventtype": "requestaccepted"
+            },
+            "schema": {"$ref": "#/definitions/devicesresponse"}
+          },
+          "401": {
+            "description": "Request not authorized",
+          }
+        }
+      }
+    },
+    "/devices/{deviceId}/subscriptions": {
+      "post": {
+        "description": "Subscribe to events against the set of Devices.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/DeviceID"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/subscriptionrequest" },
+            "x-example": {
+              "observe": true,
+              "notificationuri": "https://devicenotificationURI"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response to a requests to observe a specific Device",
+            "x-example": {
+              "observe": true
+            },
+            "schema": {"$ref": "#/definitions/resourceresponse"}
+          },
+          "401": {
+            "description": "Request not authorized",
+          }
+        }
+      }
+    },
+    "/devices/{deviceId}/{resourceLinkHref}/subscriptions": {
+      "post": {
+        "description": "Subscribe to events against a specific Resource.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/DeviceID"
+          },
+          {
+            "$ref": "#/parameters/ResourceLinkHref"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/subscriptionrequest" },
+            "x-example": {
+              "observe": true,
+              "notificationuri": "https://resourcenotificationURI"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response to a requests to observe a specific Resource, example given assumes a Binary Switch",
+            "x-example": {
+              "observe": true,
+              "href": "/resourceLinkHref",
+              "rep": {
+                "value": true
+              }
+            },
+            "schema": {"$ref": "#/definitions/resourceresponse"}
+          },
+          "401": {
+            "description": "Request not authorized",
+          }
+        }
+      }
+    },
+    "/{devicesnotificationURI}": {
+      "post": {
+        "description": "Notification of events from the set of Devices.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/DevicesNotificationURI"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/devicesresponse" },
+            "x-example": {
+              "eventtype": "deviceadded",
+              "deviceid": "54919CA5-4101-4AE4-595B-353C51AA983C"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success path",
+          },
+          "400": {
+            "description": "Bad request",
+          }
+        }
+      }
+    },
+    "/{deviceorresourcenotificationURI}": {
+      "post": {
+        "description": "Notification of an event from a Device.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/DeviceOrResourceNotificationURI"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/resourceresponse" },
+            "x-example": {
+              "observe": true,
+              "payload": [
+                {"href": "/resourceLinkHref","rep": {"value": true}}
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success case"
+          },
+          "400": {
+            "description": "Bad request",
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "DeviceID": {
+      "name": "deviceId",
+      "in": "path",
+      "type": "string",
+      "required": true
+    },
+    "ResourceLinkHref": {
+      "name": "resourceLinkHref",
+      "in": "path",
+      "type": "string",
+      "required": true
+    },
+    "DevicesNotificationURI": {
+      "name": "devicesnotificationURI",
+      "in": "path",
+      "type": "string",
+      "required": true
+    },
+    "DeviceOrResourceNotificationURI": {
+      "name": "deviceorresourcenotificationURI",
+      "in": "path",
+      "type": "string",
+      "required": true
+    }
+  },
+  "definitions": {
+    "subscriptionrequest": {
+      "type": "object",
+      "properties": {
+        "observe": {
+          "type": "boolean",
+          "description": "True = registration, False = deregistration"
+        },
+        "notificationuri": {
+          "type": "string",
+          "format": "uri",
+          "description": "URI to which notifications shall be sent",
+        }
+      },
+      "additionalProperties": true,
+      "required": ["observe","notificationuri"]
+    },
+    "devicesresponse": {
+      "type": "object",
+      "properties": {
+        "eventtype": {
+          "type": "string",
+          "enum": ["requestaccepted","requestdenied","deviceadded","devicedeleted","deviceonline","deviceoffline"],
+          "description": "Event type indicator"
+        },
+        "deviceid": {
+          "description": "OCF di Property.  Uses format pattern according to IETF RFC 4122. Must be provided when a device is added or deleted.",
+          "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$",
+          "type": "string"
+        }
+      },
+      "additionalProperties": true,
+      "required": ["eventtype"]
+    },
+    "resourceresponse": {
+      "type": "object",
+      "properties": {
+        "observe": {
+          "type": "boolean",
+          "description": "True = registration, False = deregistration"
+        },
+        "payload": {
+          "$ref": "http://openconnectivityfoundation.github.io/core/swagger2.0/oic.r.pushpayload.swagger.json#/definitions/Payload"
+        }
+      },
+      "additionalProperties": true,
+      "required": ["observe","payload"]
+    }
+  }
+}
