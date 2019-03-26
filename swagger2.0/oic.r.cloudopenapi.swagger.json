@@ -4,6 +4,11 @@
     "title": "OCF Cloud Open API",
     "version": "0.0.1"
   },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
   "paths": {
     "/devices": {
       "get": {
@@ -13,9 +18,6 @@
         "summary": "Get all devices",
         "description": "Get all devices which are signed up to the OCF Cloud - either `online` or `offline`. To filter only devices with a specific status, use the query parameter `s`. Devices which are `online` are signed in to the system and are accessible. Offline devices are signed up to the system, but currently disconnected.\n",
         "parameters": [
-          {
-            "$ref": "#/components/parameters/correlationId"
-          },
           {
             "$ref": "#/components/parameters/status"
           }
@@ -40,7 +42,9 @@
         },
         "security": [
           {
-            "bearer": []
+            "oauth2": [
+              "read:deviceinfo"
+            ]
           }
         ]
       }
@@ -52,9 +56,6 @@
         ],
         "summary": "Get the device by ID",
         "parameters": [
-          {
-            "$ref": "#/components/parameters/correlationId"
-          },
           {
             "$ref": "#/components/parameters/deviceId"
           }
@@ -79,7 +80,10 @@
         },
         "security": [
           {
-            "bearer": []
+            "oauth2": [
+              "read:deviceinfo",
+              "read:resourcedirectory"
+            ]
           }
         ]
       }
@@ -91,9 +95,6 @@
         ],
         "summary": "Retrieve resource values",
         "parameters": [
-          {
-            "$ref": "#/components/parameters/correlationId"
-          },
           {
             "$ref": "#/components/parameters/deviceId"
           },
@@ -121,7 +122,10 @@
         },
         "security": [
           {
-            "bearer": []
+            "oauth2": [
+              "read:resource",
+              "read:resourceshadow"
+            ]
           }
         ]
       },
@@ -131,9 +135,6 @@
         ],
         "summary": "Update resource values",
         "parameters": [
-          {
-            "$ref": "#/components/parameters/correlationId"
-          },
           {
             "$ref": "#/components/parameters/deviceId"
           },
@@ -172,7 +173,9 @@
         },
         "security": [
           {
-            "bearer": []
+            "oauth2": [
+              "write:resource"
+            ]
           }
         ]
       }
@@ -180,10 +183,21 @@
   },
   "components": {
     "securitySchemes": {
-      "bearer": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
+      "oauth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://example.com/api/oauth/dialog",
+            "tokenUrl": "https://example.com/api/oauth/token",
+            "scopes": {
+              "read:deviceinfo": "read basic device information",
+              "read:resourcedirectory": "read published resource links",
+              "read:resource": "read content of published resource",
+              "write:resource": "update content of published resource",
+              "read:resourceshadow": "read shadow of published resource"
+            }
+          }
+        }
       }
     },
     "parameters": {
@@ -208,15 +222,6 @@
         "schema": {
           "type": "string"
         }
-      },
-      "correlationId": {
-        "name": "Correlation-Id",
-        "in": "header",
-        "description": "Cross request logging correlation id",
-        "schema": {
-          "type": "string"
-        },
-        "example": "53080a4f-5e3e-4291-802f-3436238232d1"
       },
       "deviceId": {
         "name": "deviceId",
@@ -255,7 +260,7 @@
       "device": {
         "allOf": [
           {
-            "$ref": "https://raw.githubusercontent.com/openconnectivityfoundation/core/Bugzilla-2709/swagger2.0/oic.wk.d.swagger.json#/definitions/Device"
+            "$ref": "https://raw.githubusercontent.com/ondrejtomcik/coreocf/Bugzilla-2709/swagger2.0/oic.wk.d.swagger.json#/definitions/Device"
           },
           {
             "type": "object",
@@ -271,15 +276,21 @@
             }
           }
         ],
+        "required": [
+          "rt",
+          "dmn",
+          "n",
+          "di",
+          "s"
+        ],
         "example": {
           "rt": [
             "oic.wk.d"
           ],
-          "di": "53080a4f-5e3e-4291-802f-3436238232d2",
-          "s": "online",
+          "dmn": "Open Connectivity Foundation",
           "n": "Food safety sensor",
-          "dmv": "2.0.0",
-          "dmno": "Q101"
+          "di": "53080a4f-5e3e-4291-802f-3436238232d2",
+          "s": "online"
         }
       },
       "deviceWithLinks": {
@@ -293,62 +304,33 @@
               "links": {
                 "type": "array",
                 "items": {
-                  "$ref": "https://raw.githubusercontent.com/openconnectivityfoundation/core/Bugzilla-2709/swagger2.0/oic.wk.res.swagger.json#/definitions/oic.oic-link"
+                  "$ref": "https://raw.githubusercontent.com/ondrejtomcik/coreocf/Bugzilla-2709/swagger2.0/oic.wk.res.swagger.json#/definitions/oic.oic-link"
                 }
               }
             },
+            "required": [
+              "rt",
+              "href"
+            ],
             "example": {
               "rt": [
                 "oic.wk.d"
               ],
+              "dmn": "Open Connectivity Foundation",
+              "n": "Food safety sensor",
               "di": "53080a4f-5e3e-4291-802f-3436238232d2",
               "s": "online",
-              "n": "Food safety sensor",
-              "dmv": "2.0.0",
-              "dmno": "Q101",
               "links": [
                 {
                   "href": "/53080a4f-5e3e-4291-802f-3436238232d2/humidity",
                   "rt": [
                     "oic.r.humidity"
-                  ],
-                  "if": [
-                    "oic.if.s"
-                  ],
-                  "p": {
-                    "bm": 3
-                  },
-                  "eps": [
-                    {
-                      "ep": "coaps://[fe80::b1d6]:1111",
-                      "pri": 2
-                    },
-                    {
-                      "ep": "coap+tcp://[2001:db8:a::123]:2222",
-                      "pri": 3
-                    }
                   ]
                 },
                 {
                   "href": "/temperature",
                   "rt": [
                     "oic.r.temperature"
-                  ],
-                  "if": [
-                    "oic.if.s"
-                  ],
-                  "p": {
-                    "bm": 3
-                  },
-                  "eps": [
-                    {
-                      "ep": "coaps://[fe80::b1d6]:1111",
-                      "pri": 2
-                    },
-                    {
-                      "ep": "coap+tcp://[2001:db8:a::123]:2222",
-                      "pri": 3
-                    }
                   ]
                 }
               ]
