@@ -1,12 +1,26 @@
 {
-  "openapi": "3.0.1",
+  "swagger": "2.0",
   "info": {
     "title": "OCF Cloud Open API",
     "version": "0.0.1"
   },
-  "servers": [
+  "host": "api.example.com",
+  "basePath": "/v1",
+  "schemes": [
+    "https"
+  ],
+  "tags": [
     {
-      "url": "/"
+      "name": "Devices",
+      "description": "Basic information about devices"
+    },
+    {
+      "name": "Resources",
+      "description": "Read or change the configuration of the device"
+    },
+    {
+      "name": "Events",
+      "description": "Be notified about changes occuring on the device"
     }
   ],
   "paths": {
@@ -19,25 +33,65 @@
         "description": "Get all devices which are signed up to the OCF Cloud - either `online` or `offline`. To filter only devices with a specific status, use the query parameter `s`. Devices which are `online` are signed in to the system and are accessible. Offline devices are signed up to the system, but currently disconnected.\n",
         "parameters": [
           {
-            "$ref": "#/components/parameters/status"
+            "$ref": "#/parameters/Status"
           }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
             "description": "An array of devices",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/device"
-                  }
-                }
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Device"
               }
             }
           },
           "401": {
-            "$ref": "#/components/responses/unauthorized"
+            "$ref": "#/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "read:deviceinfo"
+            ]
+          }
+        ]
+      }
+    },
+    "/devices/subscribe": {
+      "post": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Subscribe to events against the set of Devices",
+        "description": "Subscribe to devices events by providing `eventTypes` you're interested in, `eventsUrl` endpoint where events will be as JSON-based payloads sent and `challenge` required for the verification of the origin. Successful subscription precedes verification of the `eventsUrl`. Verification is done by sending of an `url_verification` event to the `eventsUrl` together with the `challenge`, which has to be verified. After `challenge` is considered as well known, `2xx` success code has to be returned and whole subscription is successful. Additionaly, confirmation of each event sent to the `eventsUrl` endpoint is required with `2xx` success code.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/SubscriptionRequestContent"
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscription was verified and approved"
+          },
+          "400": {
+            "description": "Verification of subscription failed"
+          },
+          "401": {
+            "$ref": "#/responses/Unauthorized"
           }
         },
         "security": [
@@ -57,25 +111,66 @@
         "summary": "Get the device by ID",
         "parameters": [
           {
-            "$ref": "#/components/parameters/deviceId"
+            "$ref": "#/parameters/DeviceId"
           }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
-            "description": "Device and it's resources",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/deviceWithLinks"
-                }
-              }
-            }
+            "$ref": "#/definitions/DeviceWithLinks"
           },
           "401": {
-            "$ref": "#/components/responses/unauthorized"
+            "$ref": "#/responses/Unauthorized"
           },
           "404": {
-            "$ref": "#/components/responses/notFound"
+            "$ref": "#/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "read:deviceinfo",
+              "read:resourcedirectory"
+            ]
+          }
+        ]
+      }
+    },
+    "/devices/{deviceId}/subscribe": {
+      "post": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Subscribe to events against a specific device",
+        "description": "Subscribe to device events by providing `eventTypes` you're interested in, `eventsUrl` endpoint where events will be as JSON-based payloads sent and `challenge` required for the verification of the origin. Successful subscription precedes verification of the `eventsUrl`. Verification is done by sending of an `url_verification` event to the `eventsUrl` together with the `challenge`, which has to be verified. After `challenge` is considered as well known, `2xx` success code has to be returned and whole subscription is successful. Additionaly, confirmation of each event sent to the `eventsUrl` endpoint is required with `2xx` success code.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/DeviceId"
+          },
+          {
+            "$ref": "#/parameters/SubscriptionRequestContent"
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscription was verified and approved"
+          },
+          "400": {
+            "description": "Verification of subscription failed"
+          },
+          "401": {
+            "$ref": "#/responses/Unauthorized"
           }
         },
         "security": [
@@ -96,28 +191,27 @@
         "summary": "Retrieve resource values",
         "parameters": [
           {
-            "$ref": "#/components/parameters/deviceId"
+            "$ref": "#/parameters/DeviceId"
           },
           {
-            "$ref": "#/components/parameters/resourceLinkHref"
+            "$ref": "#/parameters/ResourceLinkHref"
           }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
-            "description": "Resource values",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/resourceRetrieveResponse"
-                }
-              }
-            }
+            "$ref": "#/definitions/ResourceRetrieveResponse"
           },
           "401": {
-            "$ref": "#/components/responses/unauthorized"
+            "$ref": "#/responses/Unauthorized"
           },
           "404": {
-            "$ref": "#/components/responses/notFound"
+            "$ref": "#/responses/NotFound"
           }
         },
         "security": [
@@ -136,39 +230,30 @@
         "summary": "Update resource values",
         "parameters": [
           {
-            "$ref": "#/components/parameters/deviceId"
+            "$ref": "#/parameters/DeviceId"
           },
           {
-            "$ref": "#/components/parameters/resourceLinkHref"
+            "$ref": "#/parameters/ResourceLinkHref"
+          },
+          {
+            "$ref": "#/parameters/ResourceUpdateContent"
           }
         ],
-        "requestBody": {
-          "description": "Map of resource values to be updated",
-          "content": {
-            "*/*": {
-              "schema": {
-                "$ref": "#/components/schemas/resourceUpdateRequest"
-              }
-            }
-          },
-          "required": true
-        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
-            "description": "Resource values updated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/resourceRetrieveResponse"
-                }
-              }
-            }
+            "$ref": "#/definitions/ResourceRetrieveResponse"
           },
           "401": {
-            "$ref": "#/components/responses/unauthorized"
+            "$ref": "#/responses/Unauthorized"
           },
           "404": {
-            "$ref": "#/components/responses/notFound"
+            "$ref": "#/responses/NotFound"
           }
         },
         "security": [
@@ -179,181 +264,333 @@
           }
         ]
       }
+    },
+    "/devices/{deviceId}/{resourceLinkHref}/subscribe": {
+      "post": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Subscribe to events against a specific resource",
+        "description": "Subscribe to resource events by providing `eventTypes` you're interested in, `eventsUrl` endpoint where events will be as JSON-based payloads sent and `challenge` required for the verification of the origin. Successful subscription precedes verification of the `eventsUrl`. Verification is done by sending of an `url_verification` event to the `eventsUrl` together with the `challenge`, which has to be verified. After `challenge` is considered as well known, `2xx` success code has to be returned and whole subscription is successful. Additionaly, confirmation of each event sent to the `eventsUrl` endpoint is required with `2xx` success code.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/DeviceId"
+          },
+          {
+            "$ref": "#/parameters/ResourceLinkHref"
+          },
+          {
+            "$ref": "#/parameters/SubscriptionRequestContent"
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscription was verified and approved"
+          },
+          "400": {
+            "description": "Verification of subscription failed"
+          },
+          "401": {
+            "$ref": "#/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "read:resource",
+              "read:resourceshadow"
+            ]
+          }
+        ]
+      }
+    },
+    "{eventsUrl}": {
+      "post": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Events endpoint provided by the subscriber",
+        "description": "Events endpoint provided by the caller, where events specified during subscription will be sent to in form of the JSON-based payloads.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/EventsUrl"
+          },
+          {
+            "$ref": "#/parameters/EventRequest"
+          },
+          {
+            "$ref": "#/parameters/EventSignedSecret"
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Event successfully recieved"
+          }
+        }
+      }
     }
   },
-  "components": {
-    "securitySchemes": {
-      "oauth2": {
-        "type": "oauth2",
-        "flows": {
-          "authorizationCode": {
-            "authorizationUrl": "https://example.com/api/oauth/dialog",
-            "tokenUrl": "https://example.com/api/oauth/token",
-            "scopes": {
-              "read:deviceinfo": "read basic device information",
-              "read:resourcedirectory": "read published resource links",
-              "read:resource": "read content of published resource",
-              "write:resource": "update content of published resource",
-              "read:resourceshadow": "read shadow of published resource"
-            }
-          }
-        }
+  "securityDefinitions": {
+    "oauth2": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://example.com/api/oauth/dialog",
+      "tokenUrl": "https://example.com/api/oauth/token",
+      "scopes": {
+        "read:deviceinfo": "read basic device information",
+        "read:resourcedirectory": "read published resource links",
+        "read:resource": "read content of published resource",
+        "write:resource": "update content of published resource",
+        "read:resourceshadow": "read shadow of published resource"
+      }
+    }
+  },
+  "parameters": {
+    "DeviceType": {
+      "name": "rt",
+      "in": "query",
+      "description": "Filter devices by device type",
+      "type": "array",
+      "items": {
+        "type": "string"
       }
     },
-    "parameters": {
-      "deviceType": {
-        "name": "rt",
-        "in": "query",
-        "description": "Filter devices by device type",
-        "style": "form",
-        "explode": false,
-        "schema": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "resourceLinkHref": {
-        "name": "resourceLinkHref",
-        "in": "path",
-        "description": "Path to resource",
-        "required": true,
-        "schema": {
-          "type": "string"
-        }
-      },
-      "deviceId": {
-        "name": "deviceId",
-        "in": "path",
-        "description": "Id of the device",
-        "required": true,
-        "schema": {
-          "type": "string",
-          "format": "uuid"
-        }
-      },
-      "status": {
-        "name": "s",
-        "in": "query",
-        "description": "Filter devices by device status",
-        "schema": {
-          "type": "string",
-          "enum": [
-            "online",
-            "offline"
-          ]
-        }
+    "ResourceLinkHref": {
+      "name": "resourceLinkHref",
+      "in": "path",
+      "description": "Path to resource",
+      "required": true,
+      "type": "string"
+    },
+    "DeviceId": {
+      "name": "deviceId",
+      "in": "path",
+      "description": "Id of the device",
+      "required": true,
+      "type": "string",
+      "format": "uuid"
+    },
+    "Status": {
+      "name": "s",
+      "in": "query",
+      "description": "Filter devices by device status",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "online",
+          "offline"
+        ]
       }
     },
-    "responses": {
-      "unauthorized": {
-        "description": "Unauthorized",
-        "content": {}
-      },
-      "notFound": {
-        "description": "Not found",
-        "content": {}
-      }
+    "EventsUrl": {
+      "name": "eventsUrl",
+      "in": "path",
+      "required": true,
+      "type": "string"
     },
-    "schemas": {
-      "device": {
-        "allOf": [
-          {
-            "$ref": "https://raw.githubusercontent.com/ondrejtomcik/coreocf/Bugzilla-2709/swagger2.0/oic.wk.d.swagger.json#/definitions/Device"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "s": {
-                "description": "Device status available from the OCF Cloud, which tracks if the device has opened TCP connection and is signed in",
-                "type": "string",
-                "enum": [
-                  "online",
-                  "offline"
-                ]
-              }
-            }
-          }
-        ],
-        "required": [
-          "rt",
-          "dmn",
-          "n",
-          "di",
-          "s"
-        ],
-        "example": {
-          "rt": [
-            "oic.wk.d"
-          ],
-          "dmn": "Open Connectivity Foundation",
-          "n": "Food safety sensor",
-          "di": "53080a4f-5e3e-4291-802f-3436238232d2",
-          "s": "online"
-        }
+    "ResourceUpdateContent": {
+      "name": "content",
+      "in": "body",
+      "description": "Map of resource values to be updated",
+      "schema": {
+        "$ref": "#/definitions/ResourceUpdateRequest"
       },
-      "deviceWithLinks": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/device"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "links": {
-                "type": "array",
-                "items": {
-                  "$ref": "https://raw.githubusercontent.com/ondrejtomcik/coreocf/Bugzilla-2709/swagger2.0/oic.wk.res.swagger.json#/definitions/oic.oic-link"
-                }
-              }
-            },
-            "required": [
-              "rt",
-              "href"
-            ],
-            "example": {
-              "rt": [
-                "oic.wk.d"
-              ],
-              "dmn": "Open Connectivity Foundation",
-              "n": "Food safety sensor",
-              "di": "53080a4f-5e3e-4291-802f-3436238232d2",
-              "s": "online",
-              "links": [
-                {
-                  "href": "/53080a4f-5e3e-4291-802f-3436238232d2/humidity",
-                  "rt": [
-                    "oic.r.humidity"
-                  ]
-                },
-                {
-                  "href": "/temperature",
-                  "rt": [
-                    "oic.r.temperature"
-                  ]
-                }
+      "required": true
+    },
+    "SubscriptionRequestContent": {
+      "name": "content",
+      "in": "body",
+      "schema": {
+        "$ref": "#/definitions/SubscriptionRequest"
+      },
+      "required": true
+    },
+    "EventRequest": {
+      "name": "content",
+      "in": "body",
+      "schema": {
+        "$ref": "#/definitions/Event"
+      },
+      "required": true
+    },
+    "EventSignedSecret": {
+      "name": "X-OCFCloud-Secret",
+      "in": "header",
+      "type": "string",
+      "required": true
+    }
+  },
+  "responses": {
+    "Unauthorized": {
+      "description": "Unauthorized"
+    },
+    "NotFound": {
+      "description": "Not found"
+    }
+  },
+  "definitions": {
+    "Device": {
+      "allOf": [
+        {
+          "$ref": "https://raw.githubusercontent.com/ondrejtomcik/coreocf/Bugzilla-2709/swagger2.0/oic.wk.d.swagger.json#/definitions/Device"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "s": {
+              "description": "Device status available from the OCF Cloud, which tracks if the device has opened TCP connection and is signed in",
+              "type": "string",
+              "enum": [
+                "online",
+                "offline"
               ]
             }
           }
-        ]
-      },
-      "resourceUpdateRequest": {
-        "type": "object",
-        "description": "Values of resources to be updated",
-        "example": {
-          "desiredHumidity": 45
+        }
+      ],
+      "required": [
+        "rt",
+        "dmn",
+        "n",
+        "di",
+        "s"
+      ],
+      "example": {
+        "rt": [
+          "oic.wk.d"
+        ],
+        "dmn": "Open Connectivity Foundation",
+        "n": "Food safety sensor",
+        "di": "53080a4f-5e3e-4291-802f-3436238232d2",
+        "s": "online"
+      }
+    },
+    "DeviceWithLinks": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Device"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "links": {
+              "type": "array",
+              "items": {
+                "$ref": "https://raw.githubusercontent.com/ondrejtomcik/coreocf/Bugzilla-2709/swagger2.0/oic.wk.res.swagger.json#/definitions/oic.oic-link"
+              }
+            }
+          },
+          "required": [
+            "rt",
+            "href"
+          ],
+          "example": {
+            "rt": [
+              "oic.wk.d"
+            ],
+            "dmn": "Open Connectivity Foundation",
+            "n": "Food safety sensor",
+            "di": "53080a4f-5e3e-4291-802f-3436238232d2",
+            "s": "online",
+            "links": [
+              {
+                "href": "/53080a4f-5e3e-4291-802f-3436238232d2/humidity",
+                "rt": [
+                  "oic.r.humidity"
+                ]
+              },
+              {
+                "href": "/temperature",
+                "rt": [
+                  "oic.r.temperature"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "ResourceUpdateRequest": {
+      "type": "object",
+      "description": "Values of resources to be updated",
+      "example": {
+        "desiredHumidity": 45
+      }
+    },
+    "ResourceRetrieveResponse": {
+      "type": "object",
+      "description": "Values of resource",
+      "example": {
+        "types": [
+          "oic.r.humidity"
+        ],
+        "humidity": 40,
+        "desiredHumidity": 45
+      }
+    },
+    "SubscriptionRequest": {
+      "type": "object",
+      "properties": {
+        "eventsUrl": {
+          "$ref": "#/definitions/EventsUrl"
+        },
+        "challenge": {
+          "type": "string"
+        },
+        "eventTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EventType"
+          }
         }
       },
-      "resourceRetrieveResponse": {
-        "type": "object",
-        "description": "Values of resource",
-        "example": {
-          "types": [
-            "oic.r.humidity"
-          ],
-          "humidity": 40,
-          "desiredHumidity": 45
+      "required": [
+        "eventsUrl",
+        "challenge",
+        "eventTypes - device_offboarded"
+      ],
+      "example": {
+        "eventsUrl": "https://notify.openapi.exaple.com/",
+        "challenge": "3eZbrw1aBm2rZgRNFdxV2595E9CY3gmdALWMmHkvFXO7tYXAYM8P",
+        "eventTypes": [
+          "device_onboarded",
+          "device_offboarded"
+        ]
+      }
+    },
+    "EventsUrl": {
+      "type": "string",
+      "format": "url",
+      "example": "https://notify.openapi.exaple.com/"
+    },
+    "EventType": {
+      "type": "string",
+      "enum": [
+        "url_verify",
+        "device_onboarded",
+        "device_offboarded",
+        "resource_contentchanged",
+        "resource_published",
+        "resource_unpublished",
+        "device_online",
+        "device_offline"
+      ]
+    },
+    "Event": {
+      "type": "object",
+      "properties": {
+        "eventType": {
+          "$ref": "#/definitions/EventType"
         }
       }
     }
