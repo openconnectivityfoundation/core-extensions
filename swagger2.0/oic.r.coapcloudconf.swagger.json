@@ -29,6 +29,7 @@
                   "apn": "github",
                   "cis": "coaps+tcp://example.com:443",
                   "sid" : "987e6543-a21f-10d1-a112-421345746237",
+                  "cps" : 0,
                   "clec": 0
                 },
               "schema": { "$ref": "#/definitions/CoAPCloudConf" }
@@ -61,6 +62,7 @@
                   "apn": "github",
                   "cis": "coaps+tcp://example.com:443",
                   "sid" : "987e6543-a21f-10d1-a112-421345746237",
+                  "cps" : 0,
                   "clec": 0
                 },
               "schema": { "$ref": "#/definitions/CoAPCloudConf" }
@@ -84,6 +86,7 @@
                   "apn": "github",
                   "cis": "coaps+tcp://example.com:443",
                   "sid" : "987e6543-a21f-10d1-a112-421345746237",
+                  "cps" : 0,
                   "clec": 0
                 },
               "schema": { "$ref": "#/definitions/CoAPCloudConf" }
@@ -116,6 +119,7 @@
                   "apn": "github",
                   "cis": "coaps+tcp://example.com:443",
                   "sid" : "987e6543-a21f-10d1-a112-421345746237",
+                  "cps" : 0,
                   "clec": 0
                 },
               "schema": { "$ref": "#/definitions/CoAPCloudConf" }
@@ -162,6 +166,18 @@
         "sid" : {
           "$ref": "http://openconnectivityfoundation.github.io/core/schemas/oic.types-schema.json#/definitions/uuid"
         },
+        "cps" : {
+          "description": "Indicates the cloud provisioning status of the Device. (0: Need to Setup, 1: Registering Cloud, 2: Registered, 3: Deregistered, 4: Failed to Register Cloud, 5~254: Reserved, 255: EOF)",
+          "enum": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "readOnly": true,
+          "type": "integer"
+        },
         "clec" : {
           "description": "Last Error Code during Cloud Provisioning (0: No Error, 1: Error response from the OCF Cloud, 2: Failed to connect to the OCF Cloud, 3: Failed to refresh Access Token, 4~254: Reserved, 255: Unknown error)",
           "enum": [
@@ -171,7 +187,8 @@
             3,
             255
           ],
-          "readOnly": true
+          "readOnly": true,
+          "type": "integer"
         },
         "id" : {
           "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
