@@ -25,6 +25,11 @@
   ],
   "paths": {
     "/devices": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/CorrelationId"
+        }
+      ],
       "get": {
         "tags": [
           "Devices"
@@ -65,16 +70,21 @@
         ]
       }
     },
-    "/devices/subscribe": {
+    "/devices/subscriptions": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/CorrelationId"
+        }
+      ],
       "post": {
         "tags": [
           "Events"
         ],
-        "summary": "Subscribe to events against the set of Devices",
-        "description": "Subscribe to devices events by providing `eventTypes` you're interested in, `eventsUrl` endpoint where events will be as JSON-based payloads sent and `challenge` required for the verification of the origin. Successful subscription precedes verification of the `eventsUrl`. Verification is done by sending of an `url_verification` event to the `eventsUrl` together with the `challenge`, which has to be verified. After `challenge` is considered as well known, `2xx` success code has to be returned and whole subscription is successful. Additionaly, confirmation of each event sent to the `eventsUrl` endpoint is required with `2xx` success code.\n",
+        "summary": "Subscribe to events against the set of devices",
+        "description": "Subscribe to devices events by providing `eventTypes` you're interested in, `eventsUrl` endpoint where events will be sent as JSON-based payloads and `subscriptionId` required for verification and mapping of fired event to registered subscription. Successful subscription precedes verification of the `eventsUrl`. Verification is done by processing of an `url_verification` event to the `eventsUrl` together with the `subscriptionId` which has to be verified and `challenge` which has to be returned in the `2xx` success response after which the subscription is successful.\n\n**Supported events** and required scopes\n- `device_onboarded` 🡆 `read:deviceinfo`\n- `device_offboarded` 🡆 `read:deviceinfo`\n- `resource_contentchanged` 🡆 `read:resource`\n- `resource_published` 🡆 `read:resource`\n- `resource_unpublished` 🡆 `read:resource`\n- `resource_contentupdated` 🡆 `write:resource`\n- `device_online` 🡆 `read:deviceinfo`\n- `device_offline` 🡆 `read:deviceinfo`\n\n_Subscription will be applied to all devices user has access to, what means that events from all user's devices will be sent to `eventsUrl`._\n",
         "parameters": [
           {
-            "$ref": "#/parameters/SubscriptionRequestContent"
+            "$ref": "#/parameters/SubscribeRequest"
           }
         ],
         "consumes": [
@@ -97,6 +107,40 @@
         "security": [
           {
             "oauth2": [
+              "write:subscriptions"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Unsubscribe from events against the set of devices",
+        "description": "Unsubscribe from devices events by providing 'eventsTypes' you want to unsubscribe from.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/UnsubscribeRequest"
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "202": {
+            "description": "Subscription was marked for deletion"
+          },
+          "401": {
+            "$ref": "#/responses/Unauthorized"
+          },
+          "404": {
+            "description": "Not subscribed to provided set of events"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "write:subscriptions",
               "read:deviceinfo"
             ]
           }
@@ -104,16 +148,19 @@
       }
     },
     "/devices/{deviceId}": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/CorrelationId"
+        },
+        {
+          "$ref": "#/parameters/DeviceId"
+        }
+      ],
       "get": {
         "tags": [
           "Devices"
         ],
         "summary": "Get the device by ID",
-        "parameters": [
-          {
-            "$ref": "#/parameters/DeviceId"
-          }
-        ],
         "consumes": [
           "application/json"
         ],
@@ -141,19 +188,24 @@
         ]
       }
     },
-    "/devices/{deviceId}/subscribe": {
+    "/devices/{deviceId}/subscriptions": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/CorrelationId"
+        },
+        {
+          "$ref": "#/parameters/DeviceId"
+        }
+      ],
       "post": {
         "tags": [
           "Events"
         ],
         "summary": "Subscribe to events against a specific device",
-        "description": "Subscribe to device events by providing `eventTypes` you're interested in, `eventsUrl` endpoint where events will be as JSON-based payloads sent and `challenge` required for the verification of the origin. Successful subscription precedes verification of the `eventsUrl`. Verification is done by sending of an `url_verification` event to the `eventsUrl` together with the `challenge`, which has to be verified. After `challenge` is considered as well known, `2xx` success code has to be returned and whole subscription is successful. Additionaly, confirmation of each event sent to the `eventsUrl` endpoint is required with `2xx` success code.\n",
+        "description": "Subscribe to device events by providing `eventTypes` you're interested in, `eventsUrl` endpoint where events will be sent as JSON-based payloads and `subscriptionId` required for verification and mapping of fired event to registered subscription. Successful subscription precedes verification of the `eventsUrl`. Verification is done by processing of an `url_verification` event to the `eventsUrl` together with the `subscriptionId` which has to be verified and `challenge` which has to be returned in the `2xx` success response after which the subscription is successful.\n\n**Supported events** and required scopes\n- `device_onboarded` 🡆 `read:deviceinfo`\n- `device_offboarded` 🡆 `read:deviceinfo`\n- `resource_contentchanged` 🡆 `read:resource`\n- `resource_published` 🡆 `read:resource`\n- `resource_unpublished` 🡆 `read:resource`\n- `resource_contentupdated` 🡆 `write:resource`\n- `device_online` 🡆 `read:deviceinfo`\n- `device_offline` 🡆 `read:deviceinfo`\n",
         "parameters": [
           {
-            "$ref": "#/parameters/DeviceId"
-          },
-          {
-            "$ref": "#/parameters/SubscriptionRequestContent"
+            "$ref": "#/parameters/SubscribeRequest"
           }
         ],
         "consumes": [
@@ -176,6 +228,40 @@
         "security": [
           {
             "oauth2": [
+              "write:subscriptions"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Unsubscribe from events against a specific device",
+        "description": "Unsubscribe from a device events by providing 'eventsTypes' you want to unsubscribe from.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/UnsubscribeRequest"
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "202": {
+            "description": "Subscription was marked for deletion"
+          },
+          "401": {
+            "$ref": "#/responses/Unauthorized"
+          },
+          "404": {
+            "description": "Not subscribed to provided set of events"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "write:subscriptions",
               "read:deviceinfo",
               "read:resourcedirectory"
             ]
@@ -184,19 +270,22 @@
       }
     },
     "/devices/{deviceId}/{resourceLinkHref}": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/CorrelationId"
+        },
+        {
+          "$ref": "#/parameters/DeviceId"
+        },
+        {
+          "$ref": "#/parameters/ResourceLinkHref"
+        }
+      ],
       "get": {
         "tags": [
           "Resources"
         ],
         "summary": "Retrieve resource values",
-        "parameters": [
-          {
-            "$ref": "#/parameters/DeviceId"
-          },
-          {
-            "$ref": "#/parameters/ResourceLinkHref"
-          }
-        ],
         "consumes": [
           "application/json"
         ],
@@ -230,13 +319,7 @@
         "summary": "Update resource values",
         "parameters": [
           {
-            "$ref": "#/parameters/DeviceId"
-          },
-          {
-            "$ref": "#/parameters/ResourceLinkHref"
-          },
-          {
-            "$ref": "#/parameters/ResourceUpdateContent"
+            "$ref": "#/parameters/ResourceUpdateRequest"
           }
         ],
         "consumes": [
@@ -265,22 +348,27 @@
         ]
       }
     },
-    "/devices/{deviceId}/{resourceLinkHref}/subscribe": {
+    "/devices/{deviceId}/{resourceLinkHref}/subscriptions": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/CorrelationId"
+        },
+        {
+          "$ref": "#/parameters/DeviceId"
+        },
+        {
+          "$ref": "#/parameters/ResourceLinkHref"
+        }
+      ],
       "post": {
         "tags": [
           "Events"
         ],
         "summary": "Subscribe to events against a specific resource",
-        "description": "Subscribe to resource events by providing `eventTypes` you're interested in, `eventsUrl` endpoint where events will be as JSON-based payloads sent and `challenge` required for the verification of the origin. Successful subscription precedes verification of the `eventsUrl`. Verification is done by sending of an `url_verification` event to the `eventsUrl` together with the `challenge`, which has to be verified. After `challenge` is considered as well known, `2xx` success code has to be returned and whole subscription is successful. Additionaly, confirmation of each event sent to the `eventsUrl` endpoint is required with `2xx` success code.\n",
+        "description": "Subscribe to resource events by providing `eventTypes` you're interested in, `eventsUrl` endpoint where events will be sent as JSON-based payloads and `subscriptionId` required for verification and mapping of fired event to registered subscription. Successful subscription precedes verification of the `eventsUrl`. Verification is done by processing of an `url_verification` event to the `eventsUrl` together with the `subscriptionId` which has to be verified and `challenge` which has to be returned in the `2xx` success response after which the subscription is successful.\n        \n**Supported events** and required scopes\n- `resource_contentchanged` 🡆 `read:resource`\n- `resource_published` 🡆 `read:resource`\n- `resource_unpublished` 🡆 `read:resource`\n- `resource_contentupdated` 🡆 `write:resource`\n",
         "parameters": [
           {
-            "$ref": "#/parameters/DeviceId"
-          },
-          {
-            "$ref": "#/parameters/ResourceLinkHref"
-          },
-          {
-            "$ref": "#/parameters/SubscriptionRequestContent"
+            "$ref": "#/parameters/SubscribeRequest"
           }
         ],
         "consumes": [
@@ -303,6 +391,40 @@
         "security": [
           {
             "oauth2": [
+              "write:subscriptions"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Unsubscribe from events against a specific resource",
+        "description": "Unsubscribe from a resource events by providing 'eventsTypes' you want to unsubscribe from.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/UnsubscribeRequest"
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "202": {
+            "description": "Subscription was marked for deletion"
+          },
+          "401": {
+            "$ref": "#/responses/Unauthorized"
+          },
+          "404": {
+            "description": "Not subscribed to provided set of events"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "write:subscriptions",
               "read:resource",
               "read:resourceshadow"
             ]
@@ -310,22 +432,25 @@
         ]
       }
     },
-    "{eventsUrl}": {
+    "/{eventsUrl}": {
       "post": {
         "tags": [
           "Events"
         ],
         "summary": "Events endpoint provided by the subscriber",
-        "description": "Events endpoint provided by the caller, where events specified during subscription will be sent to in form of the JSON-based payloads.\n",
+        "description": "Events endpoint provided during subscription where events specified in the subscription payload will be sent to in form of the JSON-based payloads. Confirmation of each event sent to the `eventsUrl` endpoint is required with `2xx` success code.\n",
         "parameters": [
+          {
+            "$ref": "#/parameters/CorrelationId"
+          },
+          {
+            "$ref": "#/parameters/EventSignature"
+          },
           {
             "$ref": "#/parameters/EventsUrl"
           },
           {
-            "$ref": "#/parameters/EventRequest"
-          },
-          {
-            "$ref": "#/parameters/EventSignedSecret"
+            "$ref": "#/parameters/Event"
           }
         ],
         "consumes": [
@@ -346,15 +471,30 @@
       "authorizationUrl": "https://example.com/api/oauth/dialog",
       "tokenUrl": "https://example.com/api/oauth/token",
       "scopes": {
-        "read:deviceinfo": "read basic device information",
-        "read:resourcedirectory": "read published resource links",
-        "read:resource": "read content of published resource",
-        "write:resource": "update content of published resource",
-        "read:resourceshadow": "read shadow of published resource"
+        "read:deviceinfo": "Read basic device information",
+        "read:resourcedirectory": "Read published resource links",
+        "read:resource": "Read content of published resource",
+        "write:resource": "Update content of published resource",
+        "read:resourceshadow": "Read shadow of published resource",
+        "write:subscriptions": "Create subscriptions"
       }
     }
   },
   "parameters": {
+    "CorrelationId": {
+      "name": "Correlation-Id",
+      "in": "header",
+      "description": "A Correlation ID, also known as a Transit ID, is a unique identifier value that is attached to requests and messages that allow reference to a particular transaction or event chain.\n",
+      "type": "string",
+      "format": "uuid"
+    },
+    "EventSignature": {
+      "name": "Event-Signature",
+      "in": "header",
+      "description": "The signature is created for each event by combining the signing secret - OAuth Client Secret with the body of the event request using a standard HMAC-SHA256 keyed hash.\n",
+      "type": "string",
+      "format": "HMAC-SHA256"
+    },
     "DeviceType": {
       "name": "rt",
       "in": "query",
@@ -398,7 +538,7 @@
       "required": true,
       "type": "string"
     },
-    "ResourceUpdateContent": {
+    "ResourceUpdateRequest": {
       "name": "content",
       "in": "body",
       "description": "Map of resource values to be updated",
@@ -407,26 +547,28 @@
       },
       "required": true
     },
-    "SubscriptionRequestContent": {
+    "SubscribeRequest": {
       "name": "content",
       "in": "body",
       "schema": {
-        "$ref": "#/definitions/SubscriptionRequest"
+        "$ref": "#/definitions/SubscribeRequest"
       },
       "required": true
     },
-    "EventRequest": {
+    "UnsubscribeRequest": {
+      "name": "content",
+      "in": "body",
+      "schema": {
+        "$ref": "#/definitions/UnsubscribeRequest"
+      },
+      "required": true
+    },
+    "Event": {
       "name": "content",
       "in": "body",
       "schema": {
         "$ref": "#/definitions/Event"
       },
-      "required": true
-    },
-    "EventSignedSecret": {
-      "name": "X-OCFCloud-Secret",
-      "in": "header",
-      "type": "string",
       "required": true
     }
   },
@@ -538,14 +680,15 @@
         "desiredHumidity": 45
       }
     },
-    "SubscriptionRequest": {
+    "SubscribeRequest": {
       "type": "object",
       "properties": {
         "eventsUrl": {
           "$ref": "#/definitions/EventsUrl"
         },
-        "challenge": {
-          "type": "string"
+        "subscriptionId": {
+          "type": "string",
+          "format": "uuid"
         },
         "eventTypes": {
           "type": "array",
@@ -556,15 +699,34 @@
       },
       "required": [
         "eventsUrl",
-        "challenge",
-        "eventTypes - device_offboarded"
+        "subscriptionId",
+        "eventTypes"
       ],
       "example": {
         "eventsUrl": "https://notify.openapi.exaple.com/",
-        "challenge": "3eZbrw1aBm2rZgRNFdxV2595E9CY3gmdALWMmHkvFXO7tYXAYM8P",
+        "subscriptionId": "1eeb465c-5e8d-4305-a366-bbf035fff671",
         "eventTypes": [
           "device_onboarded",
           "device_offboarded"
+        ]
+      }
+    },
+    "UnsubscribeRequest": {
+      "type": "object",
+      "properties": {
+        "eventTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EventType"
+          }
+        }
+      },
+      "required": [
+        "eventTypes"
+      ],
+      "example": {
+        "eventTypes": [
+          "device_onboarded"
         ]
       }
     },
