@@ -111,7 +111,17 @@
             ]
           }
         ]
-      },
+      }
+    },
+    "/devices/subscriptions/{subscriptionId}": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/CorrelationId"
+        },
+        {
+          "$ref": "#/parameters/SubscriptionId"
+        }
+      ],
       "delete": {
         "tags": [
           "Events"
@@ -232,7 +242,20 @@
             ]
           }
         ]
-      },
+      }
+    },
+    "/devices/{deviceId}/subscriptions/{subscriptionId}": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/CorrelationId"
+        },
+        {
+          "$ref": "#/parameters/DeviceId"
+        },
+        {
+          "$ref": "#/parameters/SubscriptionId"
+        }
+      ],
       "delete": {
         "tags": [
           "Events"
@@ -395,7 +418,23 @@
             ]
           }
         ]
-      },
+      }
+    },
+    "/devices/{deviceId}/{resourceLinkHref}/subscriptions/{subscriptionId}": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/CorrelationId"
+        },
+        {
+          "$ref": "#/parameters/DeviceId"
+        },
+        {
+          "$ref": "#/parameters/ResourceLinkHref"
+        },
+        {
+          "$ref": "#/parameters/SubscriptionId"
+        }
+      ],
       "delete": {
         "tags": [
           "Events"
@@ -515,6 +554,14 @@
       "name": "deviceId",
       "in": "path",
       "description": "Id of the device",
+      "required": true,
+      "type": "string",
+      "format": "uuid"
+    },
+    "SubscriptionId": {
+      "name": "subscriptionId",
+      "in": "path",
+      "description": "Id of the subscription",
       "required": true,
       "type": "string",
       "format": "uuid"
@@ -686,10 +733,6 @@
         "eventsUrl": {
           "$ref": "#/definitions/EventsUrl"
         },
-        "subscriptionId": {
-          "type": "string",
-          "format": "uuid"
-        },
         "eventTypes": {
           "type": "array",
           "items": {
@@ -699,7 +742,6 @@
       },
       "required": [
         "eventsUrl",
-        "subscriptionId",
         "eventTypes"
       ],
       "example": {
@@ -773,8 +815,24 @@
     "Event": {
       "type": "object",
       "properties": {
+        "subscriptionId": {
+          "type": "string",
+          "format": "uuid"
+        },
         "eventType": {
           "$ref": "#/definitions/EventType"
+        },
+        "data": {
+          "type": "object",
+          "description": "Event content"
+        }
+      },
+      "example": {
+        "subscriptionId": "1eeb465c-5e8d-4305-a366-bbf035fff671",
+        "eventType": "resource_contentchanged",
+        "data": {
+          "eventhumidity": 40,
+          "desiredHumidity": 45
         }
       }
     }
