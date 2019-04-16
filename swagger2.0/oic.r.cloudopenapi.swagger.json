@@ -81,7 +81,7 @@
           "Events"
         ],
         "summary": "Subscribe to events against the set of devices",
-        "description": "Subscribe to devices events by providing `eventTypes` you're interested in, `eventsUrl` endpoint where events will be sent as JSON-based payloads and `subscriptionId` required for verification and mapping of fired event to registered subscription. Successful subscription precedes verification of the `eventsUrl`. Verification is done by processing of an `url_verification` event to the `eventsUrl` together with the `subscriptionId` which has to be verified and `challenge` which has to be returned in the `2xx` success response after which the subscription is successful.\n\n**Supported events** and required scopes\n- `device_onboarded` 🡆 `read:deviceinfo`\n- `device_offboarded` 🡆 `read:deviceinfo`\n",
+        "description": "Subscribe to devices events by providing `eventTypes` you're interested in and `eventsUrl` endpoint where events will be sent as JSON-based payloads. Successful response contains `subscriptionId` which identifies registered, not yet running subscription. Running subscription precedes verification of the `eventsUrl`, which is done by processing of an `url_verification` event sent to the `eventsUrl` together with the `subscriptionId` and `challenge` which has to be returned in the `2xx` success response. After this, the subscription is successful and notifications will be sent.\n\n**Supported events** and required scopes\n- `device_onboarded` 🡆 `read:deviceinfo`\n- `device_offboarded` 🡆 `read:deviceinfo`\n",
         "parameters": [
           {
             "$ref": "#/parameters/SubscribeRequest"
@@ -95,7 +95,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Subscription was verified and approved"
+            "$ref": "#/definitions/SubscribeResponse"
           },
           "400": {
             "description": "Verification of subscription failed"
@@ -202,7 +202,7 @@
           "Events"
         ],
         "summary": "Subscribe to events against a specific device",
-        "description": "Subscribe to device events by providing `eventTypes` you're interested in, `eventsUrl` endpoint where events will be sent as JSON-based payloads and `subscriptionId` required for verification and mapping of fired event to registered subscription. Successful subscription precedes verification of the `eventsUrl`. Verification is done by processing of an `url_verification` event to the `eventsUrl` together with the `subscriptionId` which has to be verified and `challenge` which has to be returned in the `2xx` success response after which the subscription is successful.\n\n**Supported events** and required scopes\n- `resource_published` 🡆 `read:resource`\n- `resource_unpublished` 🡆 `read:resource`\n- `device_online` 🡆 `read:deviceinfo`\n- `device_offline` 🡆 `read:deviceinfo`\n",
+        "description": "Subscribe to device events by providing `eventTypes` you're interested in and `eventsUrl` endpoint where events will be sent as JSON-based payloads. Successful response contains `subscriptionId` which identifies registered, not yet running subscription. Running subscription precedes verification of the `eventsUrl`, which is done by processing of an `url_verification` event sent to the `eventsUrl` together with the `subscriptionId` and `challenge` which has to be returned in the `2xx` success response. After this, the subscription is successful and notifications will be sent.\n\n**Supported events** and required scopes\n- `resource_published` 🡆 `read:resource`\n- `resource_unpublished` 🡆 `read:resource`\n- `device_online` 🡆 `read:deviceinfo`\n- `device_offline` 🡆 `read:deviceinfo`\n",
         "parameters": [
           {
             "$ref": "#/parameters/SubscribeRequest"
@@ -216,10 +216,10 @@
         ],
         "responses": {
           "200": {
-            "description": "Subscription was verified and approved"
+            "$ref": "#/definitions/SubscribeResponse"
           },
           "400": {
-            "description": "Verification of subscription failed"
+            "description": "Invalid subscription"
           },
           "401": {
             "$ref": "#/responses/Unauthorized"
@@ -365,7 +365,7 @@
           "Events"
         ],
         "summary": "Subscribe to events against a specific resource",
-        "description": "Subscribe to resource events by providing `eventTypes` you're interested in, `eventsUrl` endpoint where events will be sent as JSON-based payloads and `subscriptionId` required for verification and mapping of fired event to registered subscription. Successful subscription precedes verification of the `eventsUrl`. Verification is done by processing of an `url_verification` event to the `eventsUrl` together with the `subscriptionId` which has to be verified and `challenge` which has to be returned in the `2xx` success response after which the subscription is successful.\n \n**Supported events** and required scopes\n- `resource_contentchanged` 🡆 `read:resource`",
+        "description": "Subscribe to resource events by providing `eventTypes` you're interested in and `eventsUrl` endpoint where events will be sent as JSON-based payloads. Successful response contains `subscriptionId` which identifies registered, not yet running subscription. Running subscription precedes verification of the `eventsUrl`, which is done by processing of an `url_verification` event sent to the `eventsUrl` together with the `subscriptionId` and `challenge` which has to be returned in the `2xx` success response. After this, the subscription is successful and notifications will be sent.\n \n**Supported events** and required scopes\n- `resource_contentchanged` 🡆 `read:resource`",
         "parameters": [
           {
             "$ref": "#/parameters/SubscribeRequest"
@@ -379,7 +379,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Subscription was verified and approved"
+            "$ref": "#/definitions/SubscribeResponse"
           },
           "400": {
             "description": "Verification of subscription failed"
@@ -711,6 +711,27 @@
         ]
       }
     },
+    "SubscribeResponse": {
+      "description": "Subscription was registeredm waiting for verification",
+      "type": "object",
+      "properties": {
+        "subscriptionId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "challenge": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "subscriptionId",
+        "challenge"
+      ],
+      "example": {
+        "subscriptionId": "1eeb465c-5e8d-4305-a366-bbf035fff671",
+        "challenge": "1l2h7y3a3@4fbj4"
+      }
+    },
     "UnsubscribeRequest": {
       "type": "object",
       "properties": {
@@ -739,6 +760,7 @@
       "type": "string",
       "enum": [
         "url_verify",
+        "subscription_canceled",
         "device_onboarded",
         "device_offboarded",
         "resource_contentchanged",
