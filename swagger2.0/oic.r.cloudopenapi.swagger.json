@@ -712,7 +712,7 @@
       }
     },
     "SubscribeResponse": {
-      "description": "Subscription was registeredm waiting for verification",
+      "description": "Subscription was registered, waiting for verification",
       "type": "object",
       "properties": {
         "subscriptionId": {
