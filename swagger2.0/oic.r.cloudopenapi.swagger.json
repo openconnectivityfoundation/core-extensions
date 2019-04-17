@@ -81,7 +81,7 @@
           "Events"
         ],
         "summary": "Subscribe to events against the set of devices",
-        "description": "Subscribe to devices events by providing `eventTypes` you're interested in and `eventsUrl` endpoint where events will be sent as JSON-based payloads. Successful response contains `subscriptionId` which identifies registered, not yet running subscription. Running subscription precedes verification of the `eventsUrl`, which is done by processing of an `url_verification` event sent to the `eventsUrl` together with the `subscriptionId` and `challenge` which has to be returned in the `2xx` success response. After this, the subscription is successful and notifications will be sent.\n\n**Supported events** and required scopes\n- `device_onboarded` 🡆 `read:deviceinfo`\n- `device_offboarded` 🡆 `read:deviceinfo`\n",
+        "description": "Subscribe to devices events by providing `eventTypes` you're interested in and `eventsUrl` endpoint where events will be sent to as defined. Successful response contains `subscriptionId` which identifies registered subscription and is part of each event. First event for each registered event type is received immediately after subscription and contains actual state of the resource, followed by new events in case of any change.\n\n**Supported events** and required scopes\n- `device_onboarded` 🡆 `read:deviceinfo`\n- `device_offboarded` 🡆 `read:deviceinfo`\n",
         "parameters": [
           {
             "$ref": "#/parameters/SubscribeRequest"
@@ -96,9 +96,6 @@
         "responses": {
           "200": {
             "$ref": "#/definitions/SubscribeResponse"
-          },
-          "400": {
-            "description": "Verification of subscription failed"
           },
           "401": {
             "$ref": "#/responses/Unauthorized"
@@ -127,24 +124,13 @@
           "Events"
         ],
         "summary": "Unsubscribe from events against the set of devices",
-        "description": "Unsubscribe from devices events by providing 'eventsTypes' you want to unsubscribe from.\n",
-        "parameters": [
-          {
-            "$ref": "#/parameters/UnsubscribeRequest"
-          }
-        ],
-        "consumes": [
-          "application/json"
-        ],
+        "description": "Cancel subscription identified by the id returned in a response for subscription.\n",
         "responses": {
           "202": {
-            "description": "Subscription was marked for deletion"
+            "description": "Subscription was marked for cancellation"
           },
           "401": {
             "$ref": "#/responses/Unauthorized"
-          },
-          "404": {
-            "description": "Not subscribed to provided set of events"
           }
         },
         "security": [
@@ -212,7 +198,7 @@
           "Events"
         ],
         "summary": "Subscribe to events against a specific device",
-        "description": "Subscribe to device events by providing `eventTypes` you're interested in and `eventsUrl` endpoint where events will be sent as JSON-based payloads. Successful response contains `subscriptionId` which identifies registered, not yet running subscription. Running subscription precedes verification of the `eventsUrl`, which is done by processing of an `url_verification` event sent to the `eventsUrl` together with the `subscriptionId` and `challenge` which has to be returned in the `2xx` success response. After this, the subscription is successful and notifications will be sent.\n\n**Supported events** and required scopes\n- `resource_published` 🡆 `read:resource`\n- `resource_unpublished` 🡆 `read:resource`\n- `device_online` 🡆 `read:deviceinfo`\n- `device_offline` 🡆 `read:deviceinfo`\n",
+        "description": "Subscribe to device events by providing `eventTypes` you're interested in and `eventsUrl` endpoint where events will be sent to as defined. Successful response contains `subscriptionId` which identifies registered subscription and is part of each event. First event for each registered event type is received immediately after subscription and contains actual state of the resource, followed by new events in case of any change.\n\n**Supported events** and required scopes\n- `resource_published` 🡆 `read:resource`\n- `resource_unpublished` 🡆 `read:resource`\n- `device_online` 🡆 `read:deviceinfo`\n- `device_offline` 🡆 `read:deviceinfo`\n",
         "parameters": [
           {
             "$ref": "#/parameters/SubscribeRequest"
@@ -227,9 +213,6 @@
         "responses": {
           "200": {
             "$ref": "#/definitions/SubscribeResponse"
-          },
-          "400": {
-            "description": "Invalid subscription"
           },
           "401": {
             "$ref": "#/responses/Unauthorized"
@@ -261,24 +244,13 @@
           "Events"
         ],
         "summary": "Unsubscribe from events against a specific device",
-        "description": "Unsubscribe from a device events by providing 'eventsTypes' you want to unsubscribe from.\n",
-        "parameters": [
-          {
-            "$ref": "#/parameters/UnsubscribeRequest"
-          }
-        ],
-        "consumes": [
-          "application/json"
-        ],
+        "description": "Cancel subscription identified by the id returned in a response for subscription.\n",
         "responses": {
           "202": {
-            "description": "Subscription was marked for deletion"
+            "description": "Subscription was marked for cancellation"
           },
           "401": {
             "$ref": "#/responses/Unauthorized"
-          },
-          "404": {
-            "description": "Not subscribed to provided set of events"
           }
         },
         "security": [
@@ -388,7 +360,7 @@
           "Events"
         ],
         "summary": "Subscribe to events against a specific resource",
-        "description": "Subscribe to resource events by providing `eventTypes` you're interested in and `eventsUrl` endpoint where events will be sent as JSON-based payloads. Successful response contains `subscriptionId` which identifies registered, not yet running subscription. Running subscription precedes verification of the `eventsUrl`, which is done by processing of an `url_verification` event sent to the `eventsUrl` together with the `subscriptionId` and `challenge` which has to be returned in the `2xx` success response. After this, the subscription is successful and notifications will be sent.\n \n**Supported events** and required scopes\n- `resource_contentchanged` 🡆 `read:resource`",
+        "description": "Subscribe to resource events by providing `eventTypes` you're interested in and `eventsUrl` endpoint where events will be sent to as defined. Successful response contains `subscriptionId` which identifies registered subscription and is part of each event. First event for each registered event type is received immediately after subscription and contains actual state of the resource, followed by new events in case of any change.\n \n**Supported events** and required scopes\n- `resource_contentchanged` 🡆 `read:resource`",
         "parameters": [
           {
             "$ref": "#/parameters/SubscribeRequest"
@@ -403,9 +375,6 @@
         "responses": {
           "200": {
             "$ref": "#/definitions/SubscribeResponse"
-          },
-          "400": {
-            "description": "Verification of subscription failed"
           },
           "401": {
             "$ref": "#/responses/Unauthorized"
@@ -440,24 +409,13 @@
           "Events"
         ],
         "summary": "Unsubscribe from events against a specific resource",
-        "description": "Unsubscribe from a resource events by providing 'eventsTypes' you want to unsubscribe from.\n",
-        "parameters": [
-          {
-            "$ref": "#/parameters/UnsubscribeRequest"
-          }
-        ],
-        "consumes": [
-          "application/json"
-        ],
+        "description": "Cancel subscription identified by the id returned in a response for subscription.\n",
         "responses": {
           "202": {
-            "description": "Subscription was marked for deletion"
+            "description": "Subscription was marked for cancellation"
           },
           "401": {
             "$ref": "#/responses/Unauthorized"
-          },
-          "404": {
-            "description": "Not subscribed to provided set of events"
           }
         },
         "security": [
@@ -476,8 +434,8 @@
         "tags": [
           "Events"
         ],
-        "summary": "Events endpoint provided by the subscriber",
-        "description": "Events endpoint provided during subscription where events specified in the subscription payload will be sent to in form of the JSON-based payloads. Confirmation of each event sent to the `eventsUrl` endpoint is required with `2xx` success code.\n",
+        "summary": "Events endpoint provided by the subscriber, where events are delivered",
+        "description": "Events endpoint provided during subscription where events specified in the subscription will be sent to  as defined per event type. Confirmation of each event sent to the `eventsUrl` endpoint is required with `2xx` success code. Events you will receive based on event type you're subscribed to are:\n - `subscription_canceled` 🡆 `SubscriptionCanceledEvent`\n - `device_onboarded` 🡆 `DeviceOnboardedEvent`\n - `device_offboarded` 🡆 `DeviceOffboardedEvent`\n - `resource_published` 🡆 `ResourcePublishedEvent`\n - `resource_unpublished` 🡆 `ResourceUnpublishedEvent`\n - `device_online` 🡆 `DeviceOnlineEvent`\n - `device_offline` 🡆 `DeviceOfflineEvent`\n - `resource_contentchanged` 🡆 `ResourceContentChangedEvent`",
         "parameters": [
           {
             "$ref": "#/parameters/CorrelationId"
@@ -535,36 +493,35 @@
       "format": "HMAC-SHA256"
     },
     "DeviceType": {
+      "description": "Filter devices by device type",
       "name": "rt",
       "in": "query",
-      "description": "Filter devices by device type",
       "type": "array",
       "items": {
         "type": "string"
       }
     },
     "ResourceLinkHref": {
+      "description": "Path to resource",
       "name": "resourceLinkHref",
       "in": "path",
-      "description": "Path to resource",
-      "required": true,
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "DeviceId": {
+      "description": "Id of the device",
       "name": "deviceId",
       "in": "path",
-      "description": "Id of the device",
-      "required": true,
       "type": "string",
-      "format": "uuid"
+      "format": "uuid",
+      "required": true
     },
     "SubscriptionId": {
       "name": "subscriptionId",
       "in": "path",
-      "description": "Id of the subscription",
-      "required": true,
       "type": "string",
-      "format": "uuid"
+      "format": "uuid",
+      "required": true
     },
     "Status": {
       "name": "s",
@@ -581,14 +538,14 @@
     },
     "EventsUrl": {
       "name": "eventsUrl",
+      "type": "string",
       "in": "path",
-      "required": true,
-      "type": "string"
+      "required": true
     },
     "ResourceUpdateRequest": {
+      "description": "Map of resource values to be updated",
       "name": "content",
       "in": "body",
-      "description": "Map of resource values to be updated",
       "schema": {
         "$ref": "#/definitions/ResourceUpdateRequest"
       },
@@ -602,19 +559,12 @@
       },
       "required": true
     },
-    "UnsubscribeRequest": {
-      "name": "content",
-      "in": "body",
-      "schema": {
-        "$ref": "#/definitions/UnsubscribeRequest"
-      },
-      "required": true
-    },
     "Event": {
+      "description": "Event of a specific type, based on what you're subscribed to",
       "name": "content",
       "in": "body",
       "schema": {
-        "$ref": "#/definitions/Event"
+        "$ref": "#/definitions/ResourceContentChangedEvent"
       },
       "required": true
     }
@@ -637,12 +587,7 @@
           "type": "object",
           "properties": {
             "s": {
-              "description": "Device status available from the OCF Cloud, which tracks if the device has opened TCP connection and is signed in",
-              "type": "string",
-              "enum": [
-                "online",
-                "offline"
-              ]
+              "$ref": "#/definitions/DeviceStatus"
             }
           }
         }
@@ -709,23 +654,59 @@
         }
       ]
     },
+    "DeviceStatus": {
+      "description": "Device status available from the OCF Cloud, which tracks if the device has opened TCP connection and is signed in",
+      "type": "string",
+      "enum": [
+        "online",
+        "offline"
+      ]
+    },
     "ResourceUpdateRequest": {
       "type": "object",
-      "description": "Values of resources to be updated",
+      "description": "Desired resource content",
+      "properties": {
+        "contentType": {
+          "$ref": "#/definitions/ContentType"
+        },
+        "content": {
+          "$ref": "#/definitions/Content"
+        }
+      },
       "example": {
-        "desiredHumidity": 45
+        "contentType": "application/cbor",
+        "content": "o29kZXNpcmVkSHVtaWRpdHkYPGV0eXBlc4Fub2ljLnIuaHVtaWRpdHloaHVtaWRpdHkYKA=="
       }
     },
     "ResourceRetrieveResponse": {
       "type": "object",
-      "description": "Values of resource",
+      "description": "Content of resource with encoding information",
+      "properties": {
+        "contentType": {
+          "$ref": "#/definitions/ContentType"
+        },
+        "content": {
+          "$ref": "#/definitions/Content"
+        }
+      },
       "example": {
-        "types": [
-          "oic.r.humidity"
-        ],
-        "humidity": 40,
-        "desiredHumidity": 45
+        "contentType": "application/cbor",
+        "content": "o29kZXNpcmVkSHVtaWRpdHkYPGV0eXBlc4Fub2ljLnIuaHVtaWRpdHloaHVtaWRpdHkYKA=="
       }
+    },
+    "ContentType": {
+      "description": "Resource content type data are encoded to",
+      "type": "string",
+      "enum": [
+        "application/json",
+        "application/cbor",
+        "application/xml"
+      ]
+    },
+    "Content": {
+      "description": "Base64 encoded content of the resource",
+      "type": "string",
+      "format": "byte"
     },
     "SubscribeRequest": {
       "type": "object",
@@ -746,7 +727,6 @@
       ],
       "example": {
         "eventsUrl": "https://notify.openapi.exaple.com/",
-        "subscriptionId": "1eeb465c-5e8d-4305-a366-bbf035fff671",
         "eventTypes": [
           "device_onboarded",
           "device_offboarded"
@@ -758,40 +738,20 @@
       "type": "object",
       "properties": {
         "subscriptionId": {
-          "type": "string",
-          "format": "uuid"
-        },
-        "challenge": {
-          "type": "string"
+          "$ref": "#/definitions/SubscriptionId"
         }
       },
       "required": [
-        "subscriptionId",
-        "challenge"
+        "subscriptionId"
       ],
       "example": {
-        "subscriptionId": "1eeb465c-5e8d-4305-a366-bbf035fff671",
-        "challenge": "1l2h7y3a3@4fbj4"
+        "subscriptionId": "1eeb465c-5e8d-4305-a366-bbf035fff671"
       }
     },
-    "UnsubscribeRequest": {
-      "type": "object",
-      "properties": {
-        "eventTypes": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/EventType"
-          }
-        }
-      },
-      "required": [
-        "eventTypes"
-      ],
-      "example": {
-        "eventTypes": [
-          "device_onboarded"
-        ]
-      }
+    "SubscriptionId": {
+      "description": "Unique id of the subscription",
+      "type": "string",
+      "format": "uuid"
     },
     "EventsUrl": {
       "type": "string",
@@ -801,7 +761,6 @@
     "EventType": {
       "type": "string",
       "enum": [
-        "url_verify",
         "subscription_canceled",
         "device_onboarded",
         "device_offboarded",
@@ -812,28 +771,157 @@
         "device_offline"
       ]
     },
-    "Event": {
+    "SubscriptionCanceledEvent": {
+      "type": "object",
+      "description": "Subscription with provided id was canceled",
+      "properties": {
+        "subscriptionId": {
+          "$ref": "#/definitions/SubscriptionId"
+        },
+        "eventType": {
+          "$ref": "#/definitions/EventType"
+        }
+      },
+      "example": {
+        "subscriptionId": "1eeb465c-5e8d-4305-a366-bbf035fff671",
+        "eventType": "subscription_canceled"
+      }
+    },
+    "DeviceOnboardedEvent": {
+      "description": "Device was successfully signed up to the OCF Cloud, as defined in the `oic.sec.account`",
       "type": "object",
       "properties": {
         "subscriptionId": {
-          "type": "string",
-          "format": "uuid"
+          "$ref": "#/definitions/SubscriptionId"
         },
         "eventType": {
           "$ref": "#/definitions/EventType"
         },
-        "data": {
-          "type": "object",
-          "description": "Event content"
+        "content": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Device"
+          }
+        }
+      }
+    },
+    "DeviceOffboardedEvent": {
+      "description": "Device was successfully signed off from the OCF Cloud, as defined in the `oic.sec.account`",
+      "type": "object",
+      "properties": {
+        "subscriptionId": {
+          "$ref": "#/definitions/SubscriptionId"
+        },
+        "eventType": {
+          "$ref": "#/definitions/EventType"
+        },
+        "content": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Device"
+          }
+        }
+      }
+    },
+    "ResourcePublishedEvent": {
+      "type": "object",
+      "properties": {
+        "subscriptionId": {
+          "$ref": "#/definitions/SubscriptionId"
+        },
+        "eventType": {
+          "$ref": "#/definitions/EventType"
+        },
+        "content": {
+          "type": "array",
+          "items": {
+            "$ref": "https://raw.githubusercontent.com/ondrejtomcik/coreocf/Bugzilla-2709/swagger2.0/oic.wk.res.swagger.json#/definitions/oic.oic-link"
+          }
+        }
+      }
+    },
+    "ResourceUnpublishedEvent": {
+      "type": "object",
+      "properties": {
+        "subscriptionId": {
+          "$ref": "#/definitions/SubscriptionId"
+        },
+        "eventType": {
+          "$ref": "#/definitions/EventType"
+        },
+        "content": {
+          "type": "array",
+          "items": {
+            "$ref": "https://raw.githubusercontent.com/ondrejtomcik/coreocf/Bugzilla-2709/swagger2.0/oic.wk.res.swagger.json#/definitions/oic.oic-link"
+          }
+        }
+      }
+    },
+    "DeviceOnlineEvent": {
+      "type": "object",
+      "properties": {
+        "subscriptionId": {
+          "$ref": "#/definitions/SubscriptionId"
+        },
+        "eventType": {
+          "$ref": "#/definitions/EventType"
+        },
+        "content": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "di": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
+        }
+      }
+    },
+    "DeviceOfflineEvent": {
+      "type": "object",
+      "properties": {
+        "subscriptionId": {
+          "$ref": "#/definitions/SubscriptionId"
+        },
+        "eventType": {
+          "$ref": "#/definitions/EventType"
+        },
+        "content": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "di": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ResourceContentChangedEvent": {
+      "type": "object",
+      "properties": {
+        "subscriptionId": {
+          "$ref": "#/definitions/SubscriptionId"
+        },
+        "eventType": {
+          "$ref": "#/definitions/EventType"
+        },
+        "contentType": {
+          "$ref": "#/definitions/ContentType"
+        },
+        "content": {
+          "$ref": "#/definitions/Content"
         }
       },
       "example": {
         "subscriptionId": "1eeb465c-5e8d-4305-a366-bbf035fff671",
         "eventType": "resource_contentchanged",
-        "data": {
-          "eventhumidity": 40,
-          "desiredHumidity": 45
-        }
+        "contentType": "application/cbor",
+        "content": "o29kZXNpcmVkSHVtaWRpdHkYPGV0eXBlc4Fub2ljLnIuaHVtaWRpdHloaHVtaWRpdHkYKA=="
       }
     }
   }
