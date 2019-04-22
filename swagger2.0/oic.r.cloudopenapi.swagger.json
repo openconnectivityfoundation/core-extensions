@@ -28,6 +28,9 @@
       "parameters": [
         {
           "$ref": "#/parameters/CorrelationId"
+        },
+        {
+          "$ref": "#/parameters/BatchFormat"
         }
       ],
       "get": {
@@ -150,6 +153,9 @@
         },
         {
           "$ref": "#/parameters/DeviceId"
+        },
+        {
+          "$ref": "#/parameters/BatchFormat"
         }
       ],
       "get": {
@@ -567,6 +573,13 @@
         "$ref": "#/definitions/ResourceContentChangedEvent"
       },
       "required": true
+    },
+    "BatchFormat": {
+      "description": "Resolve all Links in the response payload to the Resource Representation.",
+      "name": "if",
+      "in": "query",
+      "type": "string",
+      "enum": ["oic.if.b"]
     }
   },
   "responses": {
