@@ -31,6 +31,9 @@
         },
         {
           "$ref": "#/parameters/BatchFormat"
+        },
+        {
+          "$ref": "#/parameters/Accept"
         }
       ],
       "get": {
@@ -43,9 +46,6 @@
           {
             "$ref": "#/parameters/Status"
           }
-        ],
-        "consumes": [
-          "application/json"
         ],
         "produces": [
           "application/json"
@@ -77,6 +77,12 @@
       "parameters": [
         {
           "$ref": "#/parameters/CorrelationId"
+        },
+        {
+          "$ref": "#/parameters/Accept"
+        },
+        {
+          "$ref": "#/parameters/ContentType"
         }
       ],
       "post": {
@@ -156,6 +162,9 @@
         },
         {
           "$ref": "#/parameters/BatchFormat"
+        },
+        {
+          "$ref": "#/parameters/Accept"
         }
       ],
       "get": {
@@ -197,6 +206,12 @@
         },
         {
           "$ref": "#/parameters/DeviceId"
+        },
+        {
+          "$ref": "#/parameters/Accept"
+        },
+        {
+          "$ref": "#/parameters/ContentType"
         }
       ],
       "post": {
@@ -280,6 +295,9 @@
         },
         {
           "$ref": "#/parameters/ResourceLinkHref"
+        },
+        {
+          "$ref": "#/parameters/Accept"
         }
       ],
       "get": {
@@ -288,10 +306,12 @@
         ],
         "summary": "Retrieve resource values",
         "consumes": [
-          "application/json"
+          "application/json",
+          "application/vnd.ocf+cbor"
         ],
         "produces": [
-          "application/json"
+          "application/json",
+          "application/vnd.ocf+cbor"
         ],
         "responses": {
           "200": {
@@ -321,13 +341,18 @@
         "parameters": [
           {
             "$ref": "#/parameters/ResourceUpdateRequest"
+          },
+          {
+            "$ref": "#/parameters/ContentType"
           }
         ],
         "consumes": [
-          "application/json"
+          "application/json",
+          "application/vnd.ocf+cbor"
         ],
         "produces": [
-          "application/json"
+          "application/json",
+          "application/vnd.ocf+cbor"
         ],
         "responses": {
           "200": {
@@ -359,6 +384,12 @@
         },
         {
           "$ref": "#/parameters/ResourceLinkHref"
+        },
+        {
+          "$ref": "#/parameters/Accept"
+        },
+        {
+          "$ref": "#/parameters/ContentType"
         }
       ],
       "post": {
@@ -447,7 +478,19 @@
             "$ref": "#/parameters/CorrelationId"
           },
           {
+            "$ref": "#/parameters/ContentType"
+          },
+          {
             "$ref": "#/parameters/EventSignature"
+          },
+          {
+            "$ref": "#/parameters/EventType"
+          },
+          {
+            "$ref": "#/parameters/Subscription-Id"
+          },
+          {
+            "$ref": "#/parameters/SequenceNumber"
           },
           {
             "$ref": "#/parameters/EventsUrl"
@@ -457,7 +500,8 @@
           }
         ],
         "consumes": [
-          "application/json"
+          "application/json",
+          "application/vnd.ocf+cbor"
         ],
         "responses": {
           "200": {
@@ -487,9 +531,30 @@
     "CorrelationId": {
       "name": "Correlation-Id",
       "in": "header",
-      "description": "A Correlation ID, also known as a Transit ID, is a unique identifier value that is attached to requests and messages that allow reference to a particular transaction or event chain.\n",
       "type": "string",
-      "format": "uuid"
+      "format": "uuid",
+      "description": "A Correlation ID, also known as a Transit ID, is a unique identifier value that is attached to requests and messages that allow reference to a particular transaction or event chain.\n"
+    },
+    "ContentType": {
+      "name": "Content-Type",
+      "in": "header",
+      "type": "string",
+      "enum": [
+        "application/json",
+        "application/vnd.ocf+cbor"
+      ],
+      "required": true,
+      "description": "The Content-Type header is used to indicate the media type of the resource. In responses, a Content-Type header tells the client what the content type of the returned content actually is. In requests, (such as POST), the client tells the server what type of data is actually sent.\n"
+    },
+    "Accept": {
+      "name": "Accept",
+      "in": "header",
+      "type": "string",
+      "enum": [
+        "application/json",
+        "application/vnd.ocf+cbor"
+      ],
+      "description": "The Accept request header can be used to specify certain media types which are acceptable for the response. Accept headers can be used to indicate that the request is specifically limited to a small set of desired types.\n"
     },
     "EventSignature": {
       "name": "Event-Signature",
@@ -497,6 +562,38 @@
       "description": "The signature is created for each event by combining the signing secret - OAuth Client Secret with the body of the event request using a standard HMAC-SHA256 keyed hash.\n",
       "type": "string",
       "format": "HMAC-SHA256"
+    },
+    "Subscription-Id": {
+      "name": "Subscription-Id",
+      "in": "header",
+      "description": "Unique id of the subscription",
+      "type": "string",
+      "format": "uuid",
+      "required": true
+    },
+    "SequenceNumber": {
+      "name": "Sequence-Number",
+      "in": "header",
+      "description": "Unique id of the subscription",
+      "type": "string",
+      "format": "uuid",
+      "required": true
+    },
+    "EventType": {
+      "name": "Event-Type",
+      "in": "header",
+      "type": "string",
+      "enum": [
+        "subscription_canceled",
+        "device_onboarded",
+        "device_offboarded",
+        "resource_contentchanged",
+        "resource_published",
+        "resource_unpublished",
+        "device_online",
+        "device_offline"
+      ],
+      "required": true
     },
     "DeviceType": {
       "description": "Filter devices by device type",
@@ -579,7 +676,9 @@
       "name": "if",
       "in": "query",
       "type": "string",
-      "enum": ["oic.if.b"]
+      "enum": [
+        "oic.if.b"
+      ]
     }
   },
   "responses": {
@@ -676,50 +775,32 @@
       ]
     },
     "ResourceUpdateRequest": {
-      "type": "object",
-      "description": "Desired resource content",
-      "properties": {
-        "contentType": {
-          "$ref": "#/definitions/ContentType"
-        },
-        "content": {
-          "$ref": "#/definitions/Content"
-        }
-      },
-      "example": {
-        "contentType": "application/cbor",
-        "content": "o29kZXNpcmVkSHVtaWRpdHkYPGV0eXBlc4Fub2ljLnIuaHVtaWRpdHloaHVtaWRpdHkYKA=="
-      }
+      "type": "string",
+      "description": "Desired content of the resource",
+      "example": "o29kZXNpcmVkSHVtaWRpdHkYPGV0eXBlc4Fub2ljLnIuaHVtaWRpdHloaHVtaWRpdHkYKA=="
     },
     "ResourceRetrieveResponse": {
-      "type": "object",
-      "description": "Content of resource with encoding information",
-      "properties": {
-        "contentType": {
-          "$ref": "#/definitions/ContentType"
-        },
-        "content": {
-          "$ref": "#/definitions/Content"
-        }
-      },
-      "example": {
-        "contentType": "application/cbor",
-        "content": "o29kZXNpcmVkSHVtaWRpdHkYPGV0eXBlc4Fub2ljLnIuaHVtaWRpdHloaHVtaWRpdHkYKA=="
-      }
+      "type": "string",
+      "description": "Content of the resource returned from the device",
+      "example": "o29kZXNpcmVkSHVtaWRpdHkYPGV0eXBlc4Fub2ljLnIuaHVtaWRpdHloaHVtaWRpdHkYKA=="
     },
-    "ContentType": {
-      "description": "Resource content type data are encoded to",
+    "EventType": {
       "type": "string",
       "enum": [
-        "application/json",
-        "application/cbor",
-        "application/xml"
+        "subscription_canceled",
+        "device_onboarded",
+        "device_offboarded",
+        "resource_contentchanged",
+        "resource_published",
+        "resource_unpublished",
+        "device_online",
+        "device_offline"
       ]
     },
-    "Content": {
-      "description": "Base64 encoded content of the resource",
+    "SubscriptionId": {
+      "description": "Unique id of the subscription",
       "type": "string",
-      "format": "byte"
+      "format": "uuid"
     },
     "SubscribeRequest": {
       "type": "object",
@@ -761,55 +842,19 @@
         "subscriptionId": "1eeb465c-5e8d-4305-a366-bbf035fff671"
       }
     },
-    "SubscriptionId": {
-      "description": "Unique id of the subscription",
-      "type": "string",
-      "format": "uuid"
-    },
     "EventsUrl": {
       "type": "string",
       "format": "url",
       "example": "https://notify.openapi.exaple.com/"
     },
-    "EventType": {
-      "type": "string",
-      "enum": [
-        "subscription_canceled",
-        "device_onboarded",
-        "device_offboarded",
-        "resource_contentchanged",
-        "resource_published",
-        "resource_unpublished",
-        "device_online",
-        "device_offline"
-      ]
-    },
     "SubscriptionCanceledEvent": {
       "type": "object",
-      "description": "Subscription with provided id was canceled",
-      "properties": {
-        "subscriptionId": {
-          "$ref": "#/definitions/SubscriptionId"
-        },
-        "eventType": {
-          "$ref": "#/definitions/EventType"
-        }
-      },
-      "example": {
-        "subscriptionId": "1eeb465c-5e8d-4305-a366-bbf035fff671",
-        "eventType": "subscription_canceled"
-      }
+      "description": "Subscription with provided id was canceled"
     },
     "DeviceOnboardedEvent": {
       "description": "Device was successfully signed up to the OCF Cloud, as defined in the `oic.sec.account`",
       "type": "object",
       "properties": {
-        "subscriptionId": {
-          "$ref": "#/definitions/SubscriptionId"
-        },
-        "eventType": {
-          "$ref": "#/definitions/EventType"
-        },
         "content": {
           "type": "array",
           "items": {
@@ -822,12 +867,6 @@
       "description": "Device was successfully signed off from the OCF Cloud, as defined in the `oic.sec.account`",
       "type": "object",
       "properties": {
-        "subscriptionId": {
-          "$ref": "#/definitions/SubscriptionId"
-        },
-        "eventType": {
-          "$ref": "#/definitions/EventType"
-        },
         "content": {
           "type": "array",
           "items": {
@@ -839,12 +878,6 @@
     "ResourcePublishedEvent": {
       "type": "object",
       "properties": {
-        "subscriptionId": {
-          "$ref": "#/definitions/SubscriptionId"
-        },
-        "eventType": {
-          "$ref": "#/definitions/EventType"
-        },
         "content": {
           "type": "array",
           "items": {
@@ -856,12 +889,6 @@
     "ResourceUnpublishedEvent": {
       "type": "object",
       "properties": {
-        "subscriptionId": {
-          "$ref": "#/definitions/SubscriptionId"
-        },
-        "eventType": {
-          "$ref": "#/definitions/EventType"
-        },
         "content": {
           "type": "array",
           "items": {
@@ -873,12 +900,6 @@
     "DeviceOnlineEvent": {
       "type": "object",
       "properties": {
-        "subscriptionId": {
-          "$ref": "#/definitions/SubscriptionId"
-        },
-        "eventType": {
-          "$ref": "#/definitions/EventType"
-        },
         "content": {
           "type": "array",
           "items": {
@@ -895,12 +916,6 @@
     "DeviceOfflineEvent": {
       "type": "object",
       "properties": {
-        "subscriptionId": {
-          "$ref": "#/definitions/SubscriptionId"
-        },
-        "eventType": {
-          "$ref": "#/definitions/EventType"
-        },
         "content": {
           "type": "array",
           "items": {
@@ -915,27 +930,9 @@
       }
     },
     "ResourceContentChangedEvent": {
-      "type": "object",
-      "properties": {
-        "subscriptionId": {
-          "$ref": "#/definitions/SubscriptionId"
-        },
-        "eventType": {
-          "$ref": "#/definitions/EventType"
-        },
-        "contentType": {
-          "$ref": "#/definitions/ContentType"
-        },
-        "content": {
-          "$ref": "#/definitions/Content"
-        }
-      },
-      "example": {
-        "subscriptionId": "1eeb465c-5e8d-4305-a366-bbf035fff671",
-        "eventType": "resource_contentchanged",
-        "contentType": "application/cbor",
-        "content": "o29kZXNpcmVkSHVtaWRpdHkYPGV0eXBlc4Fub2ljLnIuaHVtaWRpdHloaHVtaWRpdHkYKA=="
-      }
+      "type": "string",
+      "description": "New Content of the resource returned from the device",
+      "example": "o29kZXNpcmVkSHVtaWRpdHkYPGV0eXBlc4Fub2ljLnIuaHVtaWRpdHloaHVtaWRpdHkYKA=="
     }
   }
 }
