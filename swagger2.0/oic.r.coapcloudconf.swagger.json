@@ -29,7 +29,7 @@
                   "apn": "github",
                   "cis": "coaps+tcp://example.com:443",
                   "sid" : "987e6543-a21f-10d1-a112-421345746237",
-                  "cps" : "initialized",
+                  "cps" : "registered",
                   "clec": 0
                 },
               "schema": { "$ref": "#/definitions/CoAPCloudConf" }
@@ -62,7 +62,7 @@
                   "apn": "github",
                   "cis": "coaps+tcp://example.com:443",
                   "sid" : "987e6543-a21f-10d1-a112-421345746237",
-                  "cps" : "initialized",
+                  "cps" : "readytoregister",
                   "clec": 0
                 },
               "schema": { "$ref": "#/definitions/CoAPCloudConf" }
@@ -86,7 +86,7 @@
                   "apn": "github",
                   "cis": "coaps+tcp://example.com:443",
                   "sid" : "987e6543-a21f-10d1-a112-421345746237",
-                  "cps" : "initialized",
+                  "cps" : "registered",
                   "clec": 0
                 },
               "schema": { "$ref": "#/definitions/CoAPCloudConf" }
@@ -119,7 +119,7 @@
                   "apn": "github",
                   "cis": "coaps+tcp://example.com:443",
                   "sid" : "987e6543-a21f-10d1-a112-421345746237",
-                  "cps" : "initialized",
+                  "cps" : "readytoregister",
                   "clec": 0
                 },
               "schema": { "$ref": "#/definitions/CoAPCloudConf" }
@@ -169,10 +169,10 @@
         "cps" : {
           "description": "Indicates the Cloud Provisioning status of the Device.",
           "enum": [
-            "initialized",
+            "uninitialized",
+            "readytoregister",
             "registering",
             "registered",
-            "deregistered",
             "failed"
           ],
           "readOnly": true,
