@@ -722,49 +722,49 @@
       }
     },
     "DeviceWithLinks": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/Device"
+      "type": "object",
+      "properties": {
+        "device": {
+          "$ref": "https://raw.githubusercontent.com/ondrejtomcik/coreocf/Bugzilla-2709/swagger2.0/oic.wk.d.swagger.json#/definitions/Device"
         },
-        {
-          "type": "object",
+        "statusandlinks": {
           "properties": {
+            "s": {
+              "$ref": "#/definitions/DeviceStatus"
+            },
             "links": {
               "type": "array",
               "items": {
                 "$ref": "https://raw.githubusercontent.com/ondrejtomcik/coreocf/Bugzilla-2709/swagger2.0/oic.wk.res.swagger.json#/definitions/oic.oic-link"
               }
             }
-          },
-          "required": [
-            "rt",
-            "href"
-          ],
-          "example": {
-            "rt": [
-              "oic.wk.d"
-            ],
-            "dmn": "Open Connectivity Foundation",
-            "n": "Food safety sensor",
-            "di": "53080a4f-5e3e-4291-802f-3436238232d2",
-            "s": "online",
-            "links": [
-              {
-                "href": "/53080a4f-5e3e-4291-802f-3436238232d2/humidity",
-                "rt": [
-                  "oic.r.humidity"
-                ]
-              },
-              {
-                "href": "/temperature",
-                "rt": [
-                  "oic.r.temperature"
-                ]
-              }
-            ]
           }
         }
-      ]
+      },
+      "example": {
+        "device": {
+          "dmn": "Open Connectivity Foundation",
+          "n": "Food safety sensor",
+          "di": "53080a4f-5e3e-4291-802f-3436238232d2"
+        },
+        "statusandlinks": {
+          "s": "online",
+          "links": [
+            {
+              "href": "/53080a4f-5e3e-4291-802f-3436238232d2/humidity",
+              "rt": [
+                "oic.r.humidity"
+              ]
+            },
+            {
+              "href": "/temperature",
+              "rt": [
+                "oic.r.temperature"
+              ]
+            }
+          ]
+        }
+      }
     },
     "DeviceStatus": {
       "description": "Device status available from the OCF Cloud, which tracks if the device has opened TCP connection and is signed in",
