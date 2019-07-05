@@ -180,7 +180,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/definitions/DeviceWithLinks"
+            "$ref": "#/definitions/Device"
           },
           "401": {
             "$ref": "#/responses/Unauthorized"
@@ -691,49 +691,13 @@
   },
   "definitions": {
     "Device": {
-      "allOf": [
-        {
-          "$ref": "https://raw.githubusercontent.com/ondrejtomcik/coreocf/Bugzilla-2709/swagger2.0/oic.wk.d.swagger.json#/definitions/Device"
-        },
-        {
-          "type": "object",
-          "properties": {
-            "s": {
-              "$ref": "#/definitions/DeviceStatus"
-            }
-          }
-        }
-      ],
-      "required": [
-        "rt",
-        "dmn",
-        "n",
-        "di",
-        "s"
-      ],
-      "example": {
-        "rt": [
-          "oic.wk.d"
-        ],
-        "dmn": "Open Connectivity Foundation",
-        "n": "Food safety sensor",
-        "di": "53080a4f-5e3e-4291-802f-3436238232d2",
-        "s": "online"
-      }
-    },
-    "DeviceWithLinks": {
       "type": "object",
       "properties": {
         "device": {
           "$ref": "https://raw.githubusercontent.com/ondrejtomcik/coreocf/Bugzilla-2709/swagger2.0/oic.wk.d.swagger.json#/definitions/Device"
         },
-        "devicestatus": {
-          "type": "object",
-          "properties": {
-            "s": {
-              "$ref": "#/definitions/DeviceStatus"
-            }
-          }
+        "status": {
+          "$ref": "#/definitions/DeviceStatus"
         },
         "links": {
           "type": "array",
@@ -748,9 +712,7 @@
           "n": "Food safety sensor",
           "di": "53080a4f-5e3e-4291-802f-3436238232d2"
         },
-        "devicestatus": {
-          "s": "online"
-        },
+        "status":  "online",
         "links": [
           {
             "href": "/53080a4f-5e3e-4291-802f-3436238232d2/humidity",
