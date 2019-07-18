@@ -2,10 +2,13 @@
   "swagger": "2.0",
   "info": {
     "title": "OCF Cloud Open API",
-    "version": "0.0.1"
+    "version": "0.4.0",
+    "license": {
+      "name": "Copyright 2016-2019 Open Connectivity Foundation, Inc. All rights reserved.",
+      "x-description": "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n        1.  Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n        2.  Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\n        THIS SOFTWARE IS PROVIDED BY THE Open Connectivity Foundation, INC. \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE OR WARRANTIES OF NON-INFRINGEMENT, ARE DISCLAIMED.\n        IN NO EVENT SHALL THE Open Connectivity Foundation, INC. OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)\n        HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+    }
   },
   "host": "api.example.com",
-  "basePath": "/v1",
   "schemes": [
     "https"
   ],
@@ -24,7 +27,7 @@
     }
   ],
   "paths": {
-    "/devices": {
+    "/api/v1/devices": {
       "parameters": [
         {
           "$ref": "#/parameters/CorrelationId"
@@ -60,8 +63,14 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/responses/BadRequest"
+          },
           "401": {
             "$ref": "#/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/Forbidden"
           }
         },
         "security": [
@@ -73,7 +82,7 @@
         ]
       }
     },
-    "/devices/subscriptions": {
+    "/api/v1/devices/subscriptions": {
       "parameters": [
         {
           "$ref": "#/parameters/CorrelationId"
@@ -83,6 +92,9 @@
         },
         {
           "$ref": "#/parameters/ContentType"
+        },
+        {
+          "$ref": "#/parameters/Token"
         }
       ],
       "post": {
@@ -106,8 +118,14 @@
           "200": {
             "$ref": "#/definitions/SubscribeResponse"
           },
+          "400": {
+            "$ref": "#/responses/BadRequest"
+          },
           "401": {
             "$ref": "#/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/Forbidden"
           }
         },
         "security": [
@@ -119,13 +137,13 @@
         ]
       }
     },
-    "/devices/subscriptions/{subscriptionId}": {
+    "/api/v1/devices/subscriptions/{subscriptionId}": {
       "parameters": [
         {
           "$ref": "#/parameters/CorrelationId"
         },
         {
-          "$ref": "#/parameters/SubscriptionId"
+          "$ref": "#/parameters/SubscriptionIdPath"
         }
       ],
       "delete": {
@@ -138,8 +156,17 @@
           "202": {
             "description": "Subscription was marked for cancellation"
           },
+          "400": {
+            "$ref": "#/responses/BadRequest"
+          },
           "401": {
             "$ref": "#/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/NotFound"
           }
         },
         "security": [
@@ -152,7 +179,7 @@
         ]
       }
     },
-    "/devices/{deviceId}": {
+    "/api/v1/devices/{deviceId}": {
       "parameters": [
         {
           "$ref": "#/parameters/CorrelationId"
@@ -185,8 +212,14 @@
               "$ref": "#/definitions/DeviceContentAll"
             }
           },
+          "400": {
+            "$ref": "#/responses/BadRequest"
+          },
           "401": {
             "$ref": "#/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/Forbidden"
           },
           "404": {
             "$ref": "#/responses/NotFound"
@@ -201,7 +234,7 @@
         ]
       }
     },
-    "/devices/{deviceId}/subscriptions": {
+    "/api/v1/devices/{deviceId}/subscriptions": {
       "parameters": [
         {
           "$ref": "#/parameters/CorrelationId"
@@ -214,6 +247,9 @@
         },
         {
           "$ref": "#/parameters/ContentType"
+        },
+        {
+          "$ref": "#/parameters/Token"
         }
       ],
       "post": {
@@ -237,8 +273,17 @@
           "200": {
             "$ref": "#/definitions/SubscribeResponse"
           },
+          "400": {
+            "$ref": "#/responses/BadRequest"
+          },
           "401": {
             "$ref": "#/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/NotFound"
           }
         },
         "security": [
@@ -250,7 +295,7 @@
         ]
       }
     },
-    "/devices/{deviceId}/subscriptions/{subscriptionId}": {
+    "/api/v1/devices/{deviceId}/subscriptions/{subscriptionId}": {
       "parameters": [
         {
           "$ref": "#/parameters/CorrelationId"
@@ -259,7 +304,7 @@
           "$ref": "#/parameters/DeviceId"
         },
         {
-          "$ref": "#/parameters/SubscriptionId"
+          "$ref": "#/parameters/SubscriptionIdPath"
         }
       ],
       "delete": {
@@ -272,8 +317,17 @@
           "202": {
             "description": "Subscription was marked for cancellation"
           },
+          "400": {
+            "$ref": "#/responses/BadRequest"
+          },
           "401": {
             "$ref": "#/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/NotFound"
           }
         },
         "security": [
@@ -286,7 +340,7 @@
         ]
       }
     },
-    "/devices/{deviceId}/{resourceLinkHref}": {
+    "/api/v1/devices/{deviceId}/{resourceLinkHref}": {
       "parameters": [
         {
           "$ref": "#/parameters/CorrelationId"
@@ -318,11 +372,20 @@
           "200": {
             "$ref": "#/definitions/ResourceRetrieveResponse"
           },
+          "400": {
+            "$ref": "#/responses/BadRequest"
+          },
           "401": {
             "$ref": "#/responses/Unauthorized"
           },
+          "403": {
+            "$ref": "#/responses/Forbidden"
+          },
           "404": {
             "$ref": "#/responses/NotFound"
+          },
+          "503": {
+            "description": "The target Device is unavailable for the reason indicated in the diagnostic payload"
           }
         },
         "security": [
@@ -358,11 +421,20 @@
           "200": {
             "$ref": "#/definitions/ResourceRetrieveResponse"
           },
+          "400": {
+            "$ref": "#/responses/BadRequest"
+          },
           "401": {
             "$ref": "#/responses/Unauthorized"
           },
+          "403": {
+            "$ref": "#/responses/Forbidden"
+          },
           "404": {
             "$ref": "#/responses/NotFound"
+          },
+          "415": {
+            "description": "Unsupported media type specified in the Content-Type header"
           }
         },
         "security": [
@@ -374,7 +446,7 @@
         ]
       }
     },
-    "/devices/{deviceId}/{resourceLinkHref}/subscriptions": {
+    "/api/v1/devices/{deviceId}/{resourceLinkHref}/subscriptions": {
       "parameters": [
         {
           "$ref": "#/parameters/CorrelationId"
@@ -390,6 +462,9 @@
         },
         {
           "$ref": "#/parameters/ContentType"
+        },
+        {
+          "$ref": "#/parameters/Token"
         }
       ],
       "post": {
@@ -413,8 +488,17 @@
           "200": {
             "$ref": "#/definitions/SubscribeResponse"
           },
+          "400": {
+            "$ref": "#/responses/BadRequest"
+          },
           "401": {
             "$ref": "#/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/NotFound"
           }
         },
         "security": [
@@ -426,7 +510,7 @@
         ]
       }
     },
-    "/devices/{deviceId}/{resourceLinkHref}/subscriptions/{subscriptionId}": {
+    "/api/v1/devices/{deviceId}/{resourceLinkHref}/subscriptions/{subscriptionId}": {
       "parameters": [
         {
           "$ref": "#/parameters/CorrelationId"
@@ -438,7 +522,7 @@
           "$ref": "#/parameters/ResourceLinkHref"
         },
         {
-          "$ref": "#/parameters/SubscriptionId"
+          "$ref": "#/parameters/SubscriptionIdPath"
         }
       ],
       "delete": {
@@ -451,8 +535,17 @@
           "202": {
             "description": "Subscription was marked for cancellation"
           },
+          "400": {
+            "$ref": "#/responses/BadRequest"
+          },
           "401": {
             "$ref": "#/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/NotFound"
           }
         },
         "security": [
@@ -480,16 +573,16 @@
             "$ref": "#/parameters/ContentType"
           },
           {
-            "$ref": "#/parameters/EventSignature"
-          },
-          {
             "$ref": "#/parameters/EventType"
           },
           {
-            "$ref": "#/parameters/Subscription-Id"
+            "$ref": "#/parameters/SubscriptionId"
           },
           {
             "$ref": "#/parameters/SequenceNumber"
+          },
+          {
+            "$ref": "#/parameters/Token"
           },
           {
             "$ref": "#/parameters/EventsUrl"
@@ -505,6 +598,12 @@
         "responses": {
           "200": {
             "description": "Event successfully recieved"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequest"
+          },
+          "410": {
+            "description": "The subscription identified by the Subscription-ID header is no more in demand and should be canceled"
           }
         }
       }
@@ -526,7 +625,7 @@
   },
   "parameters": {
     "CorrelationId": {
-      "name": "Correlation-Id",
+      "name": "Correlation-ID",
       "in": "header",
       "type": "string",
       "format": "uuid",
@@ -553,15 +652,8 @@
       ],
       "description": "The Accept request header can be used to specify certain media types which are acceptable for the response. Accept headers can be used to indicate that the request is specifically limited to a small set of desired types.\n"
     },
-    "EventSignature": {
-      "name": "Event-Signature",
-      "in": "header",
-      "description": "The signature is created for each event by combining the signing secret - OAuth Client Secret with the body of the event request using a standard HMAC-SHA256 keyed hash.\n",
-      "type": "string",
-      "format": "HMAC-SHA256"
-    },
-    "Subscription-Id": {
-      "name": "Subscription-Id",
+    "SubscriptionId": {
+      "name": "Subscription-ID",
       "in": "header",
       "description": "Unique id of the subscription",
       "type": "string",
@@ -592,6 +684,13 @@
       ],
       "required": true
     },
+    "Token": {
+      "name": "Token",
+      "in": "header",
+      "description": "Subscription identifier created by the Origin Cloud",
+      "type": "string",
+      "required": true
+    },
     "DeviceType": {
       "description": "Filter devices by device type",
       "name": "rt",
@@ -616,7 +715,7 @@
       "format": "uuid",
       "required": true
     },
-    "SubscriptionId": {
+    "SubscriptionIdPath": {
       "name": "subscriptionId",
       "in": "path",
       "type": "string",
@@ -684,6 +783,15 @@
     },
     "NotFound": {
       "description": "Not found"
+    },
+    "SubscriptionCancellationPending": {
+      "description": "Subscription was marked for cancellation"
+    },
+    "Forbidden": {
+      "description": "Insufficient permissions"
+    },
+    "BadRequest": {
+      "description": "The request was malformed or badly constructed"
     }
   },
   "definitions": {
