@@ -110,7 +110,7 @@
           "application/json"
         ],
         "responses": {
-          "200": {
+          "201": {
             "$ref": "#/definitions/SubscribeResponse"
           },
           "400": {
@@ -265,7 +265,7 @@
           "application/json"
         ],
         "responses": {
-          "200": {
+          "201": {
             "$ref": "#/definitions/SubscribeResponse"
           },
           "400": {
@@ -489,7 +489,7 @@
           "application/json"
         ],
         "responses": {
-          "200": {
+          "201": {
             "$ref": "#/definitions/SubscribeResponse"
           },
           "400": {
