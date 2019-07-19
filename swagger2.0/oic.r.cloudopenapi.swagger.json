@@ -33,10 +33,10 @@
           "$ref": "#/parameters/CorrelationId"
         },
         {
-          "$ref": "#/parameters/BatchFormat"
+          "$ref": "#/parameters/Accept"
         },
         {
-          "$ref": "#/parameters/Accept"
+          "$ref": "#/parameters/BatchFormat"
         }
       ],
       "get": {
@@ -44,12 +44,7 @@
           "Devices"
         ],
         "summary": "Get all devices",
-        "description": "Get all devices which are signed up to the OCF Cloud - either `online` or `offline`. To filter only devices with a specific status, use the query parameter `s`. Devices which are `online` are signed in to the system and are accessible. Offline devices are signed up to the system, but currently disconnected.\n",
-        "parameters": [
-          {
-            "$ref": "#/parameters/Status"
-          }
-        ],
+        "description": "Get all devices which are signed up to the OCF Cloud - either `online` or `offline`. Devices which are `online` are signed in to the system and are accessible. Offline devices are signed up to the system, but currently disconnected.\n",
         "produces": [
           "application/json"
         ],
@@ -185,13 +180,13 @@
           "$ref": "#/parameters/CorrelationId"
         },
         {
+          "$ref": "#/parameters/Accept"
+        },
+        {
           "$ref": "#/parameters/DeviceId"
         },
         {
           "$ref": "#/parameters/BatchFormat"
-        },
-        {
-          "$ref": "#/parameters/Accept"
         }
       ],
       "get": {
@@ -731,18 +726,15 @@
       "format": "uuid",
       "required": true
     },
-    "Status": {
-      "name": "s",
+    "BatchFormat": {
+      "name": "content",
       "in": "query",
-      "description": "Filter devices by device status",
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": [
-          "online",
-          "offline"
-        ]
-      }
+      "description": "Indicates to the recipient that the response payload shall be the resolved (i.e. resource representation) Link and not the Link itself. Default is base",
+      "type": "string",
+      "enum": [
+        "base",
+        "all"
+      ]
     },
     "EventsUrl": {
       "name": "eventsUrl",
@@ -775,15 +767,6 @@
         "$ref": "#/definitions/ResourceContentChangedEvent"
       },
       "required": true
-    },
-    "BatchFormat": {
-      "description": "Resolve all Links in the response payload to the Resource Representation.",
-      "name": "if",
-      "in": "query",
-      "type": "string",
-      "enum": [
-        "oic.if.b"
-      ]
     }
   },
   "responses": {
