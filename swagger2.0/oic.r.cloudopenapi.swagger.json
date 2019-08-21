@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "OCF Cloud Open API",
-    "version": "0.0.3-20190719",
+    "version": "0.0.3-20190821",
     "license": {
       "name": "Copyright 2019 Open Connectivity Foundation, Inc. All rights reserved.",
       "x-description": "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n        1.  Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n        2.  Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\n        THIS SOFTWARE IS PROVIDED BY THE Open Connectivity Foundation, INC. \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE OR WARRANTIES OF NON-INFRINGEMENT, ARE DISCLAIMED.\n        IN NO EVENT SHALL THE Open Connectivity Foundation, INC. OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)\n        HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
@@ -87,9 +87,6 @@
         },
         {
           "$ref": "#/parameters/ContentType"
-        },
-        {
-          "$ref": "#/parameters/Token"
         }
       ],
       "post": {
@@ -97,7 +94,7 @@
           "Events"
         ],
         "summary": "Subscribe to events against the set of devices",
-        "description": "Subscribe to devices events by providing `eventTypes` you're interested in and `eventsUrl` endpoint where events will be sent to as defined. Successful response contains `subscriptionId` which identifies registered subscription and is part of each event. First event for each registered event type is received immediately after subscription and contains actual state of the resource, followed by new events in case of any change.\n\n**Supported events** and required scopes\n- `device_onboarded` 🡆 `r:deviceinformation`\n- `device_offboarded` 🡆 `r:deviceinformation`\n",
+        "description": "Subscribe to devices events by providing `eventTypes` you're interested in and `eventsUrl` endpoint where events will be sent to as defined. Successful response contains `subscriptionId` which identifies registered subscription and is part of each event. First event for each registered event type is received immediately after subscription and contains actual state of the resource, followed by new events in case of any change.\n\n**Supported events** and required scopes\n- `device_registered` 🡆 `r:deviceinformation`\n- `device_unregistered` 🡆 `r:deviceinformation`\n",
         "parameters": [
           {
             "$ref": "#/parameters/SubscribeRequest"
@@ -126,7 +123,8 @@
         "security": [
           {
             "oauth2": [
-              "w:subscriptions"
+              "w:subscriptions",
+              "r:deviceinformation"
             ]
           }
         ]
@@ -242,9 +240,6 @@
         },
         {
           "$ref": "#/parameters/ContentType"
-        },
-        {
-          "$ref": "#/parameters/Token"
         }
       ],
       "post": {
@@ -252,7 +247,7 @@
           "Events"
         ],
         "summary": "Subscribe to events against a specific device",
-        "description": "Subscribe to device events by providing `eventTypes` you're interested in and `eventsUrl` endpoint where events will be sent to as defined. Successful response contains `subscriptionId` which identifies registered subscription and is part of each event. First event for each registered event type is received immediately after subscription and contains actual state of the resource, followed by new events in case of any change.\n\n**Supported events** and required scopes\n- `resource_published` 🡆 `r:resources`\n- `resource_unpublished` 🡆 `r:resources`\n- `device_online` 🡆 `r:deviceinformation`\n- `device_offline` 🡆 `r:deviceinformation`\n",
+        "description": "Subscribe to device events by providing `eventTypes` you're interested in and `eventsUrl` endpoint where events will be sent to as defined. Successful response contains `subscriptionId` which identifies registered subscription and is part of each event. First event for each registered event type is received immediately after subscription and contains actual state of the resource, followed by new events in case of any change.\n\n**Supported events** and required scopes\n- `resources_published` 🡆 `r:resources`\n- `resources_unpublished` 🡆 `r:resources`\n- `device_online` 🡆 `r:deviceinformation`\n- `device_offline` 🡆 `r:deviceinformation`\n",
         "parameters": [
           {
             "$ref": "#/parameters/SubscribeRequest"
@@ -284,7 +279,8 @@
         "security": [
           {
             "oauth2": [
-              "w:subscriptions"
+              "w:subscriptions",
+              "r:deviceinformation"
             ]
           }
         ]
@@ -466,9 +462,6 @@
         },
         {
           "$ref": "#/parameters/ContentType"
-        },
-        {
-          "$ref": "#/parameters/Token"
         }
       ],
       "post": {
@@ -508,7 +501,8 @@
         "security": [
           {
             "oauth2": [
-              "w:subscriptions"
+              "w:subscriptions",
+              "r:resources"
             ]
           }
         ]
@@ -568,7 +562,7 @@
           "Events"
         ],
         "summary": "Events endpoint provided by the subscriber, where events are delivered",
-        "description": "Events endpoint provided during subscription where events specified in the subscription will be sent to  as defined per event type. Confirmation of each event sent to the `eventsUrl` endpoint is required with `2xx` success code. Events you will receive based on event type you're subscribed to are:\n - `subscription_canceled` 🡆 `SubscriptionCanceledEvent`\n - `device_onboarded` 🡆 `DeviceOnboardedEvent`\n - `device_offboarded` 🡆 `DeviceOffboardedEvent`\n - `resource_published` 🡆 `ResourcePublishedEvent`\n - `resource_unpublished` 🡆 `ResourceUnpublishedEvent`\n - `device_online` 🡆 `DeviceOnlineEvent`\n - `device_offline` 🡆 `DeviceOfflineEvent`\n - `resource_contentchanged` 🡆 `ResourceContentChangedEvent`",
+        "description": "Events endpoint provided during subscription where events specified in the subscription will be sent to  as defined per event type. Confirmation of each event sent to the `eventsUrl` endpoint is required with `2xx` success code. Events you will receive based on event type you're subscribed to are:\n - `subscription_canceled` 🡆 `SubscriptionCanceledEvent`\n - `device_registered` 🡆 `DeviceRegisteredEvent`\n - `device_unregistered` 🡆 `DeviceUnregisteredEvent`\n - `resources_published` 🡆 `ResourcesPublishedEvent`\n - `resources_unpublished` 🡆 `ResourcesUnpublishedEvent`\n - `device_online` 🡆 `DeviceOnlineEvent`\n - `device_offline` 🡆 `DeviceOfflineEvent`\n - `resource_contentchanged` 🡆 `ResourceContentChangedEvent`",
         "parameters": [
           {
             "$ref": "#/parameters/CorrelationId"
@@ -584,9 +578,6 @@
           },
           {
             "$ref": "#/parameters/SequenceNumber"
-          },
-          {
-            "$ref": "#/parameters/Token"
           },
           {
             "$ref": "#/parameters/EventsUrl"
@@ -678,21 +669,14 @@
       "type": "string",
       "enum": [
         "subscription_canceled",
-        "device_onboarded",
-        "device_offboarded",
+        "device_registered",
+        "device_unregistered",
         "resource_contentchanged",
-        "resource_published",
-        "resource_unpublished",
+        "resources_published",
+        "resources_unpublished",
         "device_online",
         "device_offline"
       ],
-      "required": true
-    },
-    "Token": {
-      "name": "Token",
-      "in": "header",
-      "description": "Subscription identifier created by the Origin Cloud",
-      "type": "string",
       "required": true
     },
     "DeviceType": {
@@ -815,14 +799,8 @@
           "n": "Food safety sensor",
           "di": "53080a4f-5e3e-4291-802f-3436238232d2"
         },
-        "status":  "online",
+        "status": "online",
         "links": [
-          {
-            "href": "/53080a4f-5e3e-4291-802f-3436238232d2/oic/d",
-            "rt": [
-              "oic.wk.d"
-            ]
-          },
           {
             "href": "/53080a4f-5e3e-4291-802f-3436238232d2/humidity",
             "rt": [
@@ -868,19 +846,8 @@
           "n": "Food safety sensor",
           "di": "53080a4f-5e3e-4291-802f-3436238232d2"
         },
-        "status":  "online",
+        "status": "online",
         "links": [
-          {
-            "href": "/oic/d",
-            "rep": {
-              "rt": [
-                "oic.wk.d"
-              ],
-              "dmn": "Open Connectivity Foundation",
-              "n": "Food safety sensor",
-              "di": "53080a4f-5e3e-4291-802f-3436238232d2",
-            }
-          },
           {
             "href": "/humidity",
             "rep": {
@@ -920,11 +887,11 @@
       "type": "string",
       "enum": [
         "subscription_canceled",
-        "device_onboarded",
-        "device_offboarded",
+        "device_registered",
+        "device_unregistered",
         "resource_contentchanged",
-        "resource_published",
-        "resource_unpublished",
+        "resources_published",
+        "resources_unpublished",
         "device_online",
         "device_offline"
       ]
@@ -952,10 +919,10 @@
         "eventTypes"
       ],
       "example": {
-        "eventsUrl": "https://notify.openapi.exaple.com/",
+        "eventsUrl": "https://events.example.com/",
         "eventTypes": [
-          "device_onboarded",
-          "device_offboarded"
+          "device_registered",
+          "device_unregistered"
         ]
       }
     },
@@ -977,37 +944,47 @@
     "EventsUrl": {
       "type": "string",
       "format": "url",
-      "example": "https://notify.openapi.exaple.com/"
+      "example": "https://events.exaple.com/"
     },
     "SubscriptionCanceledEvent": {
       "type": "object",
       "description": "Subscription with provided id was canceled"
     },
-    "DeviceOnboardedEvent": {
+    "DeviceRegisteredEvent": {
       "description": "Device was successfully signed up to the OCF Cloud, as defined in the `oic.sec.account`",
       "type": "object",
       "properties": {
         "content": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Device"
+            "properties": {
+              "di": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
           }
         }
       }
     },
-    "DeviceOffboardedEvent": {
+    "DeviceUnregisteredEvent": {
       "description": "Device was successfully signed off from the OCF Cloud, as defined in the `oic.sec.account`",
       "type": "object",
       "properties": {
         "content": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Device"
+            "properties": {
+              "di": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
           }
         }
       }
     },
-    "ResourcePublishedEvent": {
+    "ResourcesPublishedEvent": {
       "type": "object",
       "properties": {
         "content": {
@@ -1018,7 +995,7 @@
         }
       }
     },
-    "ResourceUnpublishedEvent": {
+    "ResourcesUnpublishedEvent": {
       "type": "object",
       "properties": {
         "content": {
@@ -1032,32 +1009,18 @@
     "DeviceOnlineEvent": {
       "type": "object",
       "properties": {
-        "content": {
-          "type": "array",
-          "items": {
-            "properties": {
-              "di": {
-                "type": "string",
-                "format": "uuid"
-              }
-            }
-          }
+        "di": {
+          "type": "string",
+          "format": "uuid"
         }
       }
     },
     "DeviceOfflineEvent": {
       "type": "object",
       "properties": {
-        "content": {
-          "type": "array",
-          "items": {
-            "properties": {
-              "di": {
-                "type": "string",
-                "format": "uuid"
-              }
-            }
-          }
+        "di": {
+          "type": "string",
+          "format": "uuid"
         }
       }
     },
