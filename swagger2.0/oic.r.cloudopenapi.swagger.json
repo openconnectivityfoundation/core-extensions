@@ -247,7 +247,7 @@
           "Events"
         ],
         "summary": "Subscribe to events against a specific device",
-        "description": "Subscribe to device events by providing `eventTypes` you're interested in and `eventsUrl` endpoint where events will be sent to as defined. Successful response contains `subscriptionId` which identifies registered subscription and is part of each event. First event for each registered event type is received immediately after subscription and contains actual state of the resource, followed by new events in case of any change.\n\n**Supported events** and required scopes\n- `resources_published` 🡆 `r:resources`\n- `resources_unpublished` 🡆 `r:resources`\n",
+        "description": "Subscribe to device events by providing `eventTypes` you're interested in and `eventsUrl` endpoint where events will be sent to as defined. Successful response contains `subscriptionId` which identifies registered subscription and is part of each event. First event for each registered event type is received immediately after subscription and contains actual state of the resource, followed by new events in case of any change.\n\n**Supported events** and required scopes\n- `resources_published` 🡆 `r:deviceinformation`\n- `resources_unpublished` 🡆 `r:deviceinformation`\n",
         "parameters": [
           {
             "$ref": "#/parameters/SubscribeRequest"
