@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "OCF Cloud Open API",
+    "title": "OCF Cloud API for Cloud Services",
     "version": "0.0.3-20190828",
     "license": {
       "name": "Copyright 2019 Open Connectivity Foundation, Inc. All rights reserved.",
