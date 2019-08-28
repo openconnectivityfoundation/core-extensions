@@ -601,7 +601,7 @@
             "$ref": "#/responses/BadRequest"
           },
           "410": {
-            "description": "The subscription identified by the Subscription-ID header is no more in demand and should be canceled"
+            "description": "The subscription identified by the Subscription-ID header is no more in demand and shall be canceled"
           }
         }
       }
