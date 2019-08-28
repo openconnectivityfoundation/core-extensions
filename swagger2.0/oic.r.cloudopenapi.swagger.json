@@ -94,7 +94,7 @@
           "Events"
         ],
         "summary": "Subscribe to events against the set of devices",
-        "description": "Subscribe to devices events by providing `eventTypes` you're interested in and `eventsUrl` endpoint where events will be sent to as defined. Successful response contains `subscriptionId` which identifies registered subscription and is part of each event. First event for each registered event type is received immediately after subscription and contains actual state of the resource, followed by new events in case of any change.\n\n**Supported events** and required scopes\n- `device_registered` 🡆 `r:deviceinformation`\n- `device_unregistered` 🡆 `r:deviceinformation`\n",
+        "description": "Subscribe to devices events by providing `eventTypes` you're interested in and `eventsUrl` endpoint where events will be sent to as defined. Successful response contains `subscriptionId` which identifies registered subscription and is part of each event. First event for each registered event type is received immediately after subscription and contains actual state of the resource, followed by new events in case of any change.\n\n**Supported events** and required scopes\n- `devices_registered` 🡆 `r:deviceinformation`\n- `devices_unregistered` 🡆 `r:deviceinformation`\n- `devices_online` 🡆 `r:deviceinformation`\n- `devices_offline` 🡆 `r:deviceinformation`\n",
         "parameters": [
           {
             "$ref": "#/parameters/SubscribeRequest"
@@ -247,7 +247,7 @@
           "Events"
         ],
         "summary": "Subscribe to events against a specific device",
-        "description": "Subscribe to device events by providing `eventTypes` you're interested in and `eventsUrl` endpoint where events will be sent to as defined. Successful response contains `subscriptionId` which identifies registered subscription and is part of each event. First event for each registered event type is received immediately after subscription and contains actual state of the resource, followed by new events in case of any change.\n\n**Supported events** and required scopes\n- `resources_published` 🡆 `r:resources`\n- `resources_unpublished` 🡆 `r:resources`\n- `device_online` 🡆 `r:deviceinformation`\n- `device_offline` 🡆 `r:deviceinformation`\n",
+        "description": "Subscribe to device events by providing `eventTypes` you're interested in and `eventsUrl` endpoint where events will be sent to as defined. Successful response contains `subscriptionId` which identifies registered subscription and is part of each event. First event for each registered event type is received immediately after subscription and contains actual state of the resource, followed by new events in case of any change.\n\n**Supported events** and required scopes\n- `resources_published` 🡆 `r:resources`\n- `resources_unpublished` 🡆 `r:resources`\n",
         "parameters": [
           {
             "$ref": "#/parameters/SubscribeRequest"
@@ -562,7 +562,7 @@
           "Events"
         ],
         "summary": "Events endpoint provided by the subscriber, where events are delivered",
-        "description": "Events endpoint provided during subscription where events specified in the subscription will be sent to  as defined per event type. Confirmation of each event sent to the `eventsUrl` endpoint is required with `2xx` success code. Events you will receive based on event type you're subscribed to are:\n - `subscription_canceled` 🡆 `SubscriptionCanceledEvent`\n - `device_registered` 🡆 `DeviceRegisteredEvent`\n - `device_unregistered` 🡆 `DeviceUnregisteredEvent`\n - `resources_published` 🡆 `ResourcesPublishedEvent`\n - `resources_unpublished` 🡆 `ResourcesUnpublishedEvent`\n - `device_online` 🡆 `DeviceOnlineEvent`\n - `device_offline` 🡆 `DeviceOfflineEvent`\n - `resource_contentchanged` 🡆 `ResourceContentChangedEvent`",
+        "description": "Events endpoint provided during subscription where events specified in the subscription will be sent to  as defined per event type. Confirmation of each event sent to the `eventsUrl` endpoint is required with `2xx` success code. Events you will receive based on event type you're subscribed to are:\n - `subscription_canceled` 🡆 `SubscriptionCanceledEvent`\n - `devices_registered` 🡆 `DevicesRegisteredEvent`\n - `devices_unregistered` 🡆 `DevicesUnregisteredEvent`\n - `resources_published` 🡆 `ResourcesPublishedEvent`\n - `resources_unpublished` 🡆 `ResourcesUnpublishedEvent`\n - `devices_online` 🡆 `DevicesOnlineEvent`\n - `devices_offline` 🡆 `DevicesOfflineEvent`\n - `resource_contentchanged` 🡆 `ResourceContentChangedEvent`",
         "parameters": [
           {
             "$ref": "#/parameters/CorrelationId"
@@ -669,13 +669,13 @@
       "type": "string",
       "enum": [
         "subscription_canceled",
-        "device_registered",
-        "device_unregistered",
+        "devices_registered",
+        "devices_unregistered",
         "resource_contentchanged",
         "resources_published",
         "resources_unpublished",
-        "device_online",
-        "device_offline"
+        "devices_online",
+        "devices_offline"
       ],
       "required": true
     },
@@ -887,13 +887,13 @@
       "type": "string",
       "enum": [
         "subscription_canceled",
-        "device_registered",
-        "device_unregistered",
+        "devices_registered",
+        "devices_unregistered",
         "resource_contentchanged",
         "resources_published",
         "resources_unpublished",
-        "device_online",
-        "device_offline"
+        "devices_online",
+        "devices_offline"
       ]
     },
     "SubscriptionId": {
@@ -921,8 +921,8 @@
       "example": {
         "eventsUrl": "https://events.example.com/",
         "eventTypes": [
-          "device_registered",
-          "device_unregistered"
+          "devices_registered",
+          "devices_unregistered"
         ]
       }
     },
@@ -950,7 +950,7 @@
       "type": "object",
       "description": "Subscription with provided id was canceled"
     },
-    "DeviceRegisteredEvent": {
+    "DevicesRegisteredEvent": {
       "description": "Device was successfully signed up to the OCF Cloud, as defined in the `oic.sec.account`",
       "type": "object",
       "properties": {
@@ -967,7 +967,7 @@
         }
       }
     },
-    "DeviceUnregisteredEvent": {
+    "DevicesUnregisteredEvent": {
       "description": "Device was successfully signed off from the OCF Cloud, as defined in the `oic.sec.account`",
       "type": "object",
       "properties": {
@@ -1006,21 +1006,35 @@
         }
       }
     },
-    "DeviceOnlineEvent": {
+    "DevicesOnlineEvent": {
       "type": "object",
       "properties": {
-        "di": {
-          "type": "string",
-          "format": "uuid"
+        "content": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "di": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
         }
       }
     },
-    "DeviceOfflineEvent": {
+    "DevicesOfflineEvent": {
       "type": "object",
       "properties": {
-        "di": {
-          "type": "string",
-          "format": "uuid"
+        "content": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "di": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
         }
       }
     },
