@@ -1,0 +1,172 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Maintenance",
+    "version": "2019-03-04",
+    "license": {
+      "name": "OCF Data Model License",
+      "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
+      "x-copyright": "Copyright 2016-2019 Open Connectivity Foundation, Inc. All rights reserved."
+    },
+    "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
+  },
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/oic/mnt" : {
+      "get": {
+        "description": "The Resource through which a Device is maintained and can be used for diagnostic purposes.\nfr (Factory Reset) is a boolean.\n  The value 0 means No action (Default), the value 1 means Start Factory Reset\nAfter factory reset, this value shall be changed back to the default value\nrb (Reboot) is a boolean.\n  The value 0 means No action (Default), the value 1 means Start Reboot\nAfter Reboot, this value shall be changed back to the default value\n",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+            "200": {
+              "description" : "",
+              "x-example": {
+                "rt":   ["oic.wk.mnt"],
+                "fr":   false,
+                "rb":   false,
+                "err" : 503
+              },
+              "schema": { "$ref": "#/definitions/mnt" }
+            }
+        }
+      },
+      "post": {
+        "description": "Set the maintenance action(s)\n",
+        "parameters": [
+          {"$ref": "#/parameters/interface-rw"},
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/mnt-update" },
+            "x-example": {
+              "fr":   false,
+              "rb":   false
+            }
+          }
+        ],
+        "responses": {
+            "200": {
+              "description" : "",
+              "x-example": {
+                "fr":   false,
+                "rb":   false
+              },
+              "schema": { "$ref": "#/definitions/mnt" }
+            }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "interface-all" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.rw", "oic.if.baseline"]
+    },
+    "interface-rw" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.rw"]
+    }
+  },
+  "definitions": {
+    "mnt" : {
+      "properties": {
+        "rt" : {
+          "description": "Resource Type of the Resource",
+          "items": {
+            "enum":   ["oic.wk.mnt"],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "fr" : {
+          "description": "Factory Reset",
+          "type": "boolean"
+        },
+        "err" : {
+          "description": "Last HTTP occurred error",
+          "maximum": 599,
+          "minimum": 399,
+          "readOnly": true,
+          "type": "integer"
+        },
+        "n": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "rb" : {
+          "description": "Reboot Action",
+          "type": "boolean"
+        },
+        "id" : {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "if" : {
+          "description": "The OCF Interfaces supported by this Resource",
+          "items": {
+            "enum": [
+              "oic.if.rw",
+              "oic.if.baseline"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "readOnly": true,
+          "uniqueItems": true,
+          "type": "array"
+        }
+      },
+      "anyOf" : [
+        {
+          "required": [ "fr" ]
+        },
+        {
+          "required": [ "rb" ]
+        },
+        {
+          "required": [ "err" ]
+        }
+      ],
+      "type" : "object"
+    },
+    "mnt-update" : {
+      "properties": {
+        "fr" : {
+          "description": "Factory Reset",
+          "type": "boolean"
+        },
+        "n": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "rb" : {
+          "description": "Reboot Action",
+          "type": "boolean"
+        }
+      },
+      "anyOf" : [
+        {
+          "required": [
+            "fr"
+          ]
+        },
+        {
+          "required": [
+            "rb"
+          ]
+        }
+      ],
+      "type" : "object"
+    }
+  }
+}

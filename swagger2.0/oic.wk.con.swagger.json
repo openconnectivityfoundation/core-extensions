@@ -1,0 +1,301 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Device Configuration",
+    "version": "2019-02-28",
+    "license": {
+      "name": "OCF Data Model License",
+      "url": "https://openconnectivityfoundation.github.io/core/LICENSE.md",
+      "x-copyright": "Copyright 2016-2019 Open Connectivity Foundation, Inc. All rights reserved."
+    },
+    "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
+  },
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/exampleDeviceConfigurationResURI" : {
+      "get": {
+        "description": "Resource that allows for Device specific information to be configured.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/interface-all"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "x-example": {
+              "n":    "My Friendly Device Name",
+              "rt":   ["oic.wk.con"],
+              "loc":  [32.777,-96.797],
+              "locn": "My Location Name",
+              "c":    "USD",
+              "r":    "MyRegion",
+              "dl":   "en"
+            },
+            "schema": {
+              "$ref": "#/definitions/Configuration"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Update the information about the Device\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/interface-rw"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Update"
+            },
+            "x-example": {
+              "n": "Nuevo Nombre Amistoso",
+              "r": "MyNewRegion",
+              "ln": [ { "language": "es", "value": "Nuevo Nombre Amistoso" } ],
+              "dl": "es"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-example":  {
+              "n": "Nuevo Nombre Amistoso",
+              "r": "MyNewRegion",
+              "ln": [ { "language": "es", "value": "Nuevo Nombre Amistoso" } ],
+              "dl":   "es"
+            },
+            "schema": {
+              "$ref": "#/definitions/Update"
+            }
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "interface-rw" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.rw"]
+    },
+    "interface-all" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.rw", "oic.if.baseline"]
+    }
+  },
+  "definitions": {
+    "Configuration": {
+      "properties": {
+        "rt":  {
+          "description": "Resource Type of the Resource",
+          "items": {
+            "enum": ["oic.wk.con"],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "loc": {
+          "description": "Location information (lat, long)",
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "type": "array"
+        },
+        "c": {
+          "description": "Currency",
+          "maxLength": 64,
+          "type": "string"
+        },
+        "ln": {
+          "description": "Localized names",
+          "items": {
+            "properties": {
+              "language": {
+                "allOf": [
+                  {
+                    "description": "Format pattern according to IETF RFC 5646 (language tag).",
+                    "pattern": "^[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})*$",
+                    "type": "string"
+                  },
+                  {
+                    "description": "An RFC 5646 language tag."
+                  }
+                ]
+              },
+              "value": {
+                "description": "The Device name in the indicated language.",
+                "maxLength": 64,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "locn": {
+          "description": "Human Friendly Name for location",
+          "maxLength": 64,
+          "type": "string"
+        },
+        "dl": {
+          "allOf": [
+            {
+              "description": "Format pattern according to IETF RFC 5646 (language tag).",
+              "pattern": "^[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})*$",
+              "type": "string"
+            },
+            {
+              "description": "Default Language as an RFC 5646 language tag."
+            }
+          ]
+        },
+        "n": {
+          "$ref" : "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "id": {
+          "$ref" : "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "r": {
+          "description": "Region",
+          "maxLength": 64,
+          "type": "string"
+        },
+        "if" : {
+          "description": "The OCF Interfaces supported by this Resource",
+          "items": {
+            "enum": [
+              "oic.if.baseline",
+              "oic.if.rw"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        }
+      },
+      "type" : "object",
+      "required": ["n"]
+    },
+    "Update" : {
+      "properties": {
+        "loc": {
+          "description": "Location information (lat, long)",
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "type": "array"
+        },
+        "c": {
+          "description": "Currency",
+          "maxLength": 64,
+          "type": "string"
+        },
+        "ln": {
+          "description": "Localized names",
+          "items": {
+            "properties": {
+              "language": {
+                "allOf": [
+                  {
+                    "description": "Format pattern according to IETF RFC 5646 (language tag).",
+                    "pattern": "^[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})*$",
+                    "type": "string"
+                  },
+                  {
+                    "description": "An RFC 5646 language tag."
+                  }
+                ]
+              },
+              "value": {
+                "description": "The Device name in the indicated language.",
+                "maxLength": 64,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "locn": {
+          "description": "Human Friendly Name for location",
+          "maxLength": 64,
+          "type": "string"
+        },
+        "dl": {
+          "allOf": [
+            {
+              "description": "Format pattern according to IETF RFC 5646 (language tag).",
+              "pattern": "^[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})*$",
+              "type": "string"
+            },
+            {
+              "description": "Default Language as an RFC 5646 language tag."
+            }
+          ]
+        },
+        "n": {
+          "description": "The human friendly name to be set on the Resource, this is also reflected in the same Property in oic.wk.d",
+          "maxLength": 64,
+          "type": "string"
+        },
+        "r": {
+          "description": "Region",
+          "maxLength": 64,
+          "type": "string"
+        }
+      },
+      "anyOf": [
+        {
+          "required": ["loc"]
+        },
+        {
+          "required": ["locn"]
+        },
+        {
+          "required": ["c"]
+        },
+        {
+          "required": ["r"]
+        },
+        {
+          "required": ["ln"]
+        },
+        {
+          "required": ["dl"]
+        },
+        {
+          "required": ["n"]
+        }
+      ],
+      "type" : "object"
+    }
+  }
+}

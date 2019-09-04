@@ -1,0 +1,194 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Platform Configuration",
+    "version": "2019-03-04",
+    "license": {
+      "name": "OCF Data Model License",
+      "url": "https://openconnectivityfoundation.github.io/core/LICENSE.md",
+      "x-copyright": "Copyright 2016-2019 Open Connectivity Foundation, Inc. All rights reserved."
+    },
+    "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
+  },
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/examplePlatformConfigurationResURI": {
+      "get": {
+        "description": "Resource that allows for Platform specific information to be configured.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/interface-all"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-example": {
+              "rt":   ["oic.wk.con.p"],
+              "mnpn": [ { "language": "en", "value": "My Friendly Device Name" } ]
+            },
+            "schema": { "$ref": "#/definitions/Conf_Platform" }
+          }
+        }
+      },
+      "post": {
+        "description": "Update the information about the Platform\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/interface-rw"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/Update_Platform" },
+            "x-example": {
+              "n": "Nuevo nombre",
+              "mnpn": [ { "language": "es", "value": "Nuevo nombre de Plataforma Amigable" } ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-example": {
+              "n": "Nuevo nombre",
+              "mnpn": [ { "language": "es", "value": "Nuevo nombre de Plataforma Amigable" } ]
+            },
+            "schema": { "$ref": "#/definitions/Update_Platform" }
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "interface-rw": {
+      "in": "query",
+      "name": "if",
+      "type": "string",
+      "enum" : ["oic.if.rw"]
+    },
+    "interface-all": {
+      "in": "query",
+      "name": "if",
+      "type": "string",
+      "enum": ["oic.if.rw", "oic.if.baseline"]
+    }
+  },
+  "definitions": {
+    "Conf_Platform": {
+      "properties": {
+        "rt":  {
+          "description": "Resource Type of the Resource",
+          "items": {
+            "enum": ["oic.wk.con.p"],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "n":  {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "mnpn":  {
+          "description": "Platform names",
+          "items": {
+            "properties": {
+              "language": {
+                "allOf": [
+                  {
+                    "$ref": "http://openconnectivityfoundation.github.io/core/schemas/oic.types-schema.json#/definitions/language-tag"
+                  },
+                  {
+                    "description": "An RFC 5646 language tag."
+                  }
+                ]
+              },
+              "value": {
+                "description": "The Platform description in the indicated language.",
+                "maxLength": 64,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "id": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "if": {
+          "description": "The OCF Interfaces supported by this Resource",
+          "items": {
+            "enum": [
+              "oic.if.rw",
+              "oic.if.baseline"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "readOnly": true,
+          "uniqueItems": true,
+          "type": "array"
+        }
+      },
+      "type" : "object"
+    },
+    "Update_Platform": {
+      "properties": {
+        "n":  {
+          "description": "The human friendly name to be set on the Resource, this is also reflected in the same Property in oic.wk.p",
+          "maxLength": 64,
+          "type": "string"
+        },
+        "mnpn" :  {
+          "description": "Platform names",
+          "items": {
+            "properties": {
+              "language": {
+                "allOf": [
+                  {
+                    "$ref": "http://openconnectivityfoundation.github.io/core/schemas/oic.types-schema.json#/definitions/language-tag"
+                  },
+                  {
+                    "description": "An RFC 5646 language tag."
+                  }
+                ]
+              },
+              "value": {
+                "description": "The Platform description in the indicated language.",
+                "maxLength": 64,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "type": "object",
+      "anyOf": [
+        {
+          "required": ["mnpn"]
+        },
+        {
+          "required": ["n"]
+        }
+      ]
+    }
+  }
+}

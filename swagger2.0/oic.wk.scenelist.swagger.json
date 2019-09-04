@@ -1,0 +1,214 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Scene List",
+    "version": "2019-03-04",
+    "license": {
+      "name": "OCF Data Model License",
+      "url": "https://openconnectivityfoundation.github.io/core/LICENSE.md",
+      "x-copyright": "Copyright 2016-2019 Open Connectivity Foundation, Inc. All rights reserved."
+    },
+    "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
+  },
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/SceneListResURI?if=oic.if.ll": {
+      "get": {
+        "description": "Toplevel Scene Resource.\nThis Resource is a generic Collection Resource.\nThe rts value contains oic.wk.scenecollection Resource Types.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/interface-all"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "x-example": [
+              {"href": "/scenecollection1","rt": ["oic.wk.scenecollection"],"if":["oic.if.ll", "oic.if.baseline"]},
+              {"href": "/scenecollection2","rt": ["oic.wk.scenecollection"],"if":["oic.if.ll", "oic.if.baseline"]}
+            ],
+            "schema": {
+              "$ref": "#/definitions/slinks"
+            }
+          }
+        }
+      }
+    },
+    "/SceneListResURI?if=oic.if.baseline": {
+      "get": {
+        "description": "Toplevel Scene Resource.\nThis Resource is a generic Collection Resource.\nThe rts value contains oic.wk.scenecollection Resource Types.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/interface-all"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "x-example": {
+              "rt":  ["oic.wk.scenelist"],
+              "if":  ["oic.if.ll", "oic.if.baseline"],
+              "n":   "list of scene collections",
+              "rts": ["oic.wk.scenecollection"],
+              "links": [
+                {"href": "/scenecollection1","rt": ["oic.wk.scenecollection"],"if":["oic.if.ll", "oic.if.baseline"]},
+                {"href": "/scenecollection2","rt": ["oic.wk.scenecollection"],"if":["oic.if.ll", "oic.if.baseline"]}
+              ]
+            },
+            "schema": { "$ref": "#/definitions/Collection" }
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "interface-all" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.ll", "oic.if.baseline"]
+    }
+  },
+  "definitions": {
+    "Collection": {
+      "properties": {
+        "links": {
+          "description": "A set of simple or individual OCF Links.",
+          "items": {
+            "$ref": "#/definitions/oic.oic-link"
+          },
+          "type": "array"
+        },
+        "n": {
+          "$ref" : "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "id": {
+          "$ref" : "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "if": {
+          "type": "array",
+          "description": "The OCF Interfaces supported by this Resource",
+          "items": {
+            "enum": [
+              "oic.if.ll",
+              "oic.if.baseline"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 2,
+          "uniqueItems": true,
+          "readOnly": true
+        },
+        "rts": {
+          "description": "The list of allowable Resource Types in Links included in the Collection",
+          "items": {
+            "enum": ["oic.wk.scenecollection"],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "rt": {
+          "description": "Resource Type of the Resource",
+          "items": {
+            "enum": ["oic.wk.scenelist"],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "readOnly": true,
+          "uniqueItems": true,
+          "type": "array"
+        }
+      },
+      "type": "object",
+      "required": [
+        "rt",
+        "if",
+        "links"
+      ]
+    },
+    "slinks" : {
+      "type" : "array",
+      "items" : {
+        "$ref": "#/definitions/oic.oic-link"
+      }
+    },
+    "oic.oic-link": {
+      "properties": {
+        "if": {
+          "description": "The OCF Interfaces supported by the Linked Resource",
+          "items": {
+            "enum": [
+              "oic.if.ll",
+              "oic.if.baseline"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "rt": {
+          "description": "The Resource Type of the Linked Resource",
+          "items": {
+            "enum": ["oic.wk.scenecollection"],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "anchor": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/anchor"
+        },
+        "di": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/di"
+        },
+        "eps": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/eps"
+        },
+        "href": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+        },
+        "ins": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/ins"
+        },
+        "p": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/p"
+        },
+        "rel": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/rel_array"
+        },
+        "title": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/title"
+        },
+        "type": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/type"
+        }
+      },
+      "required": [
+        "href",
+        "rt",
+        "if"
+      ],
+      "type": "object"
+    }
+  }
+}

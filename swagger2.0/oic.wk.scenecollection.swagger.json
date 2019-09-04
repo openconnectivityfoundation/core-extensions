@@ -1,0 +1,269 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Scene Collection",
+    "version": "2019-03-04",
+    "license": {
+      "name": "OCF Data Model License",
+      "url": "https://openconnectivityfoundation.github.io/core/LICENSE.md",
+      "x-copyright": "Copyright 2016-2019 Open Connectivity Foundation, Inc. All rights reserved."
+    },
+    "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
+  },
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/SceneCollectionResURI?if=oic.if.ll" : {
+      "get": {
+        "description": "Collection that models a set of Scenes.\nThis Resource is a generic Collection Resource with additional Properties.\nThe rts value contains oic.scenemember Resource Types.\nThe additional Properties are\n  lastScene, this is the Scene Value last set by any Client\n  sceneValues, this is the list of available Scenes\n  lastScene shall be listed in sceneValues.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/interface-all"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "x-example": [
+              {"href": "/scenemember1","rt": ["oic.wk.scenemember"],"if":["oic.if.baseline"]},
+              {"href": "/scenemember2","rt": ["oic.wk.scenemember"],"if":["oic.if.baseline"]}
+            ],
+            "schema": {
+              "$ref": "#/definitions/slinks"
+            }
+          }
+        }
+      }
+    },
+    "/SceneCollectionResURI?if=oic.if.baseline" : {
+      "get": {
+        "description": "Collection that models a set of Scenes.\nThis Resource is a generic Collection Resource with additional Properties.\nThe rts value contains oic.scenemember Resource Types.\nThe additional Properties are\n  lastScene, this is the Scene Value last set by any Client\n  sceneValues, this is the list of available Scenes\n  lastScene shall be listed in sceneValues.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/interface-all"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "x-example": {
+              "lastScene": "off",
+              "sceneValues": ["off","Reading","TVWatching"],
+              "rt":       ["oic.wk.scenecollection"],
+              "n":        "My Scenes for my living room",
+              "rts":      ["oic.wk.scenemember"],
+              "links": [
+                {"href": "/scenemember1","rt": ["oic.wk.scenemember"],"if":["oic.if.baseline"]},
+                {"href": "/scenemember2","rt": ["oic.wk.scenemember"],"if":["oic.if.baseline"]}
+              ]
+            },
+            "schema": {
+              "$ref": "#/definitions/SceneCollection"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Provides the action to change the last set Scene selection.\nCalling this method shall update all Scene Members to the prescribed membervalue.\nWhen this method is called with the same value as the current lastScene value\nthen all Scene Members shall be updated.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/interface-update"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SceneCollectionUpdate"
+            },
+            "x-example": {
+              "lastScene": "Reading"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description" : "Indicates that the value is changed.\nThe changed Properties are provided in the response.\n",
+            "x-example": {
+              "lastScene": "Reading"
+            },
+            "schema": {
+              "$ref": "#/definitions/SceneCollectionUpdate"
+            }
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "interface-update" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.a"]
+    },
+    "interface-all" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.ll", "oic.if.baseline"]
+    }
+  },
+  "definitions": {
+    "SceneCollection": {
+      "properties": {
+        "rt": {
+          "description": "Resource Type of the Resource",
+          "items": {
+            "enum": ["oic.wk.scenecollection"],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "readOnly": true,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "lastScene": {
+          "description": "Last selected Scene from the set of sceneValues",
+          "type": "string"
+        },
+        "links": {
+          "description": "A set of simple or individual OCF Links.",
+          "items": {
+            "$ref": "#/definitions/oic.oic-link"
+          },
+          "type": "array"
+        },
+        "sceneValues": {
+          "description": "All available Scene Values",
+          "items": {
+            "type": "string"
+          },
+          "readOnly": true,
+          "type": "array"
+        },
+        "n": {
+          "$ref" : "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "id": {
+          "$ref" : "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "rts": {
+          "description": "Resource Type of the Resources within the Collection",
+          "items": {
+            "enum": ["oic.wk.scenemember"],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "readOnly": true,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "if" : {
+          "description": "The OCF Interfaces supported by this Resource",
+          "items": {
+            "enum": [
+              "oic.if.ll",
+              "oic.if.baseline",
+              "oic.if.a"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        }
+      },
+      "type" : "object"
+    },
+    "SceneCollectionUpdate": {
+      "properties": {
+        "lastScene": {
+          "description": "Last selected Scene from the set of sceneValues",
+          "type": "string"
+        }
+      },
+      "type" : "object"
+    },
+    "slinks" : {
+      "type" : "array",
+      "items" : {
+        "$ref": "#/definitions/oic.oic-link"
+      }
+    },
+    "oic.oic-link": {
+      "type": "object",
+      "properties": {
+        "if": {
+          "description": "The OCF Interfaces supported by the Linked Resource",
+          "items": {
+            "enum": [
+              "oic.if.baseline"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "rt": {
+          "description": "Resource Type of the Linked Resource",
+          "items": {
+            "enum": ["oic.wk.scenemember"],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "anchor": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/anchor"
+        },
+        "di": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/di"
+        },
+        "eps": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/eps"
+        },
+        "href": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+        },
+        "ins": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/ins"
+        },
+        "p": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/p"
+        },
+        "rel": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/rel_array"
+        },
+        "title": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/title"
+        },
+        "type": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/type"
+        }
+      },
+      "required": [
+        "href",
+        "rt",
+        "if"
+      ]
+    }
+  }
+}

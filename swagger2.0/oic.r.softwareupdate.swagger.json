@@ -1,0 +1,204 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "software update",
+    "version": "20190408",
+    "license": {
+      "name": "OCF Data Model License",
+      "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
+      "x-copyright": "Copyright 2019 Open Connectivity Foundation, Inc. All rights reserved."
+    },
+    "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
+  },
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/softwareupdateResURI" : {
+      "get": {
+        "description": "The Resource performing scheduled software update.",
+        "parameters": [
+          {"$ref": "#/parameters/interface"}
+        ],
+        "responses": {
+            "200": {
+              "description" : "Schedule an software update.",
+              "x-example":
+                {
+                  "rt": ["oic.r.softwareupdate"],
+                  "if": ["oic.if.rw", "oic.if.baseline"],
+                  "nv" : "my version",
+                  "purl": "https://myvendor/myexampleurl",
+                  "swupdateaction": "idle",
+                  "swupdatestate" : "idle",
+                  "swupdateresult" : 0,
+                  "lastupdate" : "2015-01-09T14:30:00Z",
+                  "signed" : "vendor",
+                  "updatetime" : "2015-01-09T14:30:00Z"
+                },
+              "schema": { "$ref": "#/definitions/swupdate" }
+            }
+        }
+      },
+      "post": {
+        "description": "Mechanism to schedule a start of the software update.",
+        "parameters": [
+          {"$ref": "#/parameters/interface"},
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/swupdate-update" },
+            "x-example":
+              {
+                  "purl":  "https://myvendor/newversion",
+                  "swupdateaction": "upgrade",
+                  "updatetime" : "2030-01-09T14:30:00Z"
+              }
+          }
+        ],
+        "responses": {
+            "200": {
+              "description" : "",
+              "x-example":
+                {
+                  "nv" : "my new version",
+                  "purl":  "https://myvendor/myexampleurl",
+                  "swupdateaction": "upgrade",
+                  "swupdatestate" : "idle",
+                  "swupdateresult" : 0,
+                  "lastupdate" : "2015-01-09T14:30:00Z",
+                  "signed" : "vendor",
+                  "updatetime" : "2030-01-09T14:30:00Z"
+                },
+                "schema": { "$ref": "#/definitions/swupdate" }
+            }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "interface": {
+      "in": "query",
+      "name": "if",
+      "type": "string",
+      "enum": ["oic.if.rw", "oic.if.baseline"]
+    }
+  },
+  "definitions": {
+    "swupdate": {
+      "properties": {
+        "rt": {
+          "items": {
+            "enum": [
+              "oic.r.softwareupdate"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "type": "array",
+          "readOnly": true,
+          "uniqueItems": true
+        },
+        "nv": {
+          "description": "New available Software version",
+          "maxLength": 64,
+          "type": "string",
+          "readOnly" : true
+        },
+        "purl": {
+          "description": "Source of the software package, might be a HTTPS or CoAPs URL",
+          "maxLength": 64,
+          "type": "string",
+          "format": "uri"
+        },
+        "swupdateaction": {
+          "description": "Scheduled action to do a software update",
+          "maxLength": 64,
+          "type": "string",
+          "enum": [
+              "idle",
+              "isac",
+              "isvv",
+              "upgrade"
+            ]
+        },
+        "swupdatestate": {
+          "description": "State of the software update",
+          "readOnly": true,
+          "type": "string",
+          "enum": [
+              "idle",
+              "nsa",
+              "svv",
+              "sva",
+              "upgrading"
+            ]
+        },        
+        "swupdateresult": {
+          "description": "Result of the software update, list of result codes",
+          "readOnly": true,
+          "type": "integer"
+        },
+        "lastupdate": {
+          "description": "Time of the last software update (in RFC3339 format), Initial set on date of manufacturing",
+          "readOnly": true,
+          "maxLength": 64,
+          "type": "string",
+          "format": "date-time"
+        },
+        "signed": {
+          "description": "Signage method of the software package, currently the only allowed value is 'vendor'.",
+          "readOnly": true,
+          "type": "string",
+          "enum": [
+              "vendor"
+            ]
+        },    
+        "updatetime": {
+          "description": "Scheduled time (in RFC3339 format) to do action which is specified in 'swupdateaction' Property.",
+          "maxLength": 64,
+          "type": "string",
+          "format": "date-time"
+        },
+        "n": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "id": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "if": {
+          "description": "The interface set supported by this resource",
+          "items": {
+            "enum": [
+              "oic.if.rw",
+              "oic.if.baseline"
+            ],
+            "type": "string"
+          },
+          "minItems": 2,
+          "maxItems": 2,
+          "type": "array",
+          "readOnly": true,
+          "uniqueItems": true
+        }
+      },
+      "required": ["purl", "swupdateaction", "swupdatestate", "swupdateresult", "updatetime"]
+    },
+    "swupdate-update": {
+      "properties": {
+        "purl": {
+          "$ref": "#/definitions/swupdate/properties/purl"
+        },
+        "swupdateaction" : {
+          "$ref": "#/definitions/swupdate/properties/swupdateaction"
+        },
+        "updatetime": {
+          "$ref": "#/definitions/swupdate/properties/updatetime"
+        }
+      },
+      "required": ["purl", "swupdateaction", "updatetime"]
+    }
+  }
+}

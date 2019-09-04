@@ -1,0 +1,197 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Network Monitoring",
+    "version": "2019-03-27",
+    "license": {
+      "name": "OCF Data Model License",
+      "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
+      "x-copyright": "Copyright 2016-2019 Open Connectivity Foundation, Inc. All rights reserved."
+    },
+    "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
+  },
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/nmonResURI" : {
+      "get": {
+        "description": "The Resource through which a Device can monitor network traffic.\n",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+            "200": {
+              "description" : "",
+              "x-example": {
+                "rt":   ["oic.wk.nmon"],
+                "ianaifType":   71,
+                "reset":   false,
+                "col" : false,
+                "tx" : 10,
+                "rx" : 15,
+                "mmstx" : 50,
+                "amstx" : 35,
+                "mmsrx" : 35,
+                "amsrx" : 20
+              },
+              "schema": { "$ref": "#/definitions/nmon" }
+            }
+        }
+      },
+      "post": {
+        "description": "Start/Stop collecting and reset the networking monitor Resource\n",
+        "parameters": [
+          {"$ref": "#/parameters/interface-rw"},
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/nmon-update" },
+            "x-example": {
+              "col":   true,
+              "reset":   true
+            }
+          }
+        ],
+        "responses": {
+            "200": {
+              "description" : "",
+              "x-example": {
+                "rt":   ["oic.wk.nmon"],
+                "ianaifType":   71,
+                "reset":   false,
+                "col" : true,
+                "tx" : 0,
+                "rx" : 0,
+                "mmstx" : 0,
+                "amstx" : 0,
+                "mmsrx" : 0,
+                "amsrx" : 0
+              },
+              "schema": { "$ref": "#/definitions/nmon" }
+            }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "interface-rw" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.rw"]
+    },
+    "interface-all" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.rw", "oic.if.baseline"]
+    }
+  },
+  "definitions": {
+    "nmon" : {
+      "properties": {
+        "amstx" : {
+          "description": "Average transmitted message size in bytes (tx) in the collection period",
+          "readOnly": true,
+          "type": "integer"
+        },
+        "reset" : {
+          "description": "True: reset the collected values",
+          "readOnly": false,
+          "type": "boolean"
+        },
+        "mmsrx" : {
+          "description": "Maximum received message size in bytes (rx) in the collection period",
+          "readOnly": true,
+          "type": "integer"
+        },
+        "mmstx" : {
+          "description": "Maximum transmitted message size in bytes (tx) in the collection period",
+          "readOnly": true,
+          "type": "integer"
+        },
+        "tx" : {
+          "description": "Amount of transmitted kilo bytes from the collection",
+          "readOnly": true,
+          "type": "integer"
+        },
+        "rt" : {
+          "description": "Resource Type of the Resource",
+          "items": {
+            "enum": ["oic.wk.nmon"],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "ianaifType" : {
+          "description": "The type of the network connection, as defined by iana https://www.iana.org/assignments/ianaiftype-mib/ianaiftype-mib",
+          "readOnly": true,
+          "type": "integer"
+        },
+        "rx" : {
+          "description": "Amount of received kilobytes from the collection",
+          "readOnly": true,
+          "type": "integer"
+        },
+        "id" : {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "amsrx" : {
+          "description": "Average received message size in bytes (rx) in the collection period",
+          "readOnly": true,
+          "type": "integer"
+        },
+        "n" : {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "col" : {
+          "description": "True: Device is collecting values",
+          "readOnly": false,
+          "type": "boolean"
+        },
+        "if" : {
+          "description": "The OCF Interfaces supported by this Resource",
+          "items": {
+            "enum": [
+              "oic.if.rw",
+              "oic.if.baseline"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "readOnly": true,
+          "uniqueItems": true,
+          "type": "array"
+        }
+      },
+      "type" : "object",
+      "required": ["reset", "col", "ianaifType"]
+    },
+    "nmon-update" : {
+      "properties": {
+        "reset" : {
+          "description": "True: reset the collected values",
+          "readOnly": false,
+          "type": "boolean"
+        },
+        "n" : {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "col" : {
+          "description": "True: Device is collecting values",
+          "readOnly": false,
+          "type": "boolean"
+        }
+      },
+      "type" : "object",
+      "required": ["reset", "col"]
+    }
+  }
+}
