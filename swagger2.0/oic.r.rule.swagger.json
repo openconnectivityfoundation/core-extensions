@@ -1,0 +1,621 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "OCF Rule",
+    "version": "20190625",
+    "license": {
+      "name": "OCF Data Model License",
+      "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
+      "x-copyright": "copyright 2019 Open Connectivity Foundation, Inc. All rights reserved."
+    },
+    "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
+  },
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/RuleResURI?if=oic.if.ll": {
+      "get": {
+        "description": "Links List response for an instance of oic.r.rule",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrieves the rule as Links List.",
+            "x-example":
+            [
+              {
+                "href": "/ruleinputcollection",
+                "rt":   ["oic.wk.col"],
+                "if":   ["oic.if.ll","oic.if.baseline"],
+                "p":    {"bm": 3},
+                "eps": [
+                    {"ep": "coaps://[fe80::b1d6]:1111"}
+                ]
+              },
+              {
+                "href": "/ruleexpression",
+                "rt":   ["oic.r.rule.expression"],
+                "if":   ["oic.if.rw","oic.if.baseline"],
+                "p":    {"bm": 3},
+                "eps": [
+                    {"ep": "coaps://[fe80::b1d6]:1111"}
+                ]
+              },
+              {
+                "href": "/ruleactioncollection",
+                "rt":   ["oic.wk.col"],
+                "if":   ["oic.if.ll","oic.if.baseline"],
+                "p":    {"bm": 3},
+                "eps": [
+                    {"ep": "coap://[fe80::b1d6]:1111"}
+                ]
+              }
+            ],
+            "schema": { "$ref": "#/definitions/slinklist" }
+          }
+        }
+      }
+    },
+    "/RuleResURI?if=oic.if.baseline": {
+      "get": {
+        "description": "Baseline response for an instance of oic.r.rule",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrieves the baseline response for the rule.",
+            "x-example":
+            {
+              "rt": ["oic.r.rule"],
+              "if": ["oic.if.ll", "oic.if.baseline"],
+              "links": [
+                {
+                  "href": "/ruleinputcollection",
+                  "rt":   ["oic.wk.col"],
+                  "if":   ["oic.if.ll","oic.if.baseline"],
+                  "p":    {"bm": 3},
+                  "eps": [
+                    {"ep": "coaps://[fe80::b1d6]:1111"}
+                  ]
+                },
+                {
+                  "href": "/ruleexpression",
+                  "rt":   ["oic.r.rule.expression"],
+                  "if":   ["oic.if.rw","oic.if.baseline"],
+                  "p":    {"bm": 3},
+                  "eps": [
+                    {"ep": "coaps://[fe80::b1d6]:1111"}
+                  ]
+                },
+                {
+                  "href": "/ruleactioncollection",
+                  "rt":   ["oic.wk.col"],
+                  "if":   ["oic.if.ll","oic.if.baseline"],
+                  "p":    {"bm": 3},
+                  "eps": [
+                    {"ep": "coap://[fe80::b1d6]:1111"}
+                  ]
+                }
+              ]
+            },
+            "schema": { "$ref": "#/definitions/sbaseline" }
+          }
+        }
+      }
+    },
+    "/ruleinputcollection?if=oic.if.ll": {
+      "get": {
+        "description": "Links List response for the collection of rule inputs",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrieves the rule input Links.",
+            "x-example":
+            [
+              {
+                "anchor": "timeperiod",
+                "href": "/mytimeperiodresource",
+                "rel": ["ruleinput"],
+                "rt":   ["oic.r.time.period"],
+                "if":   ["oic.if.a","oic.if.baseline"],
+                "p":    {"bm": 3},
+                "eps": [
+                    {"ep": "coaps://[fe80::b1d6]:1111"}
+                ]
+              }
+            ],
+            "schema": { "$ref": "#/definitions/slinklist" }
+          }
+        }
+      }
+    },
+    "/ruleactioncollection?if=oic.if.ll": {
+      "get": {
+        "description": "Links List response for the collection of rule actions",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrieves the rule action Links.",
+            "x-example":
+            [
+              {
+                "href": "/myruleaction",
+                "rt":   ["oic.r.rule.action"],
+                "if":   ["oic.if.rw","oic.if.baseline"],
+                "p":    {"bm": 3},
+                "eps": [
+                    {"ep": "coaps://[fe80::b1d6]:1111"}
+                ]
+              }
+            ],
+            "schema": { "$ref": "#/definitions/slinklist" }
+          }
+        }
+      }
+    },
+    "/myruleaction": {
+      "get": {
+        "description": "Rule Action",
+        "parameters": [
+          {"$ref": "#/parameters/interface-rw"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrieves the Rule action.",
+            "x-example":
+            {
+              "rt": ["oic.r.rule.action"],
+              "if": ["oic.if.rw", "oic.if.baseline"],
+              "link": [{"href": "/myscene","rt":["oic.wk.scenecollection"],"if":["oic.if.a","oic.if.ll","oic.if.baseline"]}],
+              "lastscene": "desiredlastscenevalue"
+            },
+            "schema": { "$ref": "#/definitions/ruleaction" }
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-rw"},
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/ruleaction" },
+            "x-example":
+              {
+                "lastscene": "somedifferentlastscenevalue"
+              }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "x-example": {
+              "link": [{"href": "/myscene","rt":["oic.wk.scenecollection"],"if":["oic.if.a","oic.if.ll","oic.if.baseline"]}],
+              "lastscene": "somedifferentlastscenevalue"
+            },
+            "schema": { "$ref": "#/definitions/ruleexpression" }
+          }
+        }
+      }
+    },
+    "/ruleexpression": {
+      "get": {
+        "description": "Expression for the Rule",
+        "parameters": [
+          {"$ref": "#/parameters/interface-rw"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrieves the Rule expression.",
+            "x-example":
+            {
+              "rt": ["oic.r.rule.expression"],
+              "if": ["oic.if.rw", "oic.if.baseline"],
+              "rule": "(timeperiod:triggered = true)",
+              "ruleresult": false,
+              "ruleenable": true,
+              "actionenable": true
+            },
+            "schema": { "$ref": "#/definitions/ruleexpression" }
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-rw"},
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/ruleexpression-update" },
+            "x-example":
+              {
+                "ruleenable": true,
+                "actionenable": false
+              }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "x-example": {
+              "rule": "(timeperiod:triggered = true)",
+              "ruleresult": false,
+              "ruleenable": true,
+              "actionenable": false
+            },
+            "schema": { "$ref": "#/definitions/ruleexpression" }
+          }
+        }
+      }
+    },
+    "/mytimeperiodresource" : {
+      "get": {
+        "description": "Retrieve time period",
+        "parameters": [
+          {"$ref": "#/parameters/interface-timeperiod-all"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "x-example":
+              {
+                "rt": ["oic.r.time.period"],
+                "if": ["oic.if.a", "oic.if.baseline"],
+                "startTime":"2015-01-09T14:30:00Z",
+                "stopTime": "2015-01-09T14:45:00Z"
+              },
+            "schema": { "$ref": "#/definitions/TimePeriod" }
+          }
+        }
+      },
+      "post": {
+        "description": "Sets or updates a time period for information retrieval, action or other behavior.",
+        "parameters": [
+          {"$ref": "#/parameters/interface-timeperiod-all"},
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/TimePeriod" },
+            "x-example":
+            {
+              "startTime":"2015-01-09T14:30:00Z",
+              "stopTime": "2015-01-09T14:45:00Z"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "x-example":
+            {
+              "startTime":"2015-01-09T14:30:00Z",
+              "stopTime": "2015-01-09T14:45:00Z"
+            },
+            "schema": { "$ref": "#/definitions/TimePeriod" }
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "interface-rw": {
+      "in": "query",
+      "name": "if",
+      "type": "string",
+      "enum": ["oic.if.rw"]
+    },
+    "interface-all": {
+      "in": "query",
+      "name": "if",
+      "type": "string",
+      "enum": ["oic.if.ll","oic.if.baseline"]
+    },
+    "interface-timeperiod-all": {
+      "in": "query",
+      "name": "if",
+      "type": "string",
+      "enum": ["oic.if.a","oic.if.baseline"]
+    }
+  },
+  "definitions": {
+    "oic.oic-link": {
+      "type": "object",
+      "properties": {
+        "anchor": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/anchor"
+        },
+        "di": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/di"
+        },
+        "eps": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/eps"
+        },
+        "href": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+        },
+        "if": {
+          "description": "The OCF Interfaces supported by the Linked Resource",
+          "items": {
+            "enum": [
+              "oic.if.baseline",
+              "oic.if.ll",
+              "oic.if.b",
+              "oic.if.rw",
+              "oic.if.r",
+              "oic.if.a",
+              "oic.if.s"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "ins": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/ins"
+        },
+        "p": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/p"
+        },
+        "rel": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/rel_array"
+        },
+        "rt": {
+          "description": "Resource Type of the Linked Resource",
+          "items": {
+            "maxLength": 64,
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "title": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/title"
+        },
+        "type": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/type"
+        }
+      },
+      "required": [
+        "href",
+        "rt",
+        "if"
+      ]
+    },
+    "slinklist": {
+      "type" : "array",
+      "readOnly": true,
+      "items": {
+        "$ref": "#/definitions/oic.oic-link"
+      }
+    },
+    "sbaseline" : {
+      "properties": {
+        "links" : {
+          "description": "A set of simple or individual Links.",
+          "items": {
+            "$ref": "#/definitions/oic.oic-link"
+          },
+          "type": "array"
+        },
+        "n": {
+          "$ref" : "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "id": {
+          "$ref" : "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "rt": {
+          "description": "The Resource Type.",
+          "items": {
+            "enum": ["oic.r.rule"],
+            "maxLength": 64,
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "if": {
+          "description": "The OCF Interfaces supported by this Resource",
+          "items": {
+            "enum": [
+              "oic.if.ll",
+              "oic.if.baseline"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 2,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        }
+      },
+      "additionalProperties": true,
+      "type" : "object",
+      "required": [
+        "rt",
+        "if",
+        "links"
+      ]
+    },
+    "ruleexpression" : {
+      "properties": {
+        "rt": {
+          "description": "The Resource Type.",
+          "items": {
+            "enum": ["oic.r.rule.expression"],
+            "maxLength": 64,
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "rule": {
+          "description": "The logical expression to be evaluated, see BNF",
+          "type": "string"
+        },
+        "ruleresult": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "ruleenable": {
+          "type": "boolean"
+        },
+        "actionenable": {
+          "type": "boolean"
+        },
+        "n": {
+            "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "id": {
+            "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "if": {
+          "description": "The OCF Interface set supported by this Resource.",
+          "items": {
+            "enum": [
+              "oic.if.rw",
+              "oic.if.baseline"
+            ],
+            "type": "string"
+          },
+          "minItems": 2,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        }
+      },
+      "type": "object",
+      "required": ["rule","ruleresult","actionenable","ruleenable"]
+    },
+    "ruleexpression-update" : {
+      "properties": {
+        "rule": {
+          "description": "The logical expression to be evaluated, see BNF",
+          "type": "string"
+        },
+        "ruleenable": {
+          "type": "boolean"
+        },
+        "actionenable": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "ruleaction" : {
+      "properties": {
+        "rt" : {
+          "description": "The Resource Type.",
+          "items": {
+            "enum": ["oic.r.rule.action"],
+            "maxLength": 64,
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "link": {
+          "$ref": "#/definitions/oic.oic-link"
+        },
+        "lastscene": {
+          "type": "string"
+        },
+        "n": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "id": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "if" : {
+          "description": "The OCF Interface set supported by this Resource.",
+          "items": {
+            "enum": [
+              "oic.if.rw",
+              "oic.if.baseline"
+            ],
+            "type": "string"
+          },
+          "minItems": 2,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        }
+      },
+      "type": "object",
+      "required": ["link", "lastscene"]
+    },
+    "TimePeriod" : {
+      "properties": {
+        "rt": {
+          "description": "The Resource Type.",
+          "items": {
+            "enum": ["oic.r.time.period"],
+            "maxLength": 64,
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "interval": {
+          "description": "The time interval in minutes after the \"startTime\", if present the Property \"stopTime\" cannot be present.",
+          "type": "integer"
+        },
+        "stopTime": {
+          "description": "The stop time for the time period, if present the Property \"interval\" cannot be present.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "startTime": {
+          "description": "The start time for the time period.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "n": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "id": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "if": {
+          "description": "The OCF Interface set supported by this Resource.",
+          "items": {
+            "enum": [
+              "oic.if.a",
+              "oic.if.baseline"
+            ],
+            "type": "string"
+          },
+          "minItems": 2,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        }
+      },
+      "type": "object",
+      "required": ["startTime"]
+    }
+  }
+}
