@@ -16,7 +16,7 @@
   "paths": {
     "/RuleInputCollectionResURI?if=oic.if.ll": {
       "get": {
-        "description": "Links List response for the collection of rule inputs",
+        "description": "Collection of Links to the Resources (i.e., Rule Inputs) that contain the Properties whose values are evaluated as part of the Rule Expression.",
         "parameters": [
           {"$ref": "#/parameters/interface-all"}
         ],
@@ -44,7 +44,7 @@
     },
     "/RuleInputCollectionResURI?if=oic.if.baseline": {
       "get": {
-        "description": "Baseline response for the collection of rule inputs",
+        "description": "Collection of Links to the Resources (i.e., Rule Inputs) that contain the Properties whose values are evaluated as part of the Rule Expression.",
         "parameters": [
           {"$ref": "#/parameters/interface-all"}
         ],

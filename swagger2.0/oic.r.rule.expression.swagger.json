@@ -16,7 +16,7 @@
   "paths": {
     "/RuleExpressionResURI": {
       "get": {
-        "description": "Expression for the Rule",
+        "description": "Expression for the Rule that defines the Rule logic in terms of the defined Rule Inputs, and which evaluates to a boolean value, for which \"true\" means that the Rule has been triggered.",
         "parameters": [
           {"$ref": "#/parameters/interface-all"}
         ],

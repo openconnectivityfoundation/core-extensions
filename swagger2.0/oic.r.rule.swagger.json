@@ -16,7 +16,7 @@
   "paths": {
     "/RuleResURI?if=oic.if.ll": {
       "get": {
-        "description": "Links List response for an instance of oic.r.rule",
+        "description": "A Rule is a Collection made up of 3 Links. \n A Link to an instance of a Collection of Rule Inputs. \n A Link to a Rule Expression (the logic of the Rule). \n A Link to a Collection of Rule Actions.",
         "parameters": [
           {"$ref": "#/parameters/interface-all"}
         ],
@@ -60,7 +60,7 @@
     },
     "/RuleResURI?if=oic.if.baseline": {
       "get": {
-        "description": "Baseline response for an instance of oic.r.rule",
+        "description": "A Rule is a Collection made up of 3 Links: \n- A Link to an instance of a Collection of Rule Inputs. \n- A Link to a Rule Expression (the logic of the Rule). \n- A Link to a Collection of Rule Actions.",
         "parameters": [
           {"$ref": "#/parameters/interface-all"}
         ],
@@ -71,6 +71,7 @@
             {
               "rt": ["oic.r.rule"],
               "if": ["oic.if.ll","oic.if.baseline","oic.if.create"],
+              "rts": ["oic.r.rule.inputcollection","oic.r.rule.expression","oic.r.rule.actioncollection"],
               "links": [
                 {
                   "href": "/ruleinputcollection",
@@ -105,6 +106,64 @@
           }
         }
       }
+    },
+    "/RuleResURI?if=oic.if.create": {
+      "get": {
+        "description": "Retrieval response for an instance of oic.r.rule using oic.if.create",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrival on oic.if.create provides an empty payload.",
+            "x-example":
+            {}
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-create"},
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/rule-create" },
+            "x-example":
+              {
+                "rt": ["oic.r.rule.expression"],
+                "if": ["oic.if.rw","oic.if.baseline"],
+                "p":  {"bm": 3},
+                "rep": {
+                  "rule": "(timeperiod:triggered = true)",
+                  "ruleresult": false,
+                  "ruleenable": false,
+                  "actionenable": false
+                }
+              }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "x-example": {
+              "href": "/newURIforResource",
+              "ins": 39724818,
+              "rt": ["oic.r.rule.expression"],
+              "if": ["oic.if.rw","oic.if.baseline"],
+              "p":  {"bm": 3},
+              "rep": {
+                "rule": "(timeperiod:triggered = true)",
+                "ruleresult": false,
+                "ruleenable": false,
+                "actionenable": false
+              }
+            },
+            "schema": { "$ref": "#/definitions/rule-create" }
+          }
+        }
+      }
     }
   },
   "parameters": {
@@ -116,6 +175,53 @@
     }
   },
   "definitions": {
+    "rule-create": {
+      "type": "object",
+      "properties": {
+        "href": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+        },
+        "if": {
+          "description": "The OCF Interfaces supported by the created Resource",
+          "items": {
+            "enum": [
+              "oic.if.baseline",
+              "oic.if.ll",
+              "oic.if.b",
+              "oic.if.rw",
+              "oic.if.r",
+              "oic.if.a",
+              "oic.if.s"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "ins": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/ins"
+        },
+        "p": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/p"
+        },
+        "rt": {
+          "description": "Resource Type of the created Resource",
+          "items": {
+            "maxLength": 64,
+            "type": "string",
+            "enum": ["oic.r.rule.inputcollection","oic.r.rule.expression","oic.r.rule.actioncollection"]
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "rep": {
+          "type": "object"
+        }
+      }
+    },
     "oic.oic-link": {
       "type": "object",
       "properties": {
@@ -163,7 +269,8 @@
           "description": "Resource Type of the Linked Resource",
           "items": {
             "maxLength": 64,
-            "type": "string"
+            "type": "string",
+            "enum": ["oic.r.rule.inputcollection","oic.r.rule.expression","oic.r.rule.actioncollection"]
           },
           "minItems": 1,
           "uniqueItems": true,
@@ -187,7 +294,9 @@
       "readOnly": true,
       "items": {
         "$ref": "#/definitions/oic.oic-link"
-      }
+      },
+      "minItems": 3,
+      "maxItems": 3
     },
     "sbaseline" : {
       "properties": {
@@ -196,7 +305,9 @@
           "items": {
             "$ref": "#/definitions/oic.oic-link"
           },
-          "type": "array"
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3
         },
         "n": {
           "$ref" : "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"

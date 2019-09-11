@@ -16,7 +16,7 @@
   "paths": {
     "/RuleActionResURI": {
       "get": {
-        "description": "Rule Action contains a link to Scene Collection and a value to be set for the lastScene Property within that Collection.",
+        "description": "Rule Action contains a link to Scene Collection and a value to be set for the \"lastScene\" Property within that Collection.",
         "parameters": [
           {"$ref": "#/parameters/interface-rw"}
         ],

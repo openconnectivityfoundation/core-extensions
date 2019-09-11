@@ -16,7 +16,7 @@
   "paths": {
     "/RuleActionCollectionResURI?if=oic.if.ll": {
       "get": {
-        "description": "Links List response for the collection of rule actions",
+        "description": "A Collection of Links to one or more Rule Actions, which are processed when the Rule Expression evaluates to \"true\".",
         "parameters": [
           {"$ref": "#/parameters/interface-all"}
         ],
@@ -42,7 +42,7 @@
     },
     "/RuleActionCollectionResURI?if=oic.if.baseline": {
       "get": {
-        "description": "Baseline response for the collection of rule actions",
+        "description": "A Collection of Links to one or more Rule Actions, which are processed when the Rule Expression evaluates to \"true\".",
         "parameters": [
           {"$ref": "#/parameters/interface-all"}
         ],
@@ -170,6 +170,18 @@
           "description": "The Resource Type.",
           "items": {
             "enum": ["oic.r.rule.actioncollection"],
+            "maxLength": 64,
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "rts": {
+          "description": "The Resource Types contained within the Collection.",
+          "items": {
+            "enum": ["oic.r.rule.action"],
             "maxLength": 64,
             "type": "string"
           },
