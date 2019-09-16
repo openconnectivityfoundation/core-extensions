@@ -1,0 +1,863 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "my_example_device_with_scenes",
+    "version": "my device version"
+  },
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/scenelist?if=oic.if.ll": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "schema": {
+              "$ref": "#/definitions/slinks-scenelist"
+            }
+          }
+        }
+      }
+    },
+    "/scenelist?if=oic.if.baseline": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "schema": { "$ref": "#/definitions/SceneList" }
+          }
+        }
+      }
+    },
+    "/scenelist?if=oic.if.create": {
+      "get": {
+        "description": "Retrieval response using oic.if.create",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrival on oic.if.create provides an empty payload.",
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-create"},
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/scenecollection-create" },
+          }
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "schema": { "$ref": "#/definitions/scenecollection-create" }
+          }
+        }
+      }
+    },
+    "/{scenecollection}?if=oic.if.ll" : {
+      "get": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"},
+          {"$ref": "#/parameters/scenecollection"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "schema": {
+              "$ref": "#/definitions/slinks-scenecollection"
+            }
+          }
+        }
+      }
+    },
+    "/{scenecollection}?if=oic.if.baseline" : {
+      "get": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"},
+          {"$ref": "#/parameters/scenecollection"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "schema": {
+              "$ref": "#/definitions/SceneCollection"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-update"},
+          {"$ref": "#/parameters/scenecollection"},
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SceneCollectionUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description" : "Indicates that the value is changed.\nThe changed Properties are provided in the response.\n",
+            "schema": {
+              "$ref": "#/definitions/SceneCollectionUpdate"
+            }
+          }
+        }
+      }
+    },
+    "/{scenecollection}?if=oic.if.create": {
+      "get": {
+        "description": "Retrieval response using oic.if.create",
+        "parameters": [
+          {"$ref": "#/parameters/interface-create"},
+          {"$ref": "#/parameters/scenecollection"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrieval on oic.if.create provides an empty payload.",
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-create"},
+          {"$ref": "#/parameters/scenecollection"},
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/scenemember-create" },
+          }
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "schema": { "$ref": "#/definitions/scenemember-create" }
+          }
+        }
+      }
+    },
+    "/{scenecollection}?if=oic.if.delete": {
+      "get": {
+        "description": "Retrieval response using oic.if.delete",
+        "parameters": [
+          {"$ref": "#/parameters/interface-delete"},
+          {"$ref": "#/parameters/scenecollection"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrieval on oic.if.create provides an empty payload.",
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-delete"},
+          {"$ref": "#/parameters/scenecollection"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "schema": { "$ref": "#/definitions/resource-delete" }
+          }
+        }
+      }
+    },
+    "/{scenemember}" : {
+      "get": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-baseline"},
+          {"$ref": "#/parameters/scenemember"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "schema": {
+              "$ref": "#/definitions/SceneMember"
+            }
+          }
+        }
+      }
+    },
+    "/{scenemember}?if=oic.if.linkremove&ins={linkparameter-ins}" : {
+      "get": {
+        "description": "Retrieval response using oic.if.linkremove",
+        "parameters": [
+          {"$ref": "#/parameters/interface-linkremove"},
+          {"$ref": "#/parameters/scenemember"},
+          {"$ref": "#/parameters/linkparameter-ins"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrieval on oic.if.linkremove provides an empty payload.",
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-linkremove"},
+          {"$ref": "#/parameters/linkparameter-ins"},
+          {"$ref": "#/parameters/scenemember"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "schema": { "$ref": "#/definitions/oic.oic-link-scenemember" }
+          }
+        }
+      }
+    },
+    "/{scenemember}?if=oic.if.linkadd" : {
+      "get": {
+        "description": "Retrieval response using oic.if.linkadd",
+        "parameters": [
+          {"$ref": "#/parameters/interface-linkadd"},
+          {"$ref": "#/parameters/scenemember"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrieval on oic.if.linkadd provides an empty payload.",
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-linkadd"},
+          {"$ref": "#/parameters/scenemember"},
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/oic.oic-link-scenemember" },
+          }
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "schema": { "$ref": "#/definitions/oic.oic-link-scenemember" }
+          }
+        }
+      }
+    },
+    "/{scenemember}?if=oic.if.delete": {
+      "get": {
+        "description": "Retrieval response using oic.if.delete",
+        "parameters": [
+          {"$ref": "#/parameters/interface-delete"},
+          {"$ref": "#/parameters/scenemember"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrieval on oic.if.create provides an empty payload.",
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-delete"},
+          {"$ref": "#/parameters/scenemember"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "schema": { "$ref": "#/definitions/resource-delete" }
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "interface-all" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.ll","oic.if.baseline","oic.if.create"]
+    },
+    "interface-create" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.create"]
+    },
+    "interface-delete" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.delete"]
+    },
+    "interface-linkadd" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.linkadd"]
+    },
+    "interface-linkremove" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.linkremove"]
+    },
+    "interface-update" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.a"]
+    },
+    "interface-baseline" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.a"]
+    },
+    "linkparameter-ins" : {
+      "name" : "linkparameter-ins",
+      "in" : "path",
+      "type" : "integer",
+      "required": true
+    },
+    "scenecollection": {
+      "description": "URI fragment of the scenecollection",
+      "name": "scenecollection",
+      "in": "path",
+      "type": "string",
+      "required": true
+    },
+    "scenemember": {
+      "description": "URI fragment of the scenemember",
+      "name": "scenemember",
+      "in": "path",
+      "type": "string",
+      "required": true
+    }
+  },
+  "definitions": {
+    "SceneList": {
+      "properties": {
+        "links": {
+          "description": "A set of simple or individual OCF Links.",
+          "items": {
+            "$ref": "#/definitions/oic.oic-link-scenelist"
+          },
+          "type": "array"
+        },
+        "n": {
+          "$ref" : "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "id": {
+          "$ref" : "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "if": {
+          "type": "array",
+          "description": "The OCF Interfaces supported by this Resource",
+          "items": {
+            "enum": [
+              "oic.if.ll",
+              "oic.if.baseline",
+              "oic.if.create"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 3,
+          "uniqueItems": true,
+          "readOnly": true
+        },
+        "rts": {
+          "description": "The list of allowable Resource Types in Links included in the Collection",
+          "items": {
+            "enum": ["oic.wk.scenecollection"],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "rt": {
+          "description": "Resource Type of the Resource",
+          "items": {
+            "enum": ["oic.wk.scenelist"],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "readOnly": true,
+          "uniqueItems": true,
+          "type": "array"
+        }
+      },
+      "type": "object",
+      "required": [
+        "rt",
+        "if",
+        "links"
+      ]
+    },
+    "SceneCollection": {
+      "properties": {
+        "rt": {
+          "description": "Resource Type of the Resource",
+          "items": {
+            "enum": ["oic.wk.scenecollection"],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "readOnly": true,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "lastScene": {
+          "description": "Last selected Scene from the set of sceneValues",
+          "type": "string"
+        },
+        "links": {
+          "description": "A set of simple or individual OCF Links.",
+          "items": {
+            "$ref": "#/definitions/oic.oic-link-scenecollection"
+          },
+          "type": "array"
+        },
+        "sceneValues": {
+          "description": "All available Scene Values",
+          "items": {
+            "type": "string"
+          },
+          "readOnly": true,
+          "type": "array"
+        },
+        "n": {
+          "$ref" : "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "id": {
+          "$ref" : "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "rts": {
+          "description": "Resource Type of the Resources within the Collection",
+          "items": {
+            "enum": ["oic.wk.scenemember"],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "readOnly": true,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "if" : {
+          "description": "The OCF Interfaces supported by this Resource",
+          "items": {
+            "enum": [
+              "oic.if.ll",
+              "oic.if.baseline",
+              "oic.if.a",
+              "oic.if.create"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        }
+      },
+      "type" : "object"
+    },
+    "SceneCollectionUpdate": {
+      "properties": {
+        "lastScene": {
+          "description": "Last selected Scene from the set of sceneValues",
+          "type": "string"
+        }
+      },
+      "type" : "object"
+    },
+    "scenecollection-create": {
+      "type": "object",
+      "properties": {
+        "href": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+        },
+        "if": {
+          "description": "The OCF Interfaces supported by the created Resource",
+          "items": {
+            "enum": [
+              "oic.if.ll",
+              "oic.if.a",
+              "oic.if.baseline",
+              "oic.if.delete"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "ins": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/ins"
+        },
+        "p": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/p"
+        },
+        "rt": {
+          "description": "Resource Type of the created Resource",
+          "items": {
+            "maxLength": 64,
+            "type": "string",
+            "enum": ["oic.r.scenecollection"]
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "rep": {
+          "$ref": "#/definitions/SceneCollection"
+        }
+      }
+    },
+    "scenemember-create": {
+      "type": "object",
+      "properties": {
+        "href": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+        },
+        "if": {
+          "description": "The OCF Interfaces supported by the created Resource",
+          "items": {
+            "enum": [
+              "oic.if.a",
+              "oic.if.baseline",
+              "oic.if.delete"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "ins": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/ins"
+        },
+        "p": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/p"
+        },
+        "rt": {
+          "description": "Resource Type of the created Resource",
+          "items": {
+            "maxLength": 64,
+            "type": "string",
+            "enum": ["oic.r.scenemember"]
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "rep": {
+          "$ref": "#/definitions/SceneMember"
+        }
+      }
+    },
+    "slinks" : {
+      "type" : "array",
+      "items" : {
+        "$ref": "#/definitions/oic.oic-link-base"
+      }
+    },
+    "slinks-scenelist" : {
+      "type" : "array",
+      "items" : {
+        "$ref": "#/definitions/oic.oic-link-scenelist"
+      }
+    },
+    "slinks-scenecollection" : {
+      "type" : "array",
+      "items" : {
+        "$ref": "#/definitions/oic.oic-link-scenecollection"
+      }
+    },
+    "SceneMember": {
+      "properties": {
+        "rt": {
+          "description": "Resource Type of the Resource",
+          "items": {
+            "enum": ["oic.wk.scenemember"],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "readOnly": true,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "SceneMappings": {
+          "description": "Array of mappings per Scene, can be one(1)",
+          "items": {
+            "properties": {
+              "memberProperty": {
+                "description": "Property name that will be mapped",
+                "readOnly": true,
+                "type": "string"
+              },
+              "memberValue": {
+                "description": "Value of the Member Property",
+                "readOnly": true,
+                "type": "string"
+              },
+              "scene": {
+                "description": "Specifies a Scene Value that will be acted upon",
+                "type": "string"
+              }
+            },
+            "required": [
+              "scene",
+              "memberProperty",
+              "memberValue"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "n": {
+          "$ref" : "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "id": {
+          "$ref" : "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "link": {
+          "$ref": "#/definitions/oic.oic-link-scenemember"
+        },
+        "if": {
+          "description": "The OCF Interfaces supported by this Resource",
+          "items": {
+            "enum": [
+              "oic.if.baseline"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "readOnly": true,
+          "uniqueItems": true,
+          "type": "array"
+        }
+      },
+      "type" : "object",
+      "required": [
+        "rt",
+        "if",
+        "SceneMappings"
+      ]
+    },
+    "oic.oic-link-base": {
+      "properties": {
+        "anchor": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/anchor"
+        },
+        "di": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/di"
+        },
+        "eps": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/eps"
+        },
+        "href": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+        },
+        "ins": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/ins"
+        },
+        "p": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/p"
+        },
+        "rel": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/rel_array"
+        },
+        "title": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/title"
+        },
+        "type": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/type"
+        }
+      },
+      "required": [
+        "href",
+      ],
+      "type": "object"
+    },
+    "oic.oic-link-scenelist": {
+      "allOf": [
+        {
+          "properties": {
+            "if": {
+              "description": "The OCF Interfaces supported by the Linked Resource",
+              "items": {
+                "enum": [
+                  "oic.if.ll",
+                  "oic.if.baseline",
+                  "oic.if.create",
+                  "oic.if.delete",
+                  "oic.if.a"
+                ],
+                "type": "string",
+                "maxLength": 64
+              },
+              "minItems": 1,
+              "uniqueItems": true,
+              "readOnly": true,
+              "type": "array"
+            },
+            "rt": {
+              "description": "The Resource Type of the Linked Resource",
+              "items": {
+                "enum": ["oic.wk.scenecollection"],
+                "type": "string",
+                "maxLength": 64
+              },
+              "minItems": 1,
+              "uniqueItems": true,
+              "readOnly": true,
+              "type": "array"
+            }
+          },
+          "required": ["rt","if"],
+          "type": "object"
+        },
+        {
+          "$ref": "#/definitions/oic.oic-link-base"
+        }
+      ]
+    },
+    "oic.oic-link-scenecollection": {
+      "allOf": [
+        {
+          "properties": {
+            "if": {
+              "description": "The OCF Interfaces supported by the Linked Resource",
+              "items": {
+                "enum": [
+                  "oic.if.a",
+                  "oic.if.baseline",
+                  "oic.if.linkadd",
+                  "oic.if.linkremove",
+                  "oic.if.delete"
+                ],
+                "type": "string",
+                "maxLength": 64
+              },
+              "minItems": 1,
+              "uniqueItems": true,
+              "readOnly": true,
+              "type": "array"
+            },
+            "rt": {
+              "description": "The Resource Type of the Linked Resource",
+              "items": {
+                "enum": ["oic.wk.scenemember"],
+                "type": "string",
+                "maxLength": 64
+              },
+              "minItems": 1,
+              "uniqueItems": true,
+              "readOnly": true,
+              "type": "array"
+            }
+          },
+          "required": ["rt","if"],
+          "type": "object"
+        },
+        {
+          "$ref": "#/definitions/oic.oic-link-base"
+        }
+      ]
+    },
+    "oic.oic-link-scenemember": {
+      "allOf": [
+        {
+          "properties": {
+            "if": {
+              "description": "The OCF Interfaces supported by the Linked Resource",
+              "items": {
+                "enum": [
+                  "oic.if.baseline",
+                  "oic.if.ll",
+                  "oic.if.b",
+                  "oic.if.rw",
+                  "oic.if.r",
+                  "oic.if.a",
+                  "oic.if.s"
+                ],
+                "type": "string",
+                "maxLength": 64
+              },
+              "minItems": 1,
+              "uniqueItems": true,
+              "readOnly": true,
+              "type": "array"
+            },
+            "rt": {
+              "description": "The Resource Type of the Linked Resource",
+              "items": {
+                "type": "string",
+                "maxLength": 64
+              },
+              "minItems": 1,
+              "uniqueItems": true,
+              "readOnly": true,
+              "type": "array"
+            }
+          },
+          "required": ["rt","if"],
+          "type": "object"
+        },
+        {
+          "$ref": "#/definitions/oic.oic-link-base"
+        }
+      ]
+    },
+    "resource-delete": {
+      "type": "object",
+      "properties": {
+        "href": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+        }
+      },
+      "required": ["href"]
+    }
+  }
+}
