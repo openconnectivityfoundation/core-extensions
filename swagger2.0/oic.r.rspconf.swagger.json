@@ -1,0 +1,117 @@
+{
+  "swagger": "2.0",
+  "info":  {
+    "title": "RSP Configuration",
+    "version": "20190909",
+    "license": {
+        "name": "OCF Data Model License",
+        "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
+        "x-copyright": "Copyright 2018-2019 Open Connectivity Foundation, Inc. All rights reserved."
+    },
+    "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
+  },
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/RSPConfResURI": {
+      "get": {
+        "description": "RSPConf Resource stores the information \nused to download and install an eSIM Profile to an eSIM capable IoT device.\nIt comprises SM-DP+ server FQDN and Activation Code Token\n binding to a specific subscription as defined by GSMA SGP.22.",
+        "parameters": [
+          {"$ref": "#/parameters/interface"}
+        ],
+        "responses": {
+            "200": {
+              "description" : "",
+              "x-example":
+                { "rt": ["oic.r.rspconf"],
+                  "if": ["oic.if.rw", "oic.if.baseline"],
+                  "ac":"no activation code"
+                },
+              "schema": { "$ref": "#/definitions/RSPConf" }
+            }
+          }
+        },
+      "post": {
+        "description": "Deliver Activation Code \nto an unboxing eSIM capable IoT device to connect the device to the cellular network.\n",
+        "parameters": [
+          {"$ref": "#/parameters/interface"},
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/RSPConf" },
+            "x-example":
+                {
+                "ac": "1$SMDP.GSMA.COM$04386-AGYFT-A74Y8-3F815"
+                }
+          }
+        ],
+        "responses": {
+            "200": {
+              "description" : "",
+              "x-example":
+              {
+                  "ac": "1$SMDP.GSMA.COM$04386-AGYFT-A74Y8-3F815"
+                },
+              "schema": { "$ref": "#/definitions/RSPConf" }
+            }
+          }
+        }
+    }
+  },
+  "parameters": {
+    "interface": {
+      "in": "query",
+      "name": "if",
+      "type": "string",
+      "enum": ["oic.if.rw", "oic.if.baseline"]
+    }
+  },
+  "definitions": {
+    "RSPConf": {
+      "properties": {
+        "rt": {
+          "description": "The Resource Type.",
+          "items": {
+            "enum": ["oic.r.rspconf"],
+            "maxLength": 64,
+            "type": "string"          
+        },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "ac": {
+          "description": "The information needed to provision an eSIM device.",
+          "maxLength": 256,          
+          "pattern": "^[1]\\$([0-9A-Z%\\*+\\-\\./\\: ]{1,})\\$([A-Z0-9\\-]{0,})(\\$([0-9]{1,}\\.)*[0-9]{1,})?(\\${1,2}[1])?$",
+          "type": "string"
+        },
+        "n": {
+            "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "id": {
+            "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "if": {
+          "description": "The OCF Interface set supported by this Resource.",
+          "items": {
+            "enum": [
+              "oic.if.rw",
+              "oic.if.baseline"
+            ],
+            "type": "string"
+          },
+          "minItems": 2,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+            }
+        },
+        "type": "object",
+        "required": ["ac"]
+    }
+  }
+}
