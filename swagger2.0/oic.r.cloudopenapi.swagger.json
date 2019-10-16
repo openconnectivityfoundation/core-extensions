@@ -805,12 +805,26 @@
       },
       "example": {
         "device": {
+          "rt": ["oic.wk.d","oic.d.sensor"],
           "dmn": "Open Connectivity Foundation",
           "n": "Food safety sensor",
           "di": "53080a4f-5e3e-4291-802f-3436238232d2"
         },
         "status": "online",
         "links": [
+          {
+            "href": "/oic/d",
+            "rt": [
+              "oic.wk.d",
+              "oic.d.sensor"
+            ]
+          },
+          {
+            "href": "/oic/p",
+            "rt": [
+              "oic.wk.p"
+            ]
+          },
           {
             "href": "/53080a4f-5e3e-4291-802f-3436238232d2/humidity",
             "rt": [
@@ -852,12 +866,32 @@
       },
       "example": {
         "device": {
+          "rt": ["oic.wk.d","oic.d.sensor"],
           "dmn": "Open Connectivity Foundation",
           "n": "Food safety sensor",
           "di": "53080a4f-5e3e-4291-802f-3436238232d2"
         },
         "status": "online",
         "links": [
+          {
+            "href": "/oic/d",
+            "rep": {
+              "rt": ["oic.wk.d","oic.d.sensor"],
+              "dmn": "Open Connectivity Foundation",
+              "n": "Food safety sensor",
+              "di": "53080a4f-5e3e-4291-802f-3436238232d2",
+              "icv":  "ocf.2.0.5",
+              "dmv":  "ocf.res.1.3.0, ocf.sh.1.3.0",
+              "piid": "6F0AAC04-2BB0-468D-B57C-16570A26AE48"
+            }
+          },
+          {
+            "href": "/oic/p",
+            "rep": {
+              "pi":   "54919CA5-4101-4AE4-595B-353C51AA983C",
+              "mnfv": "1.1.20"
+            }
+          },
           {
             "href": "/humidity",
             "rep": {
