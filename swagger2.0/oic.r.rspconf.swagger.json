@@ -26,7 +26,7 @@
               "x-example":
                 { "rt": ["oic.r.rspconf"],
                   "if": ["oic.if.rw", "oic.if.baseline"],
-                  "ac":"no activation code"
+                  "ac":"no activation code",
                   "pm": "",
                   "cc": "",
                   "ccr": false
