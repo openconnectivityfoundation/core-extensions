@@ -130,7 +130,7 @@
             }
         },
         "type": "object",
-        "required": ["ac","pm","ccr"]
+        "required": ["ac","cc","ccr"]
     }
   }
 }
