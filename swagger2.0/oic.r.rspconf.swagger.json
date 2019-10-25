@@ -26,14 +26,17 @@
               "x-example":
                 { "rt": ["oic.r.rspconf"],
                   "if": ["oic.if.rw", "oic.if.baseline"],
-                  "ac":"no activation code"
+                  "ac":"no activation code",
+                  "pm": "",
+                  "cc": "",
+                  "ccr": false
                 },
               "schema": { "$ref": "#/definitions/RSPConf" }
             }
           }
         },
       "post": {
-        "description": "Deliver Activation Code \nto an unboxing eSIM capable IoT device to connect the device to the cellular network.\n",
+        "description": "Update Properties of the RSPConf Resource (deliver Activation Code in this example).\n",
         "parameters": [
           {"$ref": "#/parameters/interface"},
           {
@@ -89,6 +92,22 @@
           "pattern": "^[1]\\$([0-9A-Z%\\*+\\-\\./\\: ]{1,})\\$([A-Z0-9\\-]{0,})(\\$([0-9]{1,}\\.)*[0-9]{1,})?(\\${1,2}[1])?$",
           "type": "string"
         },
+        "pm": {
+          "description": "eUICC information used for \nthe eSIM Profile download and installation procedure. \nComprises an eSIM Profile package version, \nspec version number, capabilities supported by the eUICC as defined by GSMA SGP.22.\nThis information is returned from the LPA \nas ASN.1 DER encoded binary data format, \nand base64 encoding is used to convert to JSON.\n",
+          "maxLength": 256,          
+          "type": "string",
+          "readOnly": true
+        },
+        "cc": {
+          "description": "A code entered by an end user required by the SM-DP+ \nto confirm the download and installation of an eSIM Profile.\nThe Confirmation Code is provided from a service provider to the end user.\n",
+          "maxLength": 64,          
+          "type": "string"
+        },
+        "ccr": {
+          "description": "Indicates whether a Confirmation Code is required.\n",
+          "maxLength": 64,          
+          "type": "boolean"
+        },
         "n": {
             "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
         },
@@ -111,7 +130,7 @@
             }
         },
         "type": "object",
-        "required": ["ac"]
+        "required": ["ac","cc","ccr"]
     }
   }
 }
