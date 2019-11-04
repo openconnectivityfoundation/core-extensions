@@ -2,11 +2,11 @@
   "swagger": "2.0",
   "info":  {
     "title": "RSP Configuration",
-    "version": "20190909",
+    "version": "20191029",
     "license": {
         "name": "OCF Data Model License",
         "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
-        "x-copyright": "Copyright 2018-2019 Open Connectivity Foundation, Inc. All rights reserved."
+        "x-copyright": "Copyright 2019 Open Connectivity Foundation, Inc. All rights reserved."
     },
     "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
   },
@@ -21,46 +21,45 @@
           {"$ref": "#/parameters/interface"}
         ],
         "responses": {
-            "200": {
-              "description" : "",
-              "x-example":
-                { "rt": ["oic.r.rspconf"],
-                  "if": ["oic.if.rw", "oic.if.baseline"],
-                  "ac":"no activation code",
-                  "pm": "",
-                  "cc": "",
-                  "ccr": false
-                },
-              "schema": { "$ref": "#/definitions/RSPConf" }
-            }
+          "200": {
+            "description" : "",
+            "x-example": {
+              "rt": ["oic.r.rspconf"],
+              "if": ["oic.if.rw", "oic.if.baseline"],
+              "ac":"",
+              "pm": "",
+              "ccr": false
+            },
+            "schema": { "$ref": "#/definitions/RSPConf" }
           }
-        },
+        }
+      },
       "post": {
         "description": "Update Properties of the RSPConf Resource (deliver Activation Code in this example).\n",
         "parameters": [
-          {"$ref": "#/parameters/interface"},
+          {"$ref": "#/parameters/interface-rw"},
           {
             "name": "body",
             "in": "body",
             "required": true,
-            "schema": { "$ref": "#/definitions/RSPConf" },
-            "x-example":
-                {
-                "ac": "1$SMDP.GSMA.COM$04386-AGYFT-A74Y8-3F815"
-                }
+            "schema": { "$ref": "#/definitions/RSPConfUpdate" },
+            "x-example": {
+              "ac": "1$SMDP.GSMA.COM$04386-AGYFT-A74Y8-3F815"
+            }
           }
         ],
         "responses": {
-            "200": {
-              "description" : "",
-              "x-example":
-              {
-                  "ac": "1$SMDP.GSMA.COM$04386-AGYFT-A74Y8-3F815"
-                },
-              "schema": { "$ref": "#/definitions/RSPConf" }
-            }
+          "200": {
+            "description" : "",
+            "x-example": {
+              "ac": "1$SMDP.GSMA.COM$04386-AGYFT-A74Y8-3F815",
+              "pm": "",
+              "ccr": false
+            },
+            "schema": { "$ref": "#/definitions/RSPConf" }
           }
         }
+      }
     }
   },
   "parameters": {
@@ -69,6 +68,12 @@
       "name": "if",
       "type": "string",
       "enum": ["oic.if.rw", "oic.if.baseline"]
+    },
+    "interface-rw": {
+      "in": "query",
+      "name": "if",
+      "type": "string",
+      "enum": ["oic.if.rw"]
     }
   },
   "definitions": {
@@ -79,7 +84,7 @@
           "items": {
             "enum": ["oic.r.rspconf"],
             "maxLength": 64,
-            "type": "string"          
+            "type": "string"
         },
           "minItems": 1,
           "uniqueItems": true,
@@ -88,24 +93,24 @@
         },
         "ac": {
           "description": "The information needed to provision an eSIM device.",
-          "maxLength": 256,          
+          "maxLength": 256,
           "pattern": "^[1]\\$([0-9A-Z%\\*+\\-\\./\\: ]{1,})\\$([A-Z0-9\\-]{0,})(\\$([0-9]{1,}\\.)*[0-9]{1,})?(\\${1,2}[1])?$",
           "type": "string"
         },
         "pm": {
           "description": "eUICC information used for \nthe eSIM Profile download and installation procedure. \nComprises an eSIM Profile package version, \nspec version number, capabilities supported by the eUICC as defined by GSMA SGP.22.\nThis information is returned from the LPA \nas ASN.1 DER encoded binary data format, \nand base64 encoding is used to convert to JSON.\n",
-          "maxLength": 256,          
+          "maxLength": 256,
           "type": "string",
           "readOnly": true
         },
         "cc": {
           "description": "A code entered by an end user required by the SM-DP+ \nto confirm the download and installation of an eSIM Profile.\nThe Confirmation Code is provided from a service provider to the end user.\n",
-          "maxLength": 64,          
+          "maxLength": 64,
           "type": "string"
         },
         "ccr": {
           "description": "Indicates whether a Confirmation Code is required.\n",
-          "maxLength": 64,          
+          "maxLength": 64,
           "type": "boolean"
         },
         "n": {
@@ -127,10 +132,30 @@
           "uniqueItems": true,
           "readOnly": true,
           "type": "array"
-            }
+          }
         },
         "type": "object",
-        "required": ["ac","cc","ccr"]
+        "required": ["ac","pm","ccr"]
+    },
+    "RSPConfUpdate": {
+      "properties": {
+        "ac": {
+          "description": "The information needed to provision an eSIM device.",
+          "maxLength": 256,
+          "pattern": "^[1]\\$([0-9A-Z%\\*+\\-\\./\\: ]{1,})\\$([A-Z0-9\\-]{0,})(\\$([0-9]{1,}\\.)*[0-9]{1,})?(\\${1,2}[1])?$",
+          "type": "string"
+        },
+        "cc": {
+          "description": "A code entered by an end user required by the SM-DP+ \nto confirm the download and installation of an eSIM Profile.\nThe Confirmation Code is provided from a service provider to the end user.\n",
+          "maxLength": 64,
+          "type": "string"
+        },
+        "ccr": {
+          "description": "Indicates whether a Confirmation Code is required.\n",
+          "maxLength": 64,
+          "type": "boolean"
+        }
+      }
     }
   }
 }
