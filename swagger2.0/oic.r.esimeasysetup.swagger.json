@@ -14,7 +14,7 @@
   "consumes": ["application/json"],
   "produces": ["application/json"],
   "paths": {
-    "/eSIMEasySetupResURI?if=oic.if.li" : { 
+    "/eSIMEasySetupResURI?if=oic.if.ll" : { 
       "get": {
         "description": "The eSIMEasySetup Resource Type stores useful information including Remote SIM Provisioning (RSP) status, and RSP last error which was produced in the process of eSIM Easy Setup.\nNote that the eSIM Easy Setup Resource is a Collection Resource, which contains Links to RSPConf, and RSPCapability Resources and may additionally contain Links to other Resources.\n",
         "parameters": [
