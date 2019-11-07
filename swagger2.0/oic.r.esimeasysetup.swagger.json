@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "eSIM Easy Setup Collection",
-    "version": "20191030",
+    "version": "20191107",
     "license": {
       "name": "OCF Data Model License",
       "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
@@ -39,7 +39,7 @@
                     "href": "/RSPConfResURI",
                     "rt":   ["oic.r.rspconf"],
                     "if":   ["oic.if.baseline"],
-                    "p":{"bm":2},
+                    "p":{"bm":3},
                     "eps": [
                       {"ep": "coaps://[fe80::b1d6]:1111", "pri": 2}
                     ]
@@ -48,7 +48,7 @@
                     "href": "/RSPCapabilityResURI",
                     "rt":   ["oic.r.rspcapability"],
                     "if":   ["oic.if.baseline"],
-                    "p":{"bm":2},
+                    "p":{"bm":3},
                     "eps": [
                       {"ep": "coaps://[fe80::b1d6]:1111", "pri": 2}
                     ]
@@ -177,7 +177,7 @@
             "x-example":
               {
                 "rt" : ["oic.r.esimeasysetup", "oic.wk.col"],
-                "if" : ["oic.if.ll", "oic.if.baseline", "oic.if.b","oic.if.rw"],
+                "if" : ["oic.if.ll", "oic.if.baseline", "oic.if.b"],
                 "ps" : ["Initiated", "User Confirmation Pending", "Confirmation Received", "Installed", "Error"],
                 "ler": "",
                 "lec": "",
@@ -198,7 +198,7 @@
                     "href": "/RSPConfResURI",
                     "rt":   ["oic.r.rspconf"],
                     "if":   ["oic.if.baseline"],
-                    "p":{"bm":2},
+                    "p":{"bm":3},
                     "eps": [
                       {"ep": "coaps://[fe80::b1d6]:1111", "pri": 2}
                     ]
@@ -207,7 +207,7 @@
                     "href": "/RSPCapabilityResURI",
                     "rt":   ["oic.r.rspcapability"],
                     "if":   ["oic.if.baseline"],
-                    "p":{"bm":2},
+                    "p":{"bm":3},
                     "eps": [
                       {"ep": "coaps://[fe80::b1d6]:1111", "pri": 2}
                     ]
@@ -239,7 +239,7 @@
             "x-example":
              {
                "rt" : ["oic.r.esimeasysetup", "oic.wk.col"],
-               "if" : ["oic.if.ll","oic.if.baseline", "oic.if.b", "oic.if.rw"],
+               "if" : ["oic.if.ll","oic.if.baseline", "oic.if.b"],
                "ps" : "Error",
                "ler": "",
                "lec": "",
@@ -249,7 +249,7 @@
                  {
                    "href": "/eSIMEasySetupResURI",
                    "rt": ["oic.r.esimeasysetup", "oic.wk.col"],
-                   "if": ["oic.if.b", "oic.if.ll", "oic.if.baseline","oic.if.rw"],
+                   "if": ["oic.if.b", "oic.if.ll", "oic.if.baseline"],
                    "p":{"bm":3},
                    "eps": [
                      {"ep": "coaps://[fe80::b1d6]:1111", "pri": 2}
@@ -260,7 +260,7 @@
                    "href": "/RSPConfResURI",
                    "rt":   ["oic.r.rspconf"],
                    "if":   ["oic.if.rw", "oic.if.baseline"],
-                   "p":{"bm":2},
+                   "p":{"bm":3},
                    "eps": [
                      {"ep": "coaps://[fe80::b1d6]:1111", "pri": 2}
                    ]
@@ -269,7 +269,7 @@
                    "href": "/RSPCapabilityResURI",
                    "rt":   ["oic.r.rspcapability"],
                    "if":   ["oic.if.r", "oic.if.baseline"],
-                   "p":{"bm":2},
+                   "p":{"bm":3},
                    "eps": [
                      {"ep": "coaps://[fe80::b1d6]:1111", "pri": 2}
                    ]
@@ -281,66 +281,18 @@
          }
        }
      },
-    "/eSIMEasySetupResURI?if=oic.if.rw": {
-      "get": {
-        "description": "The eSIMEasySetup Resource Type stores useful information including Remote SIM Provisioning (RSP) status, and RSP last error code which was produced in the process of eSIM Easy Setup.\nNote that the eSIM Easy Setup Resource is a Collection Resource, which contains Links to RSPConf, and RSPCapability Resources and may additionally contain Links to other Resources.\n",
-        "parameters": [
-          {"$ref": "#/parameters/interface-all"}
-        ],
-        "responses": {
-          "200": {
-            "description" : "",
-            "x-example":
-                {
-                "euc" : ""
-                },
-             "schema": { "$ref": "#/definitions/eSIMEasySetup" }
-            }
-          }
-        },
-      "post": {
-        "description": "Able to update Properties in /eSIMEasySetupResURI\nThe below example is the case to send the RSP End User Confirmation in a post.\n",
-        "parameters": [
-          {"$ref": "#/parameters/interface-update"},
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": { "$ref": "#/definitions/eSIMEasySetupUpdate" },
-            "x-example":
-             {
-               "euc": "Download OK"
-             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description" : "",
-            "x-example":
-             {
-               "ps": "Confirmation received",
-               "ler": "",
-               "lec": "",
-               "euc": "Download OK"
-              },
-             "schema": { "$ref": "#/definitions/eSIMEasySetup" }
-           }
-         }
-       }
-    }
-  },
   "parameters": {
     "interface-all" : {
       "in" : "query",
       "name" : "if",
       "type" : "string",
-      "enum" : ["oic.if.ll","oic.if.b","oic.if.baseline","oic.if.rw"]
+      "enum" : ["oic.if.ll","oic.if.b","oic.if.baseline"]
     },
     "interface-update" : {
       "in" : "query",
       "name" : "if",
       "type" : "string",
-      "enum" : ["oic.if.b", "oic.if.baseline", "oic.if.rw"]
+      "enum" : ["oic.if.b", "oic.if.baseline"]
     }
   },
   "definitions": {
@@ -512,8 +464,7 @@
             "enum": [
               "oic.if.ll",
               "oic.if.baseline",
-              "oic.if.b",
-              "oic.if.rw"
+              "oic.if.b"
             ],
             "type": "string",
             "maxLength": 64
