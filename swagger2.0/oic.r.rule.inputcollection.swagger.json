@@ -2,11 +2,11 @@
   "swagger": "2.0",
   "info": {
     "title": "OCF Rule Input Collection",
-    "version": "20190910",
+    "version": "20200114",
     "license": {
       "name": "OCF Data Model License",
       "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
-      "x-copyright": "copyright 2019 Open Connectivity Foundation, Inc. All rights reserved."
+      "x-copyright": "copyright 2020 Open Connectivity Foundation, Inc. All rights reserved."
     },
     "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
   },
@@ -22,15 +22,15 @@
         ],
         "responses": {
           "200": {
-            "description" : "Retrieves the rule input Links.",
+            "description" : "Retrieves the Rule Input Links.",
             "x-example":
             [
               {
-                "anchor": "timeperiod",
-                "href": "/mytimeperiodresource",
+                "anchor": "mytemperature",
+                "href": "/mylocaltemperaturesensor",
                 "rel": ["ruleinput"],
-                "rt":   ["oic.r.time.period"],
-                "if":   ["oic.if.a","oic.if.baseline"],
+                "rt":   ["oic.r.temperature"],
+                "if":   ["oic.if.s"],
                 "p":    {"bm": 3},
                 "eps": [
                     {"ep": "coaps://[fe80::b1d6]:1111"}
@@ -53,16 +53,17 @@
             "description" : "Retrieves the rule input Links.",
             "x-example":
             {
-              "rt": ["oic.r.rule.input"],
+              "rt": ["oic.r.rule.inputcollection"],
               "if": ["oic.if.ll","oic.if.baseline"],
+              "rts": ["oic.r.temperature"],
               "n":  "My Rule Inputs",
               "links": [
                 {
-                  "anchor": "timeperiod",
-                  "href": "/mytimeperiodresource",
+                  "anchor": "mytemperature",
+                  "href": "/mylocaltemperaturesensor",
                   "rel": ["ruleinput"],
-                  "rt":  ["oic.r.time.period"],
-                  "if":  ["oic.if.a","oic.if.baseline"],
+                  "rt":  ["oic.r.temperature"],
+                  "if":  ["oic.if.s"],
                   "p":   {"bm": 3},
                   "eps": [
                     {"ep": "coaps://[fe80::b1d6]:1111"}
@@ -148,7 +149,8 @@
       "required": [
         "href",
         "rt",
-        "if"
+        "if",
+        "rel"
       ]
     },
     "slinklist": {
@@ -176,7 +178,18 @@
         "rt": {
           "description": "The Resource Type.",
           "items": {
-            "enum": ["oic.r.rule.input"],
+            "enum": ["oic.r.rule.inputcollection"],
+            "maxLength": 64,
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "rts": {
+          "description": "The Resource Types that can be in the Collection.",
+          "items": {
             "maxLength": 64,
             "type": "string"
           },
@@ -206,7 +219,8 @@
       "required": [
         "rt",
         "if",
-        "links"
+        "links",
+        "rts"
       ]
     }
   }
