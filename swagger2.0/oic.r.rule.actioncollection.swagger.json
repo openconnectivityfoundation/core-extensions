@@ -2,11 +2,11 @@
   "swagger": "2.0",
   "info": {
     "title": "OCF Rule Action Collection",
-    "version": "20190910",
+    "version": "20200116",
     "license": {
       "name": "OCF Data Model License",
       "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
-      "x-copyright": "copyright 2019 Open Connectivity Foundation, Inc. All rights reserved."
+      "x-copyright": "copyright 2020 Open Connectivity Foundation, Inc. All rights reserved."
     },
     "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
   },
@@ -211,7 +211,8 @@
       "required": [
         "rt",
         "if",
-        "links"
+        "links",
+        "rts"
       ]
     }
   }

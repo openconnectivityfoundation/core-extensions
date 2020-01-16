@@ -136,7 +136,7 @@
                 "if": ["oic.if.rw","oic.if.baseline"],
                 "p":  {"bm": 3},
                 "rep": {
-                  "rule": "(timeperiod:triggered = true)",
+                  "rule": "(mytemperature:temperature >= 25)",
                   "ruleresult": false,
                   "ruleenable": false,
                   "actionenable": false
@@ -154,7 +154,7 @@
               "if": ["oic.if.rw","oic.if.baseline"],
               "p":  {"bm": 3},
               "rep": {
-                "rule": "(timeperiod:triggered = true)",
+                "rule": "(mytemperature:temperature >= 25)",
                 "ruleresult": false,
                 "ruleenable": false,
                 "actionenable": false
@@ -187,11 +187,7 @@
             "enum": [
               "oic.if.baseline",
               "oic.if.ll",
-              "oic.if.b",
-              "oic.if.rw",
-              "oic.if.r",
-              "oic.if.a",
-              "oic.if.s"
+              "oic.if.rw"
             ],
             "type": "string",
             "maxLength": 64
@@ -243,11 +239,7 @@
             "enum": [
               "oic.if.baseline",
               "oic.if.ll",
-              "oic.if.b",
-              "oic.if.rw",
-              "oic.if.r",
-              "oic.if.a",
-              "oic.if.s"
+              "oic.if.rw"
             ],
             "type": "string",
             "maxLength": 64
@@ -364,7 +356,8 @@
       "required": [
         "rt",
         "if",
-        "links"
+        "links",
+        "rts"
       ]
     }
   }

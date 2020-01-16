@@ -28,7 +28,7 @@
               "rt": ["oic.r.rule.action"],
               "if": ["oic.if.rw", "oic.if.baseline"],
               "link": [{"href": "/myscene","rt":["oic.wk.scenecollection"],"if":["oic.if.a","oic.if.ll","oic.if.baseline"]}],
-              "lastscene": "desiredlastscenevalue"
+              "scenevalue": "desiredlastscenevalue"
             },
             "schema": { "$ref": "#/definitions/ruleaction" }
           }
@@ -42,10 +42,10 @@
             "name": "body",
             "in": "body",
             "required": true,
-            "schema": { "$ref": "#/definitions/ruleaction" },
+            "schema": { "$ref": "#/definitions/ruleaction-update" },
             "x-example":
               {
-                "lastscene": "somedifferentlastscenevalue"
+                "scenevalue": "somedifferentlastscenevalue"
               }
           }
         ],
@@ -54,9 +54,9 @@
             "description" : "",
             "x-example": {
               "link": [{"href": "/myscene","rt":["oic.wk.scenecollection"],"if":["oic.if.a","oic.if.ll","oic.if.baseline"]}],
-              "lastscene": "somedifferentlastscenevalue"
+              "scenevalue": "somedifferentlastscenevalue"
             },
-            "schema": { "$ref": "#/definitions/ruleexpression" }
+            "schema": { "$ref": "#/definitions/ruleaction" }
           }
         }
       }
@@ -98,11 +98,7 @@
             "enum": [
               "oic.if.baseline",
               "oic.if.ll",
-              "oic.if.b",
-              "oic.if.rw",
-              "oic.if.r",
-              "oic.if.a",
-              "oic.if.s"
+              "oic.if.a"
             ],
             "type": "string",
             "maxLength": 64
@@ -123,6 +119,7 @@
         "rt": {
           "description": "Resource Type of the Linked Resource",
           "items": {
+            "enum": ["oic.wk.scenecollection"]
             "maxLength": 64,
             "type": "string"
           },
@@ -160,7 +157,7 @@
         "link": {
           "$ref": "#/definitions/oic.oic-link"
         },
-        "lastscene": {
+        "scenevalue": {
           "type": "string"
         },
         "n": {
@@ -185,7 +182,16 @@
         }
       },
       "type": "object",
-      "required": ["link", "lastscene"]
+      "required": ["link", "scenevalue"]
+    },
+    "ruleaction-update" : {
+      "properties": {
+        "scenevalue": {
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": ["scenevalue"]
     }
   }
 }
