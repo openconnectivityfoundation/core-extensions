@@ -297,7 +297,8 @@
           "items": {
             "enum": [
               "oic.if.ll",
-              "oic.if.baseline"
+              "oic.if.baseline",
+              "oic.if.create"
             ],
             "type": "string",
             "maxLength": 64

@@ -119,7 +119,7 @@
         "rt": {
           "description": "Resource Type of the Linked Resource",
           "items": {
-            "enum": ["oic.wk.scenecollection"]
+            "enum": ["oic.wk.scenecollection"],
             "maxLength": 64,
             "type": "string"
           },

@@ -136,7 +136,7 @@
                 "if": ["oic.if.rw","oic.if.baseline"],
                 "p":  {"bm": 3},
                 "rep": {
-                  "rule": "(mytemperature:temperature >= 25)",
+                  "rule": "(mytemperature:temperature >= \"25\")",
                   "ruleresult": false,
                   "ruleenable": false,
                   "actionenable": false
@@ -172,6 +172,12 @@
       "name": "if",
       "type": "string",
       "enum": ["oic.if.ll","oic.if.baseline","oic.if.create"]
+    },
+    "interface-create": {
+      "in": "query",
+      "name": "if",
+      "type": "string",
+      "enum": ["oic.if.create"]
     }
   },
   "definitions": {
@@ -187,6 +193,9 @@
             "enum": [
               "oic.if.baseline",
               "oic.if.ll",
+              "oic.if.create",
+              "oic.if.linkadd",
+              "oic.if.linkremove",
               "oic.if.rw"
             ],
             "type": "string",
@@ -239,6 +248,9 @@
             "enum": [
               "oic.if.baseline",
               "oic.if.ll",
+              "oic.if.create",
+              "oic.if.linkadd",
+              "oic.if.linkremove",
               "oic.if.rw"
             ],
             "type": "string",

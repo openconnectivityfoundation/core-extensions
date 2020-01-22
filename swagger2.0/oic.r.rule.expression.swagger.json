@@ -27,7 +27,7 @@
             {
               "rt": ["oic.r.rule.expression"],
               "if": ["oic.if.rw", "oic.if.baseline"],
-              "rule": "(mytemperature:temperature >= 25)",
+              "rule": "(mytemperature:temperature >= \"25\")",
               "ruleresult": false,
               "ruleenable": true,
               "actionenable": true
