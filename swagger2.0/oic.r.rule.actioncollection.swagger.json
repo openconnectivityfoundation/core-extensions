@@ -73,46 +73,30 @@
       }
     },
     "/RuleActionCollectionResURI?if=oic.if.create": {
-        "get": {
-          "description": "Retrieval response for an instance of oic.r.rule.actioncollection using oic.if.create",
-          "parameters": [
-            {"$ref": "#/parameters/interface-all"}
-          ],
-          "responses": {
-            "200": {
-              "description" : "Retrival on oic.if.create provides an empty payload.",
-              "x-example":
-              {}
-            }
+      "get": {
+        "description": "Retrieval response for an instance of oic.r.rule.actioncollection using oic.if.create",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrival on oic.if.create provides an empty payload.",
+            "x-example":
+            {}
           }
-        },
-        "post": {
-          "description": "",
-          "parameters": [
-            {"$ref": "#/parameters/interface-create"},
-            {
-              "name": "body",
-              "in": "body",
-              "required": true,
-              "schema": { "$ref": "#/definitions/ruleaction-create" },
-              "x-example":
-                {
-                  "rt": ["oic.r.rule.action"],
-                  "if": ["oic.if.rw","oic.if.baseline"],
-                  "p":  {"bm": 3},
-                  "rep": {
-                    "link": [{"href": "/myscene","rt":["oic.wk.scenecollection"],"if":["oic.if.a","oic.if.ll","oic.if.baseline"]}],
-                    "scenevalue": "desiredlastscenevalue"
-                  }
-                }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description" : "",
-              "x-example": {
-                "href": "/newURIforResource",
-                "ins": 39724818,
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-create"},
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/ruleaction-create" },
+            "x-example":
+              {
                 "rt": ["oic.r.rule.action"],
                 "if": ["oic.if.rw","oic.if.baseline"],
                 "p":  {"bm": 3},
@@ -120,11 +104,85 @@
                   "link": [{"href": "/myscene","rt":["oic.wk.scenecollection"],"if":["oic.if.a","oic.if.ll","oic.if.baseline"]}],
                   "scenevalue": "desiredlastscenevalue"
                 }
-              },
-              "schema": { "$ref": "#/definitions/ruleaction-create" }
-            }
+              }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "x-example": {
+              "href": "/newURIforResource",
+              "ins": 39724818,
+              "rt": ["oic.r.rule.action"],
+              "if": ["oic.if.rw","oic.if.baseline"],
+              "p":  {"bm": 3},
+              "rep": {
+                "link": [{"href": "/myscene","rt":["oic.wk.scenecollection"],"if":["oic.if.a","oic.if.ll","oic.if.baseline"]}],
+                "scenevalue": "desiredlastscenevalue"
+              }
+            },
+            "schema": { "$ref": "#/definitions/ruleaction-create" }
           }
         }
+      }
+    },
+    "/RuleActionCollectionResURI?if=oic.if.linkadd" : {
+      "get": {
+        "description": "Retrieval response using oic.if.linkadd",
+        "parameters": [
+          {"$ref": "#/parameters/interface-linkadd"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrieval on oic.if.linkadd provides an empty payload."
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-linkadd"},
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/oic.oic-link" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "schema": { "$ref": "#/definitions/oic.oic-link" }
+          }
+        }
+      }
+    },
+    "/RuleActionCollectionResURI?if=oic.if.linkremove&ins={linkparameter-ins}" : {
+      "get": {
+        "description": "Retrieval response using oic.if.linkremove",
+        "parameters": [
+          {"$ref": "#/parameters/interface-linkremove"},
+          {"$ref": "#/parameters/linkparameter-ins"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrieval on oic.if.linkremove provides an empty payload."
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-linkremove"},
+          {"$ref": "#/parameters/linkparameter-ins"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "schema": { "$ref": "#/definitions/oic.oic-link" }
+          }
+        }
+      }
     }
   },
   "parameters": {
@@ -132,13 +190,31 @@
       "in": "query",
       "name": "if",
       "type": "string",
-      "enum": ["oic.if.ll","oic.if.baseline","oic.if.create"]
+      "enum": ["oic.if.ll","oic.if.baseline","oic.if.create","oic.if.linkadd","oic.if.linkremove"]
     },
     "interface-create": {
       "in": "query",
       "name": "if",
       "type": "string",
       "enum": ["oic.if.create"]
+    },
+    "interface-linkadd" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.linkadd"]
+    },
+    "interface-linkremove" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.linkremove"]
+    },
+    "linkparameter-ins" : {
+      "name" : "linkparameter-ins",
+      "in" : "path",
+      "type" : "integer",
+      "required": true
     }
   },
   "definitions": {
