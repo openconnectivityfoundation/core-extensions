@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "OCF Rule Action Collection",
-    "version": "20200116",
+    "version": "20200122",
     "license": {
       "name": "OCF Data Model License",
       "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
@@ -71,6 +71,60 @@
           }
         }
       }
+    },
+    "/RuleActionCollectionResURI?if=oic.if.create": {
+        "get": {
+          "description": "Retrieval response for an instance of oic.r.rule.actioncollection using oic.if.create",
+          "parameters": [
+            {"$ref": "#/parameters/interface-all"}
+          ],
+          "responses": {
+            "200": {
+              "description" : "Retrival on oic.if.create provides an empty payload.",
+              "x-example":
+              {}
+            }
+          }
+        },
+        "post": {
+          "description": "",
+          "parameters": [
+            {"$ref": "#/parameters/interface-create"},
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": { "$ref": "#/definitions/ruleaction-create" },
+              "x-example":
+                {
+                  "rt": ["oic.r.rule.action"],
+                  "if": ["oic.if.rw","oic.if.baseline"],
+                  "p":  {"bm": 3},
+                  "rep": {
+                    "link": [{"href": "/myscene","rt":["oic.wk.scenecollection"],"if":["oic.if.a","oic.if.ll","oic.if.baseline"]}],
+                    "scenevalue": "desiredlastscenevalue"
+                  }
+                }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description" : "",
+              "x-example": {
+                "href": "/newURIforResource",
+                "ins": 39724818,
+                "rt": ["oic.r.rule.action"],
+                "if": ["oic.if.rw","oic.if.baseline"],
+                "p":  {"bm": 3},
+                "rep": {
+                  "link": [{"href": "/myscene","rt":["oic.wk.scenecollection"],"if":["oic.if.a","oic.if.ll","oic.if.baseline"]}],
+                  "scenevalue": "desiredlastscenevalue"
+                }
+              },
+              "schema": { "$ref": "#/definitions/ruleaction-create" }
+            }
+          }
+        }
     }
   },
   "parameters": {
@@ -78,10 +132,58 @@
       "in": "query",
       "name": "if",
       "type": "string",
-      "enum": ["oic.if.ll","oic.if.baseline"]
+      "enum": ["oic.if.ll","oic.if.baseline","oic.if.create"]
+    },
+    "interface-create": {
+      "in": "query",
+      "name": "if",
+      "type": "string",
+      "enum": ["oic.if.create"]
     }
   },
   "definitions": {
+    "ruleaction-create": {
+      "type": "object",
+      "properties": {
+        "href": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+        },
+        "if": {
+          "description": "The OCF Interfaces supported by the created Resource",
+          "items": {
+            "enum": [
+              "oic.if.baseline",
+              "oic.if.rw"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "ins": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/ins"
+        },
+        "p": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/p"
+        },
+        "rt": {
+          "description": "Resource Type of the created Resource",
+          "items": {
+            "maxLength": 64,
+            "type": "string",
+            "enum": ["oic.r.rule.action"]
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "rep": {
+          "type": "object"
+        }
+      }
+    },
     "oic.oic-link": {
       "type": "object",
       "properties": {

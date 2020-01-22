@@ -28,7 +28,7 @@
               {
                 "href": "/ruleinputcollection",
                 "rt":   ["oic.r.rule.inputcollection"],
-                "if":   ["oic.if.ll","oic.if.baseline"],
+                "if":   ["oic.if.ll","oic.if.linkadd","oic.if.linkremove","oic.if.baseline"],
                 "p":    {"bm": 3},
                 "eps": [
                     {"ep": "coaps://[fe80::b1d6]:1111"}
@@ -46,7 +46,7 @@
               {
                 "href": "/ruleactioncollection",
                 "rt":   ["oic.wk.rule.actioncollection"],
-                "if":   ["oic.if.ll","oic.if.baseline"],
+                "if":   ["oic.if.ll","oic.if.create","oic.if.baseline"],
                 "p":    {"bm": 3},
                 "eps": [
                     {"ep": "coap://[fe80::b1d6]:1111"}
@@ -76,7 +76,7 @@
                 {
                   "href": "/ruleinputcollection",
                   "rt":   ["oic.r.rule.inputcollection"],
-                  "if":   ["oic.if.ll","oic.if.baseline"],
+                  "if":   ["oic.if.ll","oic.if.linkadd","oic.if.linkremove","oic.if.baseline"],
                   "p":    {"bm": 3},
                   "eps": [
                     {"ep": "coaps://[fe80::b1d6]:1111"}
@@ -94,7 +94,7 @@
                 {
                   "href": "/ruleactioncollection",
                   "rt":   ["oic.r.rule.actioncollection"],
-                  "if":   ["oic.if.ll","oic.if.baseline"],
+                  "if":   ["oic.if.ll","oic.if.create","oic.if.baseline"],
                   "p":    {"bm": 3},
                   "eps": [
                     {"ep": "coap://[fe80::b1d6]:1111"}
