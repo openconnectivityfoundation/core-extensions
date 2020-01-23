@@ -52,7 +52,7 @@
         ],
         "responses": {
           "200": {
-            "description" : "Retrival on oic.if.create provides an empty payload.",
+            "description" : "Retrival on oic.if.create provides an empty payload."
           }
         }
       },
@@ -141,7 +141,7 @@
         ],
         "responses": {
           "200": {
-            "description" : "Retrieval on oic.if.create provides an empty payload.",
+            "description" : "Retrieval on oic.if.create provides an empty payload."
           }
         }
       },
@@ -260,7 +260,7 @@
             "name": "body",
             "in": "body",
             "required": true,
-            "schema": { "$ref": "#/definitions/oic.oic-link-scenemember" },
+            "schema": { "$ref": "#/definitions/oic.oic-link-scenemember" }
           }
         ],
         "responses": {
