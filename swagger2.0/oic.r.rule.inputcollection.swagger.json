@@ -133,6 +133,31 @@
           }
         }
       }
+    },
+    "/RuleInputCollectionResURI?if=oic.if.delete": {
+      "get": {
+        "description": "Retrieval response using oic.if.delete",
+        "parameters": [
+          {"$ref": "#/parameters/interface-delete"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrieval on oic.if.create provides an empty payload."
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-delete"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "schema": { "$ref": "#/definitions/resource-delete" }
+          }
+        }
+      }
     }
   },
   "parameters": {
@@ -140,7 +165,13 @@
       "in": "query",
       "name": "if",
       "type": "string",
-      "enum": ["oic.if.ll","oic.if.linkadd","oic.if.linkremove","oic.if.baseline"]
+      "enum": ["oic.if.ll","oic.if.linkadd","oic.if.linkremove","oic.if.baseline","oic.if.delete"]
+    },
+    "interface-delete": {
+      "in": "query",
+      "name": "if",
+      "type": "string",
+      "enum": ["oic.if.delete"]
     },
     "interface-linkadd" : {
       "in" : "query",
@@ -228,6 +259,15 @@
         "if",
         "rel"
       ]
+    },
+    "resource-delete": {
+      "type": "object",
+      "properties": {
+        "href": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+        }
+      },
+      "required": ["href"]
     },
     "slinklist": {
       "type" : "array",
