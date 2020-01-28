@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "Remote SIM Provisioning Capability",
-    "version": "20190910",
+    "version": "20200128",
     "license": {
       "name": "OCF Data Model License",
       "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
@@ -59,14 +59,14 @@
           "type": "array"
         },
         "euiccinfo" : {
-          "description": "Indicates information of eUICC. This information is returned from LPA as ASN.1 DER encoded binary data format, and base64 encoding is used to convert to JSON.",
+          "description": "Refers to EUICCInfo2 defined in GSMA SGP.22 Annex H./nThis information is returned from LPA as ASN.1 DER encoded binary data format, and base64 encoding is used to convert to JSON.",
           "type": "string",
-          "maxLength": 256
+          "maxLength": 1024
         },
         "deviceinfo" : {
-          "description": "Indicates device information used for the eSIM Profile download and installation procedure. This information is returned from LPA as ASN.1 DER encoded binary data format, and base64 encoding is used to convert to JSON.",
+          "description": "Refers to DeviceInfo defined in GSMA SGP.22 Annex H./nThis information is returned from LPA as ASN.1 DER encoded binary data format, and base64 encoding is used to convert to JSON.",
           "type": "string",
-          "maxLength": 256
+          "maxLength": 128
         },
         "n" : {
           "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
