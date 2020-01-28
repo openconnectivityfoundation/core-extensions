@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info":  {
     "title": "RSP Configuration",
-    "version": "20191029",
+    "version": "20200128",
     "license": {
         "name": "OCF Data Model License",
         "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
@@ -28,7 +28,7 @@
               "if": ["oic.if.rw", "oic.if.baseline"],
               "ac":"",
               "pm": "",
-              "ccr": false
+              "ccr": ""
             },
             "schema": { "$ref": "#/definitions/RSPConf" }
           }
@@ -94,12 +94,11 @@
         "ac": {
           "description": "The information needed to provision an eSIM device.",
           "maxLength": 256,
-          "pattern": "^[1]\\$([0-9A-Z%\\*+\\-\\./\\: ]{1,})\\$([A-Z0-9\\-]{0,})(\\$([0-9]{1,}\\.)*[0-9]{1,})?(\\${1,2}[1])?$",
           "type": "string"
         },
         "pm": {
-          "description": "eUICC information used for \nthe eSIM Profile download and installation procedure. \nComprises an eSIM Profile package version, \nspec version number, capabilities supported by the eUICC as defined by GSMA SGP.22.\nThis information is returned from the LPA \nas ASN.1 DER encoded binary data format, \nand base64 encoding is used to convert to JSON.\n",
-          "maxLength": 256,
+          "description": "Refers to ProfileInfo in GSMA SGP.22 Annex H.\nThis information is returned from the LPA \nas ASN.1 DER encoded binary data format, \nand base64 encoding is used to convert to JSON.\n",
+          "maxLength": 1024,
           "type": "string",
           "readOnly": true
         },
@@ -111,7 +110,8 @@
         "ccr": {
           "description": "Indicates whether a Confirmation Code is required.\n",
           "maxLength": 64,
-          "type": "boolean"
+          "type": "boolean",
+          "readOnly": true
         },
         "n": {
             "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
@@ -142,18 +142,12 @@
         "ac": {
           "description": "The information needed to provision an eSIM device.",
           "maxLength": 256,
-          "pattern": "^[1]\\$([0-9A-Z%\\*+\\-\\./\\: ]{1,})\\$([A-Z0-9\\-]{0,})(\\$([0-9]{1,}\\.)*[0-9]{1,})?(\\${1,2}[1])?$",
           "type": "string"
         },
         "cc": {
           "description": "A code entered by an end user required by the SM-DP+ \nto confirm the download and installation of an eSIM Profile.\nThe Confirmation Code is provided from a service provider to the end user.\n",
           "maxLength": 64,
           "type": "string"
-        },
-        "ccr": {
-          "description": "Indicates whether a Confirmation Code is required.\n",
-          "maxLength": 64,
-          "type": "boolean"
         }
       }
     }
