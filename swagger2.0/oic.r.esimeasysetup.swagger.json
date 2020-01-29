@@ -518,7 +518,8 @@
           "description": "A set of OCF Links.",
           "items": {
             "$ref": "#/definitions/oic.oic-link"
-          }
+          },
+          "readOnly":true
         }
       },
       "type" : "object",
