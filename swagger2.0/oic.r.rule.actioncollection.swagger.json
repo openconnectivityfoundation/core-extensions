@@ -52,7 +52,7 @@
             "x-example":
             {
               "rt":  ["oic.r.rule.actioncollection"],
-              "if":  ["oic.if.ll","oic.if.baseline"],
+              "if":  ["oic.if.ll","oic.if.baseline","oic.if.create","oic.if.linkadd","oic.if.linkremove"],
               "rts": ["oic.r.rule.action"],
               "n":   "My collection of Rule Actions",
               "links": [
@@ -414,7 +414,10 @@
             "enum": [
               "oic.if.ll",
               "oic.if.baseline",
-              "oic.if.create"
+              "oic.if.create",
+              "oic.if.linkadd",
+              "oic.if.linkremove",
+              "oic.if.delete"
             ],
             "type": "string",
             "maxLength": 64
