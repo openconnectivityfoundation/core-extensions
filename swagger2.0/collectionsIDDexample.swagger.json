@@ -1,0 +1,437 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "my_example_device_with_collections",
+    "version": "my device version"
+  },
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/collection?if=oic.if.ll": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "schema": {
+              "$ref": "#/definitions/slinks"
+            }
+          }
+        }
+      }
+    },
+    "/collection?if=oic.if.baseline": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "schema": { "$ref": "#/definitions/collection" }
+          }
+        }
+      }
+    },
+    "/collection?if=oic.if.create": {
+      "get": {
+        "description": "Retrieval response using oic.if.create",
+        "parameters": [
+          {"$ref": "#/parameters/interface-create"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrival on oic.if.create provides an empty payload."
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-create"},
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/collection-create" },
+          }
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "schema": { "$ref": "#/definitions/collection-create" }
+          }
+        }
+      }
+    },
+    "/{createdresource}" : {
+      "get": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-baseline"},
+          {"$ref": "#/parameters/createdresource"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "schema": {
+              "$ref": "#/definitions/createdresource"
+            }
+          }
+        }
+      }
+    },
+    "/{createdresource}?if=oic.if.delete": {
+      "get": {
+        "description": "Retrieval response using oic.if.delete",
+        "parameters": [
+          {"$ref": "#/parameters/interface-delete"},
+          {"$ref": "#/parameters/createdresource"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrieval on oic.if.create provides an empty payload.",
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-delete"},
+          {"$ref": "#/parameters/createdresource"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "schema": { "$ref": "#/definitions/resource-delete" }
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "interface-all" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.ll","oic.if.baseline","oic.if.create"]
+    },
+    "interface-baseline" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.baseline"]
+    },
+    "interface-create" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.create"]
+    },
+    "interface-delete" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.delete"]
+    },
+    "createdresource": {
+      "description": "URI fragment of the created resource",
+      "name": "createdresource",
+      "in": "path",
+      "type": "string",
+      "required": true
+    }
+  },
+  "definitions": {
+    "collection": {
+      "properties": {
+        "links": {
+          "description": "A set of simple or individual OCF Links.",
+          "items": {
+            "$ref": "#/definitions/oic.oic-link-base"
+          },
+          "type": "array"
+        },
+        "n": {
+          "$ref" : "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "id": {
+          "$ref" : "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "if": {
+          "type": "array",
+          "description": "The OCF Interfaces supported by this Resource",
+          "items": {
+            "enum": [
+              "oic.if.ll",
+              "oic.if.baseline",
+              "oic.if.create"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 3,
+          "uniqueItems": true,
+          "readOnly": true
+        },
+        "rts": {
+          "description": "The list of allowable Resource Types in Links included in the Collection",
+          "items": {
+            "enum": ["oic.r.switch.binary","oic.r.humidity"],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "rt": {
+          "description": "Resource Type of the Resource",
+          "items": {
+            "enum": ["oic.wk.collection"],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "readOnly": true,
+          "uniqueItems": true,
+          "type": "array"
+        }
+      },
+      "type": "object",
+      "required": [
+        "rt",
+        "if",
+        "links"
+      ]
+    },
+    "collection-create": {
+      "type": "object",
+      "properties": {
+        "href": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+        },
+        "if": {
+          "description": "The OCF Interfaces supported by the created Resource",
+          "items": {
+            "enum": [
+              "oic.if.s",
+              "oic.if.baseline",
+              "oic.if.delete"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "ins": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/ins"
+        },
+        "p": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/p"
+        },
+        "rt": {
+          "description": "Resource Type of the created Resource",
+          "items": {
+            "maxLength": 64,
+            "type": "string",
+            "enum": ["oic.r.switch.binary","oic.r.humidity"]
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "rep": {
+          "$ref": "#/definitions/createdresource"
+        }
+      }
+    },
+    "createdresource": {
+      "oneOf": [
+        {
+          "properties": {
+            "rt": {
+              "description": "Resource Type of the Resource",
+              "items": {
+                "enum": ["oic.r.switch.binary"],
+                "type": "string",
+                "maxLength": 64
+              },
+              "minItems": 1,
+              "readOnly": true,
+              "uniqueItems": true,
+              "type": "array"
+            },
+            "value": {
+              "description": "The status of the switch.",
+              "type": "boolean"
+            },
+            "n": {
+                "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+            },
+            "id": {
+                "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+            },
+            "if": {
+              "description": "The OCF Interface set supported by this Resource.",
+              "items": {
+                "enum": [
+                  "oic.if.a",
+                  "oic.if.baseline"
+                ],
+                "type": "string"
+              },
+              "minItems": 2,
+              "uniqueItems": true,
+              "readOnly": true,
+              "type": "array"
+            }
+          },
+          "type": "object",
+          "required": ["value"]
+        },
+        {
+          "properties": {
+            "rt": {
+              "description": "The Resource Type.",
+              "items": {
+                "enum": ["oic.r.humidity"],
+                "maxLength": 64,
+                "type": "string"
+              },
+              "minItems": 1,
+              "uniqueItems": true,
+              "readOnly": true,
+              "type": "array"
+            },
+            "desiredHumidity": {
+              "description": "The desired value for humidity.",
+              "maximum": 100,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "humidity": {
+              "description": "The current sensed value for humidity.",
+              "maximum": 100,
+              "minimum": 0,
+              "readOnly": true,
+              "type": "integer"
+            },
+            "n": {
+                "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+            },
+            "id": {
+                "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+            },
+            "if": {
+              "description": "The OCF Interface set supported by this Resource.",
+              "items": {
+                "enum": [
+                  "oic.if.s",
+                  "oic.if.baseline"
+                ],
+                "type": "string"
+              },
+              "minItems": 2,
+              "uniqueItems": true,
+              "readOnly": true,
+              "type": "array"
+            }
+          },
+          "type": "object",
+          "required": ["humidity"]
+        }
+      ]
+    },
+    "slinks" : {
+      "type" : "array",
+      "items" : {
+        "$ref": "#/definitions/oic.oic-link-base"
+      }
+    },
+    "oic.oic-link-base": {
+      "properties": {
+        "anchor": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/anchor"
+        },
+        "di": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/di"
+        },
+        "eps": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/eps"
+        },
+        "href": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+        },
+        "ins": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/ins"
+        },
+        "p": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/p"
+        },
+        "rel": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/rel_array"
+        },
+        "title": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/title"
+        },
+        "type": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/type"
+        },
+        "if": {
+          "description": "The OCF Interfaces supported by the Linked Resource",
+          "items": {
+            "enum": [
+              "oic.if.baseline",
+              "oic.if.delete",
+              "oic.if.s"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "rt": {
+          "description": "The Resource Type of the Linked Resource",
+          "items": {
+            "enum": ["oic.r.switch.binary","oic.r.humidity"],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        }
+      },
+      "required": ["href","rt","if"],
+      "type": "object"
+    },
+    "resource-delete": {
+      "type": "object",
+      "properties": {
+        "href": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+        }
+      },
+      "required": ["href"]
+    }
+  }
+}
