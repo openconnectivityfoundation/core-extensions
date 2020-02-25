@@ -109,12 +109,12 @@
         }
       }
     },
-    "/{createdresource}?if=oic.if.delete": {
+    "/collection/{oic.r.humidity}?if=oic.if.delete": {
       "get": {
         "description": "Retrieval response using oic.if.delete",
         "parameters": [
           {"$ref": "#/parameters/interface-delete"},
-          {"$ref": "#/parameters/createdresource"}
+          {"$ref": "#/parameters/oic.r.humidity"}
         ],
         "responses": {
           "200": {
@@ -126,12 +126,39 @@
         "description": "",
         "parameters": [
           {"$ref": "#/parameters/interface-delete"},
-          {"$ref": "#/parameters/createdresource"}
+          {"$ref": "#/parameters/oic.r.humidity"}
         ],
         "responses": {
           "200": {
             "description" : "",
             "schema": { "$ref": "#/definitions/resource-delete" }
+          }
+        }
+      }
+    },
+    "/collection/{oic.r.switch.binary}?if=oic.if.delete":{
+      "get": {
+        "description": "Retrieval response using oic.if.delete",
+        "parameters": [
+          {"$ref": "#/parameters/interface-delete"},
+          {"$ref": "#/parameters/oic.r.switch.binary"}
+        ],
+        "responses": {
+          "200":{
+            "description" :"Retrieval on oic.if.create provides an empty payload."
+          }
+        }
+      },
+      "delete":{
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-delete"},
+          {"$ref": "#/parameters/oic.r.switch.binary"}
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": { "$ref":"#/definitions/resource-delete" }
           }
         }
       }
@@ -161,13 +188,6 @@
       "name" : "if",
       "type" : "string",
       "enum" : ["oic.if.delete"]
-    },
-    "createdresource": {
-      "description": "URI fragment of the created resource",
-      "name": "createdresource",
-      "in": "path",
-      "type": "string",
-      "required": true
     },
     "oic.r.switch.binary": {
       "description": "URI fragment of the created resource",
@@ -286,8 +306,11 @@
           "uniqueItems": true,
           "type": "array"
         },
-        "rep": {
-          "$ref": "#/definitions/createdresource"
+        "rep":{
+          "oneOf":[
+            {"$ref": "#/definitions/createdresource-humidity"},
+            {"$ref": "#/definitions/createdresource-binaryswitch"}
+          ]
         }
       }
     },
