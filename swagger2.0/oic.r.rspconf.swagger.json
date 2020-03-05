@@ -28,7 +28,7 @@
               "if": ["oic.if.rw", "oic.if.baseline"],
               "ac":"",
               "pm": "",
-              "ccr": ""
+              "ccr": false
             },
             "schema": { "$ref": "#/definitions/RSPConf" }
           }
