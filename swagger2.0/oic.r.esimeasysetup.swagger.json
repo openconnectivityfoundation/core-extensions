@@ -86,7 +86,7 @@
                     "ac": "",
                     "pm": "",
                     "cc": "",
-                    "ccr": ""
+                    "ccr": false
                   }
                 },
                 {
@@ -123,7 +123,7 @@
                   "rep":{
                     "ac": "1$SMDP.GSMA.COM$04386-AGYFT-A74Y8-3F815",
                     "pm": "",
-                   "ccr": ""
+                   "ccr": false
                   }
                 }
               ]
