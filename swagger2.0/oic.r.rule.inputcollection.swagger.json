@@ -75,89 +75,6 @@
           }
         }
       }
-    },
-    "/RuleInputCollectionResURI?if=oic.if.linkadd" : {
-      "get": {
-        "description": "Retrieval response using oic.if.linkadd",
-        "parameters": [
-          {"$ref": "#/parameters/interface-linkadd"}
-        ],
-        "responses": {
-          "200": {
-            "description" : "Retrieval on oic.if.linkadd provides an empty payload."
-          }
-        }
-      },
-      "post": {
-        "description": "",
-        "parameters": [
-          {"$ref": "#/parameters/interface-linkadd"},
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": { "$ref": "#/definitions/oic.oic-link" }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description" : "",
-            "schema": { "$ref": "#/definitions/oic.oic-link" }
-          }
-        }
-      }
-    },
-    "/RuleInputCollectionResURI?if=oic.if.linkremove&ins={linkparameter-ins}" : {
-      "get": {
-        "description": "Retrieval response using oic.if.linkremove",
-        "parameters": [
-          {"$ref": "#/parameters/interface-linkremove"},
-          {"$ref": "#/parameters/linkparameter-ins"}
-        ],
-        "responses": {
-          "200": {
-            "description" : "Retrieval on oic.if.linkremove provides an empty payload."
-          }
-        }
-      },
-      "post": {
-        "description": "",
-        "parameters": [
-          {"$ref": "#/parameters/interface-linkremove"},
-          {"$ref": "#/parameters/linkparameter-ins"}
-        ],
-        "responses": {
-          "200": {
-            "description" : "",
-            "schema": { "$ref": "#/definitions/oic.oic-link" }
-          }
-        }
-      }
-    },
-    "/RuleInputCollectionResURI?if=oic.if.delete": {
-      "get": {
-        "description": "Retrieval response using oic.if.delete",
-        "parameters": [
-          {"$ref": "#/parameters/interface-delete"}
-        ],
-        "responses": {
-          "200": {
-            "description" : "Retrieval on oic.if.create provides an empty payload."
-          }
-        }
-      },
-      "delete": {
-        "description": "",
-        "parameters": [
-          {"$ref": "#/parameters/interface-delete"}
-        ],
-        "responses": {
-          "200": {
-            "description" : "",
-            "schema": { "$ref": "#/definitions/resource-delete" }
-          }
-        }
-      }
     }
   },
   "parameters": {
@@ -165,31 +82,7 @@
       "in": "query",
       "name": "if",
       "type": "string",
-      "enum": ["oic.if.ll","oic.if.linkadd","oic.if.linkremove","oic.if.baseline","oic.if.delete"]
-    },
-    "interface-delete": {
-      "in": "query",
-      "name": "if",
-      "type": "string",
-      "enum": ["oic.if.delete"]
-    },
-    "interface-linkadd" : {
-      "in" : "query",
-      "name" : "if",
-      "type" : "string",
-      "enum" : ["oic.if.linkadd"]
-    },
-    "interface-linkremove" : {
-      "in" : "query",
-      "name" : "if",
-      "type" : "string",
-      "enum" : ["oic.if.linkremove"]
-    },
-    "linkparameter-ins" : {
-      "name" : "linkparameter-ins",
-      "in" : "path",
-      "type" : "integer",
-      "required": true
+      "enum": ["oic.if.ll","oic.if.baseline"]
     }
   },
   "definitions": {
@@ -261,15 +154,6 @@
         "rel"
       ]
     },
-    "resource-delete": {
-      "type": "object",
-      "properties": {
-        "href": {
-          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
-        }
-      },
-      "required": ["href"]
-    },
     "slinklist": {
       "type" : "array",
       "readOnly": true,
@@ -320,10 +204,7 @@
           "items": {
             "enum": [
               "oic.if.ll",
-              "oic.if.baseline",
-              "oic.if.linkadd",
-              "oic.if.linkremove",
-              "oic.if.delete"
+              "oic.if.baseline"
             ],
             "type": "string",
             "maxLength": 64
