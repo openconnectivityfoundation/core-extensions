@@ -18,7 +18,7 @@
       "get": {
         "description": "Rule Action contains a link to Scene Collection and a value to be set for the \"lastScene\" Property within that Collection.",
         "parameters": [
-          {"$ref": "#/parameters/interface-rw"}
+          {"$ref": "#/parameters/interface-all"}
         ],
         "responses": {
           "200": {
@@ -27,7 +27,7 @@
             {
               "rt": ["oic.r.rule.action"],
               "if": ["oic.if.rw", "oic.if.baseline"],
-              "link": [{"href": "/myscene","rt":["oic.wk.scenecollection"],"if":["oic.if.a","oic.if.ll","oic.if.baseline"]}],
+              "link": {"href": "/myscene","rt":["oic.wk.scenecollection"],"if":["oic.if.a","oic.if.ll","oic.if.baseline"]},
               "scenevalue": "desiredlastscenevalue"
             },
             "schema": { "$ref": "#/definitions/ruleaction" }
@@ -53,7 +53,7 @@
           "200": {
             "description" : "",
             "x-example": {
-              "link": [{"href": "/myscene","rt":["oic.wk.scenecollection"],"if":["oic.if.a","oic.if.ll","oic.if.baseline"]}],
+              "link": {"href": "/myscene","rt":["oic.wk.scenecollection"],"if":["oic.if.a","oic.if.ll","oic.if.baseline"]},
               "scenevalue": "somedifferentlastscenevalue"
             },
             "schema": { "$ref": "#/definitions/ruleaction" }

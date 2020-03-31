@@ -54,7 +54,7 @@
             "x-example":
             {
               "rt": ["oic.r.rule.inputcollection"],
-              "if": ["oic.if.ll","oic.if.baseline","oic.if.linkadd","oic.if.linkremove"],
+              "if": ["oic.if.ll","oic.if.baseline"],
               "rts": ["oic.r.temperature"],
               "n":  "My Rule Inputs",
               "links": [

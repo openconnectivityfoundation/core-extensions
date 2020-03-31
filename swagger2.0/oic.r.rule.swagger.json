@@ -28,7 +28,7 @@
               {
                 "href": "/ruleinputcollection",
                 "rt":   ["oic.r.rule.inputcollection"],
-                "if":   ["oic.if.ll","oic.if.linkadd","oic.if.linkremove","oic.if.baseline"],
+                "if":   ["oic.if.ll","oic.if.baseline"],
                 "p":    {"bm": 3},
                 "eps": [
                     {"ep": "coaps://[fe80::b1d6]:1111"}
@@ -45,8 +45,8 @@
               },
               {
                 "href": "/ruleactioncollection",
-                "rt":   ["oic.wk.rule.actioncollection"],
-                "if":   ["oic.if.ll","oic.if.create","oic.if.baseline"],
+                "rt":   ["oic.r.rule.actioncollection"],
+                "if":   ["oic.if.ll","oic.if.baseline"],
                 "p":    {"bm": 3},
                 "eps": [
                     {"ep": "coap://[fe80::b1d6]:1111"}
@@ -70,13 +70,13 @@
             "x-example":
             {
               "rt": ["oic.r.rule"],
-              "if": ["oic.if.ll","oic.if.baseline","oic.if.create"],
+              "if": ["oic.if.ll","oic.if.baseline"],
               "rts": ["oic.r.rule.inputcollection","oic.r.rule.expression","oic.r.rule.actioncollection"],
               "links": [
                 {
                   "href": "/ruleinputcollection",
                   "rt":   ["oic.r.rule.inputcollection"],
-                  "if":   ["oic.if.ll","oic.if.linkadd","oic.if.linkremove","oic.if.baseline"],
+                  "if":   ["oic.if.ll","oic.if.baseline"],
                   "p":    {"bm": 3},
                   "eps": [
                     {"ep": "coaps://[fe80::b1d6]:1111"}
@@ -94,7 +94,7 @@
                 {
                   "href": "/ruleactioncollection",
                   "rt":   ["oic.r.rule.actioncollection"],
-                  "if":   ["oic.if.ll","oic.if.create","oic.if.baseline"],
+                  "if":   ["oic.if.ll","oic.if.baseline"],
                   "p":    {"bm": 3},
                   "eps": [
                     {"ep": "coap://[fe80::b1d6]:1111"}
