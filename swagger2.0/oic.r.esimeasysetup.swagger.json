@@ -113,12 +113,6 @@
             "x-example":
               [
                 {
-                  "href": "/eSIMEasySetupResURI",
-                  "rep":{
-                    "ps": "Initiated"
-                  }
-                },
-                {
                   "href": "/RSPConfResURI",
                   "rep":{
                     "ac": "1$SMDP.GSMA.COM$04386-AGYFT-A74Y8-3F815",
@@ -491,6 +485,7 @@
         "ps" : {
           "description": "Indicates the steps in Remote SIM Provisioning.\n",
           "enum": ["Initiated", "User confirmation pending", "Confirmation Received", "Downloaded", "Installed", "Error"], 
+          "readOnly": true,
           "type": "string"
         },
         "ler" : {
@@ -529,11 +524,6 @@
       "additionalProperties": true,
       "description": "Update to writeable values in eSIMEasySetupResURI",
       "properties": {
-        "ps" : {
-          "description": "Indicates the steps in Remote SIM Provisioning.\n",
-          "enum": ["Initiated", "User confirmation pending", "Confirmation Received", "Downloaded", "Installed", "Error"], 
-          "type": "string"
-        },
         "euc" : {
           "description": "End User Consent for RSP.\n",
           "enum": ["Timeout", "Download Reject", "Download Postponed", "Download OK", "Download and Enable OK"],
