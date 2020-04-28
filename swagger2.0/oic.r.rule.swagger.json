@@ -45,7 +45,7 @@
               },
               {
                 "href": "/ruleactioncollection",
-                "rt":   ["oic.wk.rule.actioncollection"],
+                "rt":   ["oic.r.rule.actioncollection"],
                 "if":   ["oic.if.ll","oic.if.create","oic.if.baseline"],
                 "p":    {"bm": 3},
                 "eps": [
