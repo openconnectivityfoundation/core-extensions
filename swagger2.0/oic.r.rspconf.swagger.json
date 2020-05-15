@@ -98,7 +98,7 @@
         },
         "pm": {
           "description": "Refers to ProfileInfo in GSMA SGP.22 Annex H.\nThis information is returned from the LPA \nas ASN.1 DER encoded binary data format, \nand base64 encoding is used to convert to JSON.\n",
-          "maxLength": 1024,
+          "maxLength": 2048,
           "type": "string",
           "readOnly": true
         },
