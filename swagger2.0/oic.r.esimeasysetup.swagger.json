@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "eSIM Easy Setup Collection",
-    "version": "20200128",
+    "version": "20200515",
     "license": {
       "name": "OCF Data Model License",
       "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
@@ -73,7 +73,7 @@
                 {
                   "href": "/eSIMEasySetupResURI",
                   "rep":{
-                    "ps" : "",
+                    "ps" : "User confirmation pending",
                     "ler": "",
                     "lec": "",
                     "led": "",
@@ -83,10 +83,10 @@
                 {
                   "href": "/RSPConfResURI",
                   "rep":{
-                    "ac": "",
-                    "pm": "",
+                    "ac": "1$SMDP.GSMA.COM$04386-AGYFT-A74Y8-3F815",
+                    "pm": "vyU4WgqJAQIDBAUGBwgJkRNTZXJ2aWNlUHJvdmlkZXJOYW1lkgtQcm9maWxlTmFtZZMBAJQCAACVAQI=",
                     "cc": "",
-                    "ccr": false
+                    "ccr": true
                   }
                 },
                 {
@@ -113,13 +113,17 @@
             "x-example":
               [
                 {
+                  "href": "/eSIMEasySetupResURI",
+                  "rep":{
+                    "euc": "Download OK"
+                  }
+                },
+                {
                   "href": "/RSPConfResURI",
                   "rep":{
-                    "ac": "1$SMDP.GSMA.COM$04386-AGYFT-A74Y8-3F815",
-                    "pm": "",
-                   "ccr": false
+                    "cc": "102030405"
                   }
-                }
+                } 
               ]
           }
         ],
@@ -131,19 +135,20 @@
                 {
                   "href": "/eSIMEasySetupResURI",
                   "rep" : {
-                    "ps" : "Initiated",
+                    "ps" : "Confirmation received",
                     "ler": "",
                     "lec": "",
                     "led": "",
-                    "euc": ""
+                    "euc": "Download OK"
                   }
                 },
                 {
                   "href": "/RSPConfResURI",
                   "rep" : { 
                     "ac": "1$SMDP.GSMA.COM$04386-AGYFT-A74Y8-3F815",
-                    "pm": "",
-                    "ccr": false
+                    "pm": "vyU4WgqJAQIDBAUGBwgJkRNTZXJ2aWNlUHJvdmlkZXJOYW1lkgtQcm9maWxlTmFtZZMBAJQCAACVAQI=",
+                    "cc": "102030405",
+                    "ccr": true
                   }
                 },
                 {
@@ -172,7 +177,7 @@
               {
                 "rt" : ["oic.r.esimeasysetup", "oic.wk.col"],
                 "if" : ["oic.if.ll", "oic.if.baseline", "oic.if.b"],
-                "ps" : ["Initiated", "User Confirmation Pending", "Confirmation Received", "Installed", "Error"],
+                "ps" : ["Initiated", "User confirmation pending", "Confirmation received", "Installed", "Error"],
                 "ler": "",
                 "lec": "",
                 "led": "",
@@ -484,7 +489,7 @@
         },
         "ps" : {
           "description": "Indicates the steps in Remote SIM Provisioning.\n",
-          "enum": ["Initiated", "User confirmation pending", "Confirmation Received", "Downloaded", "Installed", "Error"], 
+          "enum": ["Initiated", "User confirmation pending", "Confirmation received", "Downloaded", "Installed", "Error"], 
           "readOnly": true,
           "type": "string"
         },
