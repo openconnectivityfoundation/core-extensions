@@ -1,0 +1,156 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "OCF Rule Expression",
+    "version": "20200114",
+    "license": {
+      "name": "OCF Data Model License",
+      "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
+      "x-copyright": "copyright 2020 Open Connectivity Foundation, Inc. All rights reserved."
+    },
+    "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
+  },
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/RuleExpressionResURI": {
+      "get": {
+        "description": "Expression for the Rule that defines the Rule logic in terms of the defined Rule Inputs, and which evaluates to a boolean value, for which \"true\" means that the Rule has been triggered.",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrieves the Rule expression.",
+            "x-example":
+            {
+              "rt": ["oic.r.rule.expression"],
+              "if": ["oic.if.rw", "oic.if.baseline"],
+              "rule": "(mytemperature:temperature >= \"25\")",
+              "ruleresult": false,
+              "ruleenable": true,
+              "actionenable": true
+            },
+            "schema": { "$ref": "#/definitions/ruleexpression" }
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-rw"},
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/ruleexpression-update" },
+            "x-example":
+              {
+                "ruleenable": true,
+                "actionenable": false,
+                "ruleresult": false
+              }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "x-example": {
+              "rule": "(mytemperature:temperature >= 25)",
+              "ruleresult": false,
+              "ruleenable": true,
+              "actionenable": false
+            },
+            "schema": { "$ref": "#/definitions/ruleexpression" }
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "interface-rw": {
+      "in": "query",
+      "name": "if",
+      "type": "string",
+      "enum": ["oic.if.rw"]
+    },
+    "interface-all": {
+      "in": "query",
+      "name": "if",
+      "type": "string",
+      "enum": ["oic.if.rw","oic.if.baseline"]
+    }
+  },
+  "definitions": {
+    "ruleexpression" : {
+      "properties": {
+        "rt": {
+          "description": "The Resource Type.",
+          "items": {
+            "enum": ["oic.r.rule.expression"],
+            "maxLength": 64,
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "rule": {
+          "description": "The logical expression to be evaluated, see BNF",
+          "type": "string"
+        },
+        "ruleresult": {
+          "type": "boolean"
+        },
+        "ruleenable": {
+          "type": "boolean"
+        },
+        "actionenable": {
+          "type": "boolean"
+        },
+        "n": {
+            "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "id": {
+            "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "if": {
+          "description": "The OCF Interface set supported by this Resource.",
+          "items": {
+            "enum": [
+              "oic.if.rw",
+              "oic.if.baseline"
+            ],
+            "type": "string"
+          },
+          "minItems": 2,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        }
+      },
+      "type": "object",
+      "required": ["rule","ruleresult","actionenable","ruleenable"]
+    },
+    "ruleexpression-update" : {
+      "properties": {
+        "rule": {
+          "description": "The logical expression to be evaluated, see BNF",
+          "type": "string"
+        },
+        "ruleenable": {
+          "type": "boolean"
+        },
+        "actionenable": {
+          "type": "boolean"
+        },
+        "ruleresult": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    }
+  }
+}

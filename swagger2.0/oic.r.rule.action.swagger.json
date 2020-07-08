@@ -1,0 +1,197 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "OCF Rule Action",
+    "version": "20190910",
+    "license": {
+      "name": "OCF Data Model License",
+      "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
+      "x-copyright": "copyright 2019 Open Connectivity Foundation, Inc. All rights reserved."
+    },
+    "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
+  },
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/RuleActionResURI": {
+      "get": {
+        "description": "Rule Action contains a link to Scene Collection and a value to be set for the \"lastScene\" Property within that Collection.",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrieves the Rule action.",
+            "x-example":
+            {
+              "rt": ["oic.r.rule.action"],
+              "if": ["oic.if.rw", "oic.if.baseline"],
+              "link": {"href": "/myscene","rt":["oic.wk.scenecollection"],"if":["oic.if.a","oic.if.ll","oic.if.baseline"]},
+              "scenevalue": "desiredlastscenevalue"
+            },
+            "schema": { "$ref": "#/definitions/ruleaction" }
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {"$ref": "#/parameters/interface-rw"},
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/ruleaction-update" },
+            "x-example":
+              {
+                "scenevalue": "somedifferentlastscenevalue"
+              }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "x-example": {
+              "link": {"href": "/myscene","rt":["oic.wk.scenecollection"],"if":["oic.if.a","oic.if.ll","oic.if.baseline"]},
+              "scenevalue": "somedifferentlastscenevalue"
+            },
+            "schema": { "$ref": "#/definitions/ruleaction" }
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "interface-rw": {
+      "in": "query",
+      "name": "if",
+      "type": "string",
+      "enum": ["oic.if.rw"]
+    },
+    "interface-all": {
+      "in": "query",
+      "name": "if",
+      "type": "string",
+      "enum": ["oic.if.rw","oic.if.baseline"]
+    }
+  },
+  "definitions": {
+    "oic.oic-link": {
+      "type": "object",
+      "properties": {
+        "anchor": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/anchor"
+        },
+        "di": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/di"
+        },
+        "eps": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/eps"
+        },
+        "href": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+        },
+        "if": {
+          "description": "The OCF Interfaces supported by the Linked Resource",
+          "items": {
+            "enum": [
+              "oic.if.baseline",
+              "oic.if.ll",
+              "oic.if.a"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "ins": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/ins"
+        },
+        "p": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/p"
+        },
+        "rel": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/rel_array"
+        },
+        "rt": {
+          "description": "Resource Type of the Linked Resource",
+          "items": {
+            "enum": ["oic.wk.scenecollection"],
+            "maxLength": 64,
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "title": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/title"
+        },
+        "type": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/type"
+        }
+      },
+      "required": [
+        "href",
+        "rt",
+        "if"
+      ]
+    },
+    "ruleaction" : {
+      "properties": {
+        "rt" : {
+          "description": "The Resource Type.",
+          "items": {
+            "enum": ["oic.r.rule.action"],
+            "maxLength": 64,
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "link": {
+          "$ref": "#/definitions/oic.oic-link"
+        },
+        "scenevalue": {
+          "type": "string"
+        },
+        "n": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "id": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "if" : {
+          "description": "The OCF Interface set supported by this Resource.",
+          "items": {
+            "enum": [
+              "oic.if.rw",
+              "oic.if.baseline"
+            ],
+            "type": "string"
+          },
+          "minItems": 2,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        }
+      },
+      "type": "object",
+      "required": ["link", "scenevalue"]
+    },
+    "ruleaction-update" : {
+      "properties": {
+        "scenevalue": {
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": ["scenevalue"]
+    }
+  }
+}

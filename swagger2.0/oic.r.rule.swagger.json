@@ -1,0 +1,262 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "OCF Rule",
+    "version": "20190910",
+    "license": {
+      "name": "OCF Data Model License",
+      "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
+      "x-copyright": "copyright 2019 Open Connectivity Foundation, Inc. All rights reserved."
+    },
+    "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
+  },
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/RuleResURI?if=oic.if.ll": {
+      "get": {
+        "description": "A Rule is a Collection made up of 3 Links. \n A Link to an instance of a Collection of Rule Inputs. \n A Link to a Rule Expression (the logic of the Rule). \n A Link to a Collection of Rule Actions.",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrieves the rule as Links List.",
+            "x-example":
+            [
+              {
+                "href": "/ruleinputcollection",
+                "rt":   ["oic.r.rule.inputcollection"],
+                "if":   ["oic.if.ll","oic.if.baseline"],
+                "p":    {"bm": 3},
+                "eps": [
+                    {"ep": "coaps://[fe80::b1d6]:1111"}
+                ]
+              },
+              {
+                "href": "/ruleexpression",
+                "rt":   ["oic.r.rule.expression"],
+                "if":   ["oic.if.rw","oic.if.baseline"],
+                "p":    {"bm": 3},
+                "eps": [
+                    {"ep": "coaps://[fe80::b1d6]:1111"}
+                ]
+              },
+              {
+                "href": "/ruleactioncollection",
+                "rt":   ["oic.r.rule.actioncollection"],
+                "if":   ["oic.if.ll","oic.if.baseline"],
+                "p":    {"bm": 3},
+                "eps": [
+                    {"ep": "coap://[fe80::b1d6]:1111"}
+                ]
+              }
+            ],
+            "schema": { "$ref": "#/definitions/slinklist" }
+          }
+        }
+      }
+    },
+    "/RuleResURI?if=oic.if.baseline": {
+      "get": {
+        "description": "A Rule is a Collection made up of 3 Links: \n- A Link to an instance of a Collection of Rule Inputs. \n- A Link to a Rule Expression (the logic of the Rule). \n- A Link to a Collection of Rule Actions.",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrieves the baseline response for the rule.",
+            "x-example":
+            {
+              "rt": ["oic.r.rule"],
+              "if": ["oic.if.ll","oic.if.baseline"],
+              "rts": ["oic.r.rule.inputcollection","oic.r.rule.expression","oic.r.rule.actioncollection"],
+              "links": [
+                {
+                  "href": "/ruleinputcollection",
+                  "rt":   ["oic.r.rule.inputcollection"],
+                  "if":   ["oic.if.ll","oic.if.baseline"],
+                  "p":    {"bm": 3},
+                  "eps": [
+                    {"ep": "coaps://[fe80::b1d6]:1111"}
+                  ]
+                },
+                {
+                  "href": "/ruleexpression",
+                  "rt":   ["oic.r.rule.expression"],
+                  "if":   ["oic.if.rw","oic.if.baseline"],
+                  "p":    {"bm": 3},
+                  "eps": [
+                    {"ep": "coaps://[fe80::b1d6]:1111"}
+                  ]
+                },
+                {
+                  "href": "/ruleactioncollection",
+                  "rt":   ["oic.r.rule.actioncollection"],
+                  "if":   ["oic.if.ll","oic.if.baseline"],
+                  "p":    {"bm": 3},
+                  "eps": [
+                    {"ep": "coap://[fe80::b1d6]:1111"}
+                  ]
+                }
+              ]
+            },
+            "schema": { "$ref": "#/definitions/sbaseline" }
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "interface-all": {
+      "in": "query",
+      "name": "if",
+      "type": "string",
+      "enum": ["oic.if.ll","oic.if.baseline"]
+    }
+  },
+  "definitions": {
+    "oic.oic-link": {
+      "type": "object",
+      "properties": {
+        "anchor": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/anchor"
+        },
+        "di": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/di"
+        },
+        "eps": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/eps"
+        },
+        "href": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+        },
+        "if": {
+          "description": "The OCF Interfaces supported by the Linked Resource",
+          "items": {
+            "enum": [
+              "oic.if.baseline",
+              "oic.if.ll",
+              "oic.if.rw"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "ins": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/ins"
+        },
+        "p": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/p"
+        },
+        "rel": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/rel_array"
+        },
+        "rt": {
+          "description": "Resource Type of the Linked Resource",
+          "items": {
+            "maxLength": 64,
+            "type": "string",
+            "enum": ["oic.r.rule.inputcollection","oic.r.rule.expression","oic.r.rule.actioncollection"]
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "title": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/title"
+        },
+        "type": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/type"
+        }
+      },
+      "required": [
+        "href",
+        "rt",
+        "if"
+      ]
+    },
+    "slinklist": {
+      "type" : "array",
+      "readOnly": true,
+      "items": {
+        "$ref": "#/definitions/oic.oic-link"
+      },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "sbaseline" : {
+      "properties": {
+        "links" : {
+          "description": "A set of simple or individual Links.",
+          "items": {
+            "$ref": "#/definitions/oic.oic-link"
+          },
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "n": {
+          "$ref" : "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "id": {
+          "$ref" : "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "rt": {
+          "description": "The Resource Type.",
+          "items": {
+            "enum": ["oic.r.rule"],
+            "maxLength": 64,
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "rts": {
+          "description": "The Linked Resource Types.",
+          "items": {
+            "enum": ["oic.r.rule.inputcollection",
+                     "oic.r.rule.expression",
+                     "oic.r.rule.actioncollection"],
+            "maxLength": 64,
+            "type": "string"
+          },
+          "minItems": 3,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "if": {
+          "description": "The OCF Interfaces supported by this Resource",
+          "items": {
+            "enum": [
+              "oic.if.ll",
+              "oic.if.baseline"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 2,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        }
+      },
+      "additionalProperties": true,
+      "type" : "object",
+      "required": [
+        "rt",
+        "if",
+        "links",
+        "rts"
+      ]
+    }
+  }
+}

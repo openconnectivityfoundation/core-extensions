@@ -1,0 +1,228 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "OCF Rule Input Collection",
+    "version": "20200114",
+    "license": {
+      "name": "OCF Data Model License",
+      "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
+      "x-copyright": "copyright 2020 Open Connectivity Foundation, Inc. All rights reserved."
+    },
+    "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
+  },
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/RuleInputCollectionResURI?if=oic.if.ll": {
+      "get": {
+        "description": "Collection of Links to the Resources (i.e., Rule Inputs) that contain the Properties whose values are evaluated as part of the Rule Expression.",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrieves the Rule Input Links.",
+            "x-example":
+            [
+              {
+                "anchor": "mytemperature",
+                "href": "/mylocaltemperaturesensor",
+                "rel": ["ruleinput"],
+                "rt":   ["oic.r.temperature"],
+                "if":   ["oic.if.s"],
+                "p":    {"bm": 3},
+                "eps": [
+                    {"ep": "coaps://[fe80::b1d6]:1111"}
+                ]
+              }
+            ],
+            "schema": { "$ref": "#/definitions/slinklist" }
+          }
+        }
+      }
+    },
+    "/RuleInputCollectionResURI?if=oic.if.baseline": {
+      "get": {
+        "description": "Collection of Links to the Resources (i.e., Rule Inputs) that contain the Properties whose values are evaluated as part of the Rule Expression.",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "Retrieves the rule input Links.",
+            "x-example":
+            {
+              "rt": ["oic.r.rule.inputcollection"],
+              "if": ["oic.if.ll","oic.if.baseline"],
+              "rts": ["oic.r.temperature"],
+              "n":  "My Rule Inputs",
+              "links": [
+                {
+                  "anchor": "mytemperature",
+                  "href": "/mylocaltemperaturesensor",
+                  "rel": ["ruleinput"],
+                  "rt":  ["oic.r.temperature"],
+                  "if":  ["oic.if.s"],
+                  "p":   {"bm": 3},
+                  "eps": [
+                    {"ep": "coaps://[fe80::b1d6]:1111"}
+                  ]
+                }
+              ]
+            },
+            "schema": { "$ref": "#/definitions/sbaseline" }
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "interface-all": {
+      "in": "query",
+      "name": "if",
+      "type": "string",
+      "enum": ["oic.if.ll","oic.if.baseline"]
+    }
+  },
+  "definitions": {
+    "oic.oic-link": {
+      "type": "object",
+      "properties": {
+        "anchor": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/anchor"
+        },
+        "di": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/di"
+        },
+        "eps": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/eps"
+        },
+        "href": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+        },
+        "if": {
+          "description": "The OCF Interfaces supported by the Linked Resource",
+          "items": {
+            "enum": [
+              "oic.if.baseline",
+              "oic.if.ll",
+              "oic.if.b",
+              "oic.if.rw",
+              "oic.if.r",
+              "oic.if.a",
+              "oic.if.s"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "ins": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/ins"
+        },
+        "p": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/p"
+        },
+        "rel": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/rel_array"
+        },
+        "rt": {
+          "description": "Resource Type of the Linked Resource",
+          "items": {
+            "maxLength": 64,
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "title": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/title"
+        },
+        "type": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/type"
+        }
+      },
+      "required": [
+        "href",
+        "rt",
+        "if",
+        "rel"
+      ]
+    },
+    "slinklist": {
+      "type" : "array",
+      "readOnly": true,
+      "items": {
+        "$ref": "#/definitions/oic.oic-link"
+      }
+    },
+    "sbaseline" : {
+      "properties": {
+        "links" : {
+          "description": "A set of simple or individual Links.",
+          "items": {
+            "$ref": "#/definitions/oic.oic-link"
+          },
+          "type": "array"
+        },
+        "n": {
+          "$ref" : "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "id": {
+          "$ref" : "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "rt": {
+          "description": "The Resource Type.",
+          "items": {
+            "enum": ["oic.r.rule.inputcollection"],
+            "maxLength": 64,
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "rts": {
+          "description": "The Resource Types that can be in the Collection.",
+          "items": {
+            "maxLength": 64,
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "if": {
+          "description": "The OCF Interfaces supported by this Resource",
+          "items": {
+            "enum": [
+              "oic.if.ll",
+              "oic.if.baseline"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 2,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        }
+      },
+      "additionalProperties": true,
+      "type" : "object",
+      "required": [
+        "rt",
+        "if",
+        "links",
+        "rts"
+      ]
+    }
+  }
+}
