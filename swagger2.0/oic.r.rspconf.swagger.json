@@ -2,11 +2,11 @@
   "swagger": "2.0",
   "info":  {
     "title": "RSP Configuration",
-    "version": "2020-06-09",
+    "version": "2020-09-01",
     "license": {
         "name": "OCF Data Model License",
         "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
-        "x-copyright": "Copyright 2019 Open Connectivity Foundation, Inc. All rights reserved."
+        "x-copyright": "Copyright 2020 Open Connectivity Foundation, Inc. All rights reserved."
     },
     "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
   },
@@ -97,7 +97,7 @@
           "type": "string"
         },
         "pm": {
-          "description": "Refers to ProfileInfo in GSMA SGP.22 Annex H.\nThis information is returned from the LPA \nas ASN.1 DER encoded binary data format, \nand base64 encoding is used to convert to JSON.\n",
+          "description": "Refers to ProfileInfo in GSMA SGP.22 Annex H.",
           "maxLength": 2048,
           "type": "string",
           "readOnly": true
