@@ -2,11 +2,11 @@
   "swagger": "2.0",
   "info": {
     "title": "Remote SIM Provisioning Capability",
-    "version": "2020-06-09",
+    "version": "2020-09-01",
     "license": {
       "name": "OCF Data Model License",
       "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
-      "x-copyright": "Copyright 2018-2019 Open Connectivity Foundation, Inc. All rights reserved."
+      "x-copyright": "Copyright 2020 Open Connectivity Foundation, Inc. All rights reserved."
     },
     "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
   },
@@ -59,12 +59,12 @@
           "type": "array"
         },
         "euiccinfo" : {
-          "description": "Refers to EUICCInfo2 defined in GSMA SGP.22 Annex H.\nThis information is returned from LPA as ASN.1 DER encoded binary data format, and base64 encoding is used to convert to JSON.\n",
+          "description": "Refers to EUICCInfo2 defined in GSMA SGP.22 Annex H.",
           "type": "string",
           "maxLength": 1024
         },
         "deviceinfo" : {
-          "description": "Refers to DeviceInfo defined in GSMA SGP.22 Annex H.\nThis information is returned from LPA as ASN.1 DER encoded binary data format, and base64 encoding is used to convert to JSON.\n",
+          "description": "Refers to DeviceInfo defined in GSMA SGP.22 Annex H.",
           "type": "string",
           "maxLength": 128
         },
