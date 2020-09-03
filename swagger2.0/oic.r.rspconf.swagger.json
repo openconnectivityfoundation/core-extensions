@@ -97,7 +97,7 @@
           "type": "string"
         },
         "pm": {
-          "description": "Refers to ProfileInfo in GSMA SGP.22 Annex H.",
+          "description": "Refers to ProfileInfo in GSMA SGP.22 Annex H.This value type shall be encoded as Major Type 2",
           "maxLength": 2048,
           "type": "string",
           "readOnly": true
