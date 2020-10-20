@@ -1,0 +1,480 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "eSIM Easy Setup Collection",
+    "version": "2020-09-01",
+    "license": {
+      "name": "OCF Data Model License",
+      "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
+      "x-copyright": "Copyright 2020 Open Connectivity Foundation, Inc. All rights reserved."
+    },
+    "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
+  },
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/eSIMEasySetupResURI?if=oic.if.ll" : { 
+      "get": {
+        "description": "The eSIMEasySetup Resource Type stores useful information including Remote SIM Provisioning (RSP) status, and RSP last error which was produced in the process of eSIM Easy Setup.\nNote that the eSIM Easy Setup Resource is a Collection Resource, which contains Links to RSPConf, and RSPCapability Resources and may additionally contain Links to other Resources.\n",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+            "200": {
+              "description" : "",
+              "x-example":
+                [
+                  {
+                    "href": "/eSIMEasySetupResURI",
+                    "rt": ["oic.r.esimeasysetup"],
+                    "if": ["oic.if.b", "oic.if.baseline", "oic.if.ll"],
+                    "p":{"bm":3},
+                    "eps": [
+                      {"ep": "coaps://[fe80::b1d6]:1111", "pri": 2}
+                    ],
+                    "rel":["self", "item"]
+                  },
+                  {
+                    "href": "/RSPConfResURI",
+                    "rt":   ["oic.r.rspconf"],
+                    "if":   ["oic.if.baseline", "oic.if.rw"],
+                    "p":{"bm":3},
+                    "eps": [
+                      {"ep": "coaps://[fe80::b1d6]:1111", "pri": 2}
+                    ]
+                  },
+                  {
+                    "href": "/RSPCapabilityResURI",
+                    "rt":   ["oic.r.rspcapability"],
+                    "if":   ["oic.if.baseline", "oic.if.r"],
+                    "p":{"bm":3},
+                    "eps": [
+                      {"ep": "coaps://[fe80::b1d6]:1111", "pri": 2}
+                    ]
+                  }
+                ],
+              "schema": { "$ref": "#/definitions/slinks" }
+            }
+        }
+      }
+    },
+    "/eSIMEasySetupResURI?if=oic.if.b" : {
+      "get": {
+        "description": "The eSIMEasySetup Resource Type stores useful information including Remote SIM Provisioning (RSP) status, and RSP last error code which was produced in the process of eSIM Easy Setup.\nNote that the eSIM Easy Setup Resource is a Collection Resource, which contains Links to RSPConf, and RSPCapability Resources and may additionally contain Links to other Resources.\n",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "x-example":
+              [
+                {
+                  "href": "/eSIMEasySetupResURI",
+                  "rep":{
+                    "ps" : "User confirmation pending",
+                    "ler": "",
+                    "lec": "",
+                    "led": "",
+                    "euc": "Undefined"
+                   }
+                },
+                {
+                  "href": "/RSPConfResURI",
+                  "rep":{
+                    "ac": "1$SMDP.GSMA.COM$04386-AGYFT-A74Y8-3F815",
+                    "pm": "vyU4WgqJAQIDBAUGBwgJkRNTZXJ2aWNlUHJvdmlkZXJOYW1lkgtQcm9maWxlTmFtZZMBAJQCAACVAQI=",
+                    "cc": "",
+                    "ccr": true
+                  }
+                },
+                {
+                  "href": "/RSPCapabilityURI",
+                  "rep":{
+                   "euiccinfo": "vyJ7gQMCAACCAwICAYMDQQEFhAyBAQCCAwVJQIMCFkWFBAV/NuCGAwkCAIcDAgMAiAIEkKkWBBRmWhQz1nwaLF24tSyWfxCgV7pcsqoWBBRmWhQz1nwaLF24tSyWfxCgV7pcsosBAgQDAQAADBAxMDAwMDAwMDAwMDAwMDAw",
+                    "deviceinfo" : "oDCABBI0VnihKIADAQIDgQMCAwSCAwMEBYMDBAUGhAMFBgeFAwYHCIYDBwgJhwMICQo="
+                  }
+                }
+              ],
+            "schema": { "$ref": "#/definitions/sbatch" }
+          }
+        }
+      },
+      "post": {
+        "description": "Able to deliver RSP Configuration, RSP Capability and other configuration\ninformation in a batch by utilizing 'batch' OCF Interface.\nIf you want to deliver in a batch,\nyou can write all Properties you want to send with a 'batch' OCF Interface.\nThe below example is the case to send eSIMEasySetup and RSP configuration\n(i.e., RSP Procedure Status, Activation Code, Confirmation Code required) in a batch.\n",
+        "parameters": [
+          {"$ref": "#/parameters/interface-update"},
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/sbatch-update" },
+            "x-example":
+              [
+                {
+                  "href": "/eSIMEasySetupResURI",
+                  "rep":{
+                    "euc": "Download OK"
+                  }
+                },
+                {
+                  "href": "/RSPConfResURI",
+                  "rep":{
+                    "cc": "102030405"
+                  }
+                } 
+              ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "x-example":
+              [
+                {
+                  "href": "/eSIMEasySetupResURI",
+                  "rep" : {
+                    "ps" : "Confirmation received",
+                    "ler": "",
+                    "lec": "",
+                    "led": "",
+                    "euc": "Download OK"
+                  }
+                },
+                {
+                  "href": "/RSPConfResURI",
+                  "rep" : { 
+                    "ac": "1$SMDP.GSMA.COM$04386-AGYFT-A74Y8-3F815",
+                    "pm": "vyU4WgqJAQIDBAUGBwgJkRNTZXJ2aWNlUHJvdmlkZXJOYW1lkgtQcm9maWxlTmFtZZMBAJQCAACVAQI=",
+                    "cc": "102030405",
+                    "ccr": true
+                  }
+                },
+                {
+                  "href": "/RSPCapabilityResURI",
+                  "rep" : {
+                    "euiccinfo": "vyJ7gQMCAACCAwICAYMDQQEFhAyBAQCCAwVJQIMCFkWFBAV/NuCGAwkCAIcDAgMAiAIEkKkWBBRmWhQz1nwaLF24tSyWfxCgV7pcsqoWBBRmWhQz1nwaLF24tSyWfxCgV7pcsosBAgQDAQAADBAxMDAwMDAwMDAwMDAwMDAw",
+                    "deviceinfo" : "oDCABBI0VnihKIADAQIDgQMCAwSCAwMEBYMDBAUGhAMFBgeFAwYHCIYDBwgJhwMICQo="
+                  }
+                }
+              ],
+            "schema": { "$ref": "#/definitions/sbatch" }
+          }
+        }
+      }
+    },
+    "/eSIMEasySetupResURI?if=oic.if.baseline" : {
+      "get": {
+        "description": "The eSIMEasySetup Resource Type stores useful information including Remote SIM Provisioning (RSP) status,\n and RSP last error code which was produced in the process of eSIM Easy Setup.\nNote that the eSIM Easy Setup Resource is a Collection Resource, which contains Links to RSPConf, and RSPCapability Resources and may additionally contain Links to other Resources.\n",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "x-example":
+              {
+                "rt" : ["oic.r.esimeasysetup", "oic.wk.col"],
+                "if" : ["oic.if.ll", "oic.if.baseline", "oic.if.b"],
+                "ps" : ["Undefined", "Initiated", "User confirmation pending", "Confirmation received", "Downloaded", "Installed", "Error"],
+                "ler": "",
+                "lec": "",
+                "led": "",
+                "euc": ["Undefined", "Timeout", "Download Reject", "Download Postponed", "Download OK", "Download and Enable OK"],
+                "links": [
+                  {
+                    "href": "/eSIMEasySetupResURI",
+                    "rt": ["oic.r.esimeasysetup", "oic.wk.col"],
+                    "if": ["oic.if.b", "oic.if.baseline", "oic.if.ll"],
+                    "p":{"bm":3},
+                    "eps": [
+                      {"ep": "coaps://[fe80::b1d6]:1111", "pri": 2}
+                    ],
+                    "rel":["self", "item"]
+                  },
+                  {
+                    "href": "/RSPConfResURI",
+                    "rt":   ["oic.r.rspconf"],
+                    "if":   ["oic.if.baseline", "oic.if.rw"],
+                    "p":{"bm":3},
+                    "eps": [
+                      {"ep": "coaps://[fe80::b1d6]:1111", "pri": 2}
+                    ]
+                  },
+                  {
+                    "href": "/RSPCapabilityResURI",
+                    "rt":   ["oic.r.rspcapability"],
+                    "if":   ["oic.if.baseline", "oic.if.r"],
+                    "p":{"bm":3},
+                    "eps": [
+                      {"ep": "coaps://[fe80::b1d6]:1111", "pri": 2}
+                    ]
+                  }
+                ]
+              },
+            "schema": { "$ref": "#/definitions/eSIMEasySetup" }
+          }
+        }
+      }
+     }
+  },
+  "parameters": {
+    "interface-all" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.ll","oic.if.b","oic.if.baseline"]
+    },
+    "interface-update" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.b"]
+    }
+  },
+  "definitions": {
+    "oic.oic-link": {
+      "type": "object",
+      "properties": {
+        "anchor": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/anchor"
+        },
+        "di": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/di"
+        },
+        "eps": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/eps"
+        },
+        "href": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+        },
+        "ins": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/ins"
+        },
+        "p": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/p"
+        },
+        "rel": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/rel_array"
+        },
+        "title": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/title"
+        },
+        "type": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/type"
+        },
+        "if": {
+          "description": "The OCF Interfaces supported by the target Resource",
+          "items": {
+            "enum": [
+              "oic.if.baseline",
+              "oic.if.ll",
+              "oic.if.b",
+              "oic.if.r", 
+              "oic.if.rw"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "rt": {
+          "description": "Resource Type of the target Resource",
+          "items": {
+            "maxLength": 64,
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "type": "array"
+        }
+      },
+      "required": [
+        "href",
+        "rt",
+        "if"
+      ]
+    },
+    "slinks" : {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/oic.oic-link"
+      }
+    },
+    "sbatch" : {
+      "minItems" : 1,
+      "items" : {
+        "additionalProperties": true,
+        "properties": {
+          "href": {
+            "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+          },
+          "rep": {
+            "description": "The response payload from a single Resource",
+            "type": "object",
+            "anyOf": [
+              {
+                  "$ref": "#/definitions/eSIMEasySetup"
+              },
+              {
+                  "$ref": "https://openconnectivityfoundation.github.io/core-extensions/swagger2.0/oic.r.rspconf.swagger.json#/definitions/RSPConf"
+              },
+              {
+                  "$ref": "https://openconnectivityfoundation.github.io/core-extensions/swagger2.0/oic.r.rspcapability.swagger.json#/definitions/RSPCapability"
+              }
+            ]
+          }
+        },
+        "required": [
+          "href",
+          "rep"
+        ],
+        "type": "object"
+      },
+      "type" : "array"
+    },
+    "sbatch-update" : {
+      "minItems" : 1,
+      "items" : {
+        "additionalProperties": true,
+        "description": "Array of Resource representations to apply to the batch Collection, \nusing href to indicate which resource(s) in the batch to update. \nIf the href Property is empty, effectively making the URI reference to the Collection itself, \nthe representation is to be applied to all Resources in the batch\n",
+        "properties": {
+          "href": {
+            "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+          },
+          "rep": {
+            "description": "The response payload from a single Resource",
+            "type": "object",
+            "anyOf": [
+              {
+                  "$ref": "#/definitions/eSIMEasySetupUpdate"
+              },
+              {
+                  "$ref": "https://openconnectivityfoundation.github.io/core-extensions/swagger2.0/oic.r.rspconf.swagger.json#/definitions/RSPConfUpdate"
+              }
+            ]
+          }
+        },
+        "required": [
+          "href",
+          "rep"
+        ],
+        "type": "object"
+      },
+      "type" : "array"
+    },
+    "eSIMEasySetup" : {
+      "properties": {
+        "n" :  {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "rts" : {
+          "description": "Resource Type of the Resources within the Collection",
+          "items": {
+            "maxLength": 64,
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "id" : {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "rts-m" : {
+          "description": "Resource Type of the mandatory Resources within the Collection",
+          "items": {
+            "maxLength": 64,
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "if" : {
+          "description": "The OCF Interfaces supported by this Resource",
+          "items": {
+            "enum": [
+              "oic.if.ll",
+              "oic.if.baseline",
+              "oic.if.b"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 3,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "rt" : {
+          "items": {
+            "enum": [
+              "oic.r.esimeasysetup"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true,
+          "readOnly": true
+        },
+        "ps" : {
+          "description": "Indicates the steps in Remote SIM Provisioning.\n",
+          "enum": ["Undefined", "Initiated", "User confirmation pending", "Confirmation received", "Downloaded", "Installed", "Error"], 
+          "readOnly": true,
+          "type": "string"
+        },
+        "ler" : {
+          "description": "Error Reason returned by the LPA while eSIM Easy Setup. \nIt indicates where it was occurred.\n(e.g.,ES9+.GetBoundProfilePackage(Fail), ES10b.LoadBoundProfilePackage(Fail))\n",
+          "readOnly": true,
+          "type": "string"
+        },
+        "lec" : {
+          "description": "Error Code returned by the LPA while eSIM Easy Setup. \nIt indicates why it was occurred.\nIt is mapped to the GSMA error status (e.g., “8.8.1–3.8”, “7”, “6A 80”)\n",
+          "readOnly": true,
+          "type": "string"
+        },
+        "led" : {
+          "description": "Optional error description \nreturned by the LPA while eSIM Easy Setup. (e.g., Invalid SM-DP+ Address)\n",
+          "readOnly": true,
+          "type": "string"
+        },
+        "euc" : {
+          "description": "End User Consent for RSP.\n",
+          "enum": ["Undefined", "Timeout", "Download Reject", "Download Postponed", "Download OK", "Download and Enable OK"],
+          "type": "string"
+        },
+        "links" : {
+          "type": "array",
+          "description": "A set of OCF Links.",
+          "items": {
+            "$ref": "#/definitions/oic.oic-link"
+          },
+          "readOnly":true
+        }
+      },
+      "type" : "object",
+      "required": ["ps","ler","lec","euc"]
+    },
+    "eSIMEasySetupUpdate" : {
+      "additionalProperties": true,
+      "description": "Update to writeable values in eSIMEasySetupResURI",
+      "properties": {
+        "euc" : {
+          "description": "End User Consent for RSP.\n",
+          "enum": ["Undefined", "Timeout", "Download Reject", "Download Postponed", "Download OK", "Download and Enable OK"],
+          "type": "string",
+          "required": "euc"
+        }
+     },
+      "type": "object"
+    }
+}
+}

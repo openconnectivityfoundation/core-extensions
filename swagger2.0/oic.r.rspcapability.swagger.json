@@ -1,0 +1,97 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Remote SIM Provisioning Capability",
+    "version": "2020-09-01",
+    "license": {
+      "name": "OCF Data Model License",
+      "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
+      "x-copyright": "Copyright 2020 Open Connectivity Foundation, Inc. All rights reserved."
+    },
+    "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
+  },
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/RSPCapabilityResURI" : {
+      "get": {
+        "description": "RSPCapability Resource stores information to help a service provider to provide appropriate cellular plans to an end user.\n",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "x-example":
+              { "rt": ["oic.r.rspcapability"],
+                "if": ["oic.if.r", "oic.if.baseline"],
+                "euiccinfo": "vyJ7gQMCAACCAwICAYMDQQEFhAyBAQCCAwVJQIMCFkWFBAV/NuCGAwkCAIcDAgMAiAIEkKkWBBRmWhQz1nwaLF24tSyWfxCgV7pcsqoWBBRmWhQz1nwaLF24tSyWfxCgV7pcsosBAgQDAQAADBAxMDAwMDAwMDAwMDAwMDAw",
+                "deviceinfo" : "oDCABBI0VnihKIADAQIDgQMCAwSCAwMEBYMDBAUGhAMFBgeFAwYHCIYDBwgJhwMICQo="
+              },
+            "schema": { "$ref": "#/definitions/RSPCapability" }
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "interface-all" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.r", "oic.if.baseline"]
+    }
+  },
+  "definitions": {
+    "RSPCapability" : {
+      "properties": {
+        "rt" : {
+          "description": "Resource Type of the Resource",
+          "items": {
+            "enum": ["oic.r.rspcapability"],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "euiccinfo" : {
+          "description": "Refers to EUICCInfo2 defined in GSMA SGP.22 Annex H.This value type shall be encoded as Major Type 2.",
+          "type": "string",
+          "maxLength": 1024
+        },
+        "deviceinfo" : {
+          "description": "Refers to DeviceInfo defined in GSMA SGP.22 Annex H.This value type shall be encoded as Major Type 2.",
+          "type": "string",
+          "maxLength": 128
+        },
+        "n" : {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "id" : {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "if" : {
+          "description": "The OCF Interfaces supported by this Resource",
+          "items": {
+            "enum": [
+              "oic.if.r",
+              "oic.if.baseline"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 2,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        }
+      },
+      "type" : "object",
+      "required":["euiccinfo", "deviceinfo"]
+    }
+  }
+}
