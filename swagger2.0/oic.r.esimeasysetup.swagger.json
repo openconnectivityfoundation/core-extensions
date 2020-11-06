@@ -437,7 +437,7 @@
           "type": "string"
         },
         "lec" : {
-          "description": "Error Code returned by the LPA while eSIM Easy Setup. \nIt indicates why it was occurred.\nIt is mapped to the GSMA error status (e.g., '8.8.1–3.8', '7', '6A 80')\n",
+          "description": "Error Code returned by the LPA while eSIM Easy Setup. \nIt indicates why it was occurred.\nIt is mapped to the GSMA error status (e.g., \"8.8.1-3.8\", \"7\", \"6A 80\"')\n",
           "readOnly": true,
           "type": "string"
         },
