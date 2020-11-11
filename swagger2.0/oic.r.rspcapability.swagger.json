@@ -61,11 +61,13 @@
         "euiccinfo" : {
           "description": "Refers to EUICCInfo2 defined in GSMA SGP.22 Annex H.This value type shall be encoded as Major Type 2.",
           "type": "string",
+          "readOnly": true,
           "maxLength": 1024
         },
         "deviceinfo" : {
           "description": "Refers to DeviceInfo defined in GSMA SGP.22 Annex H.This value type shall be encoded as Major Type 2.",
           "type": "string",
+          "readOnly": true,
           "maxLength": 128
         },
         "n" : {
