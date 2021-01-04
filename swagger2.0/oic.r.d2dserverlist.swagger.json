@@ -1,0 +1,201 @@
+{
+   "swagger": "2.0",
+   "info": {
+      "title": "D2D Server List",
+      "version": "2020-09-17",
+      "license": {
+         "name": "OCF Data Model License",
+         "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
+         "x-copyright": "Copyright 2019 Open Connectivity Foundation, Inc. All rights reserved."
+      },
+      "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
+   },
+   "schemes": ["http"],
+   "consumes": ["application/json"],
+   "produces": ["application/json"],
+   "paths": {
+      "/D2DList-URI": {
+         "get": {
+            "description": "The RETRIEVE operation on this Resource is only allowed for appropriately privileged devices (e.g. Mediator). For all other devices the Cloud Proxy is expected to reject RETRIEVE operation attempts.",
+            "parameters": [{ "$ref": "#/parameters/interface" }],
+            "responses": {
+               "200": {
+                  "description": "example response payload",
+                  "x-example": {
+                     "rt": ["oic.r.d2dserverlist"],
+                     "d2dserverlist": [
+                        {
+                           "di": "374a0ba2-f904-11ea-8002-0c9d928536d7",
+                           "eps": [{ "ep": "coaps://[2001:db8:a::b234]:20000" }]
+                        },
+                        {
+                           "di": "b63ece84-f904-11ea-bf17-0c9d928536d7",
+                           "eps": [{ "ep": "coaps://[2001:db8:a::b1d4]:11111" }]
+                        }
+                     ]
+                  },
+                  "schema": { "$ref": "#/definitions/D2DServerList" }
+               }
+            }
+         },
+         "post": {
+            "description": "The Mediator provisions the D2DServerList Resource with Device ID of the D2D Device. When the Cloud Proxy receives this request it retrieves '/oic/res' of the D2D Device, and then The Cloud Proxy completes a new entry of 'd2dserver' object with the contents of the RETRIEVE Response and adds it to D2DServerList Resource.",
+            "parameters": [
+               { "$ref": "#/parameters/interface-rw" },
+               {
+                  "in": "body",
+                  "name": "body",
+                  "required": true,
+                  "schema": { "$ref": "#/definitions/D2DServerList-di" },
+                  "x-example": {
+                     "di": "374a0ba2-f904-11ea-8002-0c9d928536d7"
+                  }
+               }
+            ],
+            "responses": {
+               "201": {
+                  "description": "new d2dserver entry was created"
+               },
+               "204": {
+                  "description": "requested d2dserver entry was updated"
+               },
+               "404": {
+                  "description": "requested D2D Device does not exist"
+               }
+            }
+         },
+         "delete": {
+            "description": "The Mediator can remove specific d2dserver entries for maintenance purpose",
+            "parameters": [
+               { "$ref": "#/parameters/interface-rw" },
+               {
+                  "name": "body",
+                  "in": "body",
+                  "required": true,
+                  "schema": { "$ref": "#/definitions/D2DServerList-dis" },
+                  "x-example": {
+                     "dis": [
+                        "374a0ba2-f904-11ea-8002-0c9d928536d7",
+                        "204c9de4-2b2b-11eb-90cc-0c9d928536d7"
+                     ]
+                  }
+               }
+            ],
+            "responses": {
+               "202": {
+                  "description": "requested d2dserver entries were deleted"
+               },
+               "404": {
+                  "description": "requested d2dserver entries were not found, dis which are not found in D2DServerList are included in the payload",
+                  "x-example": {
+                     "dis": [
+                        "374a0ba2-f904-11ea-8002-0c9d928536d7"
+                     ]
+                  },
+                  "schema": { "$ref": "#/definitions/D2DServerList-dis" }
+               }
+            }
+         }
+      }
+   },
+   "parameters": {
+      "interface": {
+         "in": "query",
+         "name": "if",
+         "type": "string",
+         "enum": ["oic.if.baseline", "oic.if.rw"]
+      },
+      "interface-rw": {
+         "in": "query",
+         "name": "if",
+         "type": "string",
+         "enum": ["oic.if.rw"]
+      }
+   },
+   "definitions": {
+      "d2dserver": {
+         "description": "D2D Device connection endpoint info",
+         "type": "object",
+         "properties": {
+            "di": {
+               "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.types-schema.json#/definitions/uuid"
+            },
+            "href": {
+               "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+            },
+            "eps": {
+               "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/eps"
+            }
+         },
+         "required": ["di", "eps"]
+      },
+      "D2DServerList": {
+         "description": "The D2DServerList Resource keeps connection information of D2D Devices which connect to the OCF Cloud through the Cloud Proxy.",
+         "type": "object",
+         "properties": {
+            "rt": {
+               "description": "Resource Type",
+               "type": "array",
+               "minItems": 1,
+               "uniqueItems": true,
+               "items": {
+                  "maxLength": 64,
+                  "type": "string",
+                  "enum": ["oic.r.d2dserverlist"]
+               },
+               "readOnly": true
+            },
+            "n": {
+               "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+            },
+            "id": {
+               "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+            },
+            "if": {
+               "description": "The OCF Interface set supported by this Resource",
+               "type": "array",
+               "minItems": 2,
+               "uniqueItems": true,
+               "items": {
+                  "type": "string",
+                  "enum": ["oic.if.baseline", "oic.if.rw"]
+               },
+               "readOnly": true
+            },
+            "d2dserverlist": {
+               "description": "This Property maintains the list of the D2D Device's connection info i.e. {Device ID, Resource URI, end points}",
+               "type": "array",
+               "uniqueItems": true,
+               "items": {
+                  "$ref": "#/definitions/d2dserver"
+               }
+            }
+         },
+         "required": ["d2dserverlist"]
+      },
+      "D2DServerList-di": {
+         "type": "object",
+         "properties": {
+            "di": {
+               "description": "Device ID of the D2D Device that connects to the OCF Cloud through the Cloud Proxy",
+               "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.types-schema.json#/definitions/uuid"
+            }
+         },
+         "required": ["di"]
+      },
+      "D2DServerList-dis": {
+         "type": "object",
+         "properties": {
+            "dis": {
+               "description": "Device IDs of the D2D Devices stored in D2DServerList Resource.",
+               "type": "array",
+               "uniqueItems": true,
+               "items": {
+                  "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.types-schema.json#/definitions/uuid"
+               }
+            }
+         },
+         "required": ["dis"]
+      }
+   }
+}
