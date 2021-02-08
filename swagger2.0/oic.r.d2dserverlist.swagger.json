@@ -17,7 +17,9 @@
       "/D2DList-URI": {
          "get": {
             "description": "The RETRIEVE operation on this Resource is only allowed for appropriately privileged devices (e.g. Mediator). For all other devices the Cloud Proxy is expected to reject RETRIEVE operation attempts.",
-            "parameters": [{ "$ref": "#/parameters/interface" }],
+            "parameters": [
+               { "$ref": "#/parameters/interface" }
+            ],
             "responses": {
                "200": {
                   "description": "example response payload",
@@ -65,21 +67,10 @@
             }
          },
          "delete": {
-            "description": "The Mediator can remove specific d2dserver entries for maintenance purpose",
+            "description": "The Mediator can remove a specific d2dserver entry for maintenance purpose",
             "parameters": [
                { "$ref": "#/parameters/interface-rw" },
-               {
-                  "name": "body",
-                  "in": "body",
-                  "required": true,
-                  "schema": { "$ref": "#/definitions/D2DServerList-dis" },
-                  "x-example": {
-                     "dis": [
-                        "374a0ba2-f904-11ea-8002-0c9d928536d7",
-                        "204c9de4-2b2b-11eb-90cc-0c9d928536d7"
-                     ]
-                  }
-               }
+               { "$ref": "#/parameters/device-id" }
             ],
             "responses": {
                "202": {
@@ -92,7 +83,7 @@
                         "374a0ba2-f904-11ea-8002-0c9d928536d7"
                      ]
                   },
-                  "schema": { "$ref": "#/definitions/D2DServerList-dis" }
+                  "schema": { "$ref": "#/definitions/D2DServerList-di" }
                }
             }
          }
@@ -110,6 +101,12 @@
          "name": "if",
          "type": "string",
          "enum": ["oic.if.rw"]
+      },
+      "device-id": {
+         "in": "query",
+         "name": "di",
+         "type": "string",
+         "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
       }
    },
    "definitions": {
@@ -182,20 +179,6 @@
             }
          },
          "required": ["di"]
-      },
-      "D2DServerList-dis": {
-         "type": "object",
-         "properties": {
-            "dis": {
-               "description": "Device IDs of the D2D Devices stored in D2DServerList Resource.",
-               "type": "array",
-               "uniqueItems": true,
-               "items": {
-                  "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.types-schema.json#/definitions/uuid"
-               }
-            }
-         },
-         "required": ["dis"]
       }
    }
 }
