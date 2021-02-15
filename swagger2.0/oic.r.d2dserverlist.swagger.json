@@ -124,7 +124,7 @@
                "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/eps"
             }
          },
-         "required": ["di", "eps"]
+         "required": ["di"]
       },
       "D2DServerList": {
          "description": "The D2DServerList Resource keeps connection information of D2D Devices which connect to the OCF Cloud through the Cloud Proxy.",
