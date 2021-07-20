@@ -14,7 +14,7 @@
   "consumes": ["application/json"],
   "produces": ["application/json"],
   "paths": {
-    "/groupsURI" : {
+    "/groupsResURI" : {
       "get": {
         "description": "The Resource to set groups to which the device belongs to. To be used in conjuction with SSM.\n",
         "parameters": [
