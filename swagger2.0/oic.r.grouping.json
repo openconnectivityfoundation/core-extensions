@@ -16,7 +16,7 @@
   "paths": {
     "/groupsResURI" : {
       "get": {
-        "description": "The Resource to set groups to which the device belongs to. To be used in conjuction with SSM.\n",
+        "description": "The Resource to set groups to which the device belongs. To be used in conjuction with SSM (Simple Secure Messaging).\n",
         "parameters": [
           {"$ref": "#/parameters/interface-all"}
         ],
