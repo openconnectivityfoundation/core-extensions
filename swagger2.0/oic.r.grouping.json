@@ -1,0 +1,124 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Grouping",
+    "version": "2021-07-15",
+    "license": {
+      "name": "OCF Data Model License",
+      "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
+      "x-copyright": "Copyright 2021 Open Connectivity Foundation, Inc. All rights reserved."
+    },
+    "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
+  },
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/groupsResURI" : {
+      "get": {
+        "description": "The Resource to set groups to which the device belongs. To be used in conjunction with SSM (Simple Secure Multicast).",
+        "parameters": [
+          {"$ref": "#/parameters/interface-all"}
+        ],
+        "responses": {
+            "200": {
+              "description" : "",
+              "x-example": {
+                "rt":   ["oic.r.groups"],
+                "groups": []
+              },
+              "schema": { "$ref": "#/definitions/groups" }
+            }
+        }
+      },
+      "post": {
+        "description": "sets all groups",
+        "parameters": [
+          {"$ref": "#/parameters/interface-rw"},
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/groups" },
+            "x-example": {
+              "groups": [ 2, 5]
+            }
+          }
+        ],
+        "responses": {
+            "200": {
+              "description" : "",
+              "x-example": {
+                "rt":   ["oic.r.groups"],
+                "groups": [ 2, 5]
+              },
+              "schema": { "$ref": "#/definitions/groups" }
+            }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "interface-rw" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.rw"]
+    },
+    "interface-all" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.rw", "oic.if.baseline"]
+    }
+  },
+  "definitions": {
+    "groups" : {
+      "properties": {
+        "groups" : {
+          "description": "list of group identifiers to which the device belongs to, empty means not belonging to a group.",
+          "items": {
+            "type": "integer"
+          },
+          "readOnly": false,
+          "type": "array"
+        },
+        "rt" : {
+          "description": "Resource Type of the Resource",
+          "items": {
+            "enum": ["oic.r.groups"],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "id" : {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "n" : {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "if" : {
+          "description": "The OCF Interfaces supported by this Resource",
+          "items": {
+            "enum": [
+              "oic.if.rw",
+              "oic.if.baseline"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "readOnly": true,
+          "uniqueItems": true,
+          "type": "array"
+        }
+      },
+      "type" : "object",
+      "required": ["groups"]
+    }
+  }
+}
