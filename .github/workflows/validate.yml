@@ -41,12 +41,12 @@ jobs:
         # find . -type f \( -iname ".*" ! -iname ".htaccess" \)
         # Refrige  Refrigera
         echo 'FILE_LIST<<EOF' >> $GITHUB_ENV
-        find . -type f -iname "*.swagger.json" ! -name '*esimeasysetup*' ! -name '*wk.mnt*'! -name '*wk.con*' ! -name '*easysetup*' ! -name '*alertcollection*'  >> $GITHUB_ENV
+        find . -type f -iname "*.swagger.json" ! -name '*esimeasysetup*' ! -name '*wk.mnt*' ! -name '*wk.con.*' ! -name '*easysetup*' ! -name '*alertcollection*'  >> $GITHUB_ENV
         echo 'EOF' >> $GITHUB_ENV
         ## files not checked:
         find . -type f -name '*esimeasysetup*'
         find . -type f -name '*wk.mnt*'
-        find . -type f -name '*wk.con*'
+        find . -type f -name '*wk.con.*'
         find . -type f -name '*easysetup*'
         find . -type f -name '*alertcollection*'
         # Using step output (space separated file list)
