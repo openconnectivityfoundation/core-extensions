@@ -30,8 +30,8 @@
           "200": {
             "description" : "",
             "x-example": [
-              {"href": "/pushconfig/1", "rt": ["oic.r.notificationseltor","oic.r.pushproxy"], "if": ["oic.if.rw","oic.if.baseline"], "eps": [{"ep": "coaps://[fe80::b1d6]:1122"}]},
-              {"href": "/pushconfig/2", "rt": ["oic.r.notificationfilter", "oic.r.pushproxy"], "if": ["oic.if.rw","oic.if.baseline"], "eps": [{"ep": "coaps://[fe80::b1d6]:1122"}]}
+              {"href": "/pushconfig/1", "rt": ["oic.r.notificationselector","oic.r.pushproxy"], "if": ["oic.if.rw","oic.if.baseline"], "eps": [{"ep": "coaps://[fe80::b1d6]:1122"}]},
+              {"href": "/pushconfig/2", "rt": ["oic.r.notificationselector", "oic.r.pushproxy"], "if": ["oic.if.rw","oic.if.baseline"], "eps": [{"ep": "coaps://[fe80::b1d6]:1122"}]}
             ],
             "schema": { "$ref": "#/definitions/links-in-response" }
           }
@@ -52,8 +52,8 @@
               "if": ["oic.if.ll","oic.if.create","oic.if.baseline"],
               "rts": ["oic.r.notificationselector", "oic.r.pushproxy"], 
               "links": [
-                {"href": "/pushconfig/1", "rt": ["oic.r.notificationseltor","oic.r.pushproxy"], "if": ["oic.if.rw","oic.if.baseline"], "eps": [{"ep": "coaps://[fe80::b1d6]:1122"}]},
-                {"href": "/pushconfig/2", "rt": ["oic.r.notificationfilter", "oic.r.pushproxy"], "if": ["oic.if.rw","oic.if.baseline"], "eps": [{"ep": "coaps://[fe80::b1d6]:1122"}]}
+                {"href": "/pushconfig/1", "rt": ["oic.r.notificationselector","oic.r.pushproxy"], "if": ["oic.if.rw","oic.if.baseline"], "eps": [{"ep": "coaps://[fe80::b1d6]:1122"}]},
+                {"href": "/pushconfig/2", "rt": ["oic.r.notificationselector", "oic.r.pushproxy"], "if": ["oic.if.rw","oic.if.baseline"], "eps": [{"ep": "coaps://[fe80::b1d6]:1122"}]}
               ]
             },
             "schema": { "$ref": "#/definitions/get-baseline-response" }
@@ -129,7 +129,7 @@
       },
       "x-example" : {
         "rt": [ "oic.r.notificationselector", "oic.r.pushproxy" ], 
-        "if": [ "oic.if.baseline", "oic.if.rw" ], 
+        "if": [ "oic.if.rw", "oic.if.baseline" ], 
         "rep": {
           "phref": "/myFilterResURI",
           "prt": [
