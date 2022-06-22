@@ -1,0 +1,263 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Push Receiver",
+    "version": "2022-06-15",
+    "license": {
+      "name": "OCF Data Model License",
+      "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
+      "x-copyright": "Copyright 2019 Open Connectivity Foundation, Inc. All rights reserved."
+    },
+    "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
+  },
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/PushReceiverResURI": {
+      "get": {
+        "description": "Resource that defines the receiver for Push Notifications",
+        "parameters": [
+          { 
+            "$ref": "#/parameters/interface-rw" 
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-example": {
+              "receivers": [
+                {
+                  "receiveruri": "/mylocaltargeturiforthermostats",
+                  "rts": ["oic.r.temperature", "oic.r.humidity"]
+                },
+                {
+                  "receiveruri": "/mylocaltargeturifordontcare",
+                  "rts": []
+                }
+              ]
+            },
+            "schema": { "$ref": "#/definitions/get-rw-response" }
+          }
+        }
+      },
+      "post": {
+        "description": "replace whole push receiver objects\n",
+        "parameters": [
+          { "$ref": "#/parameters/interface-rw" },
+          { "$ref": "#/parameters/body-receivers-update" }
+        ],
+        "responses": {
+          "204": {
+            "description": "whole receiver objects are replaced successfully\n"
+          }
+        }
+      },
+      "delete": {
+        "description": "delete whole push receiver objects\n",
+        "parameters": [
+          { 
+            "$ref": "#/parameters/interface-rw" 
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "whole receiver objects are removed successfully\n"
+          }
+        }
+      }
+    },
+    "/PushReceiverResURI?receiveruri=<uri>": {
+      "post": {
+        "description": "Updates a push receiver object which has `receiveruri`\n",
+        "parameters": [
+          { "$ref": "#/parameters/interface-rw" },
+          { "$ref": "#/parameters/receiveruri" },
+          { "$ref": "#/parameters/body-receiver-update" }
+        ],
+        "responses": {
+          "204": {
+            "description": "a receiver object is updated successfully\n"
+          }
+        }
+      },
+      "delete": {
+        "description": "delete a push receiver object which has `receiveruri`\n",
+        "parameters": [
+          { "$ref": "#/parameters/interface-rw" },
+          { "$ref": "#/parameters/receiveruri" }
+        ],
+        "responses": {
+          "204": {
+            "description": "a receiver object was removed successfully\n"
+          }
+        }
+      }
+    },
+    "/PushReceiverResURI?if=oic.if.baseline": {
+      "get": {
+        "description": "Resource that defines the receiver for Push Notifications",
+        "parameters": [
+          { "$ref": "#/parameters/interface-baseline" }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-example": {
+              "rt": ["oic.r.pushreceiver"],
+              "if": ["oic.if.rw", "oic.if.baseline"],
+              "receivers": [
+                {
+                  "receiveruri": "/mylocaltargeturiforthermostats",
+                  "rts": ["oic.r.temperature", "oic.r.humidity"]
+                },
+                {
+                  "receiveruri": "/mylocaltargeturifordontcare",
+                  "rts": []
+                }
+              ]
+            },
+            "schema": { "$ref": "#/definitions/get-baseline-response" }
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "interface-baseline": {
+      "in": "query",
+      "name": "if",
+      "type": "string",
+      "enum": ["oic.if.baseline"]
+    },
+    "interface-rw": {
+      "in": "query",
+      "name": "if",
+      "type": "string",
+      "enum": ["oic.if.rw"]
+    },
+    "receiveruri": {
+      "in": "query",
+      "name": "receiveruri",
+      "type": "string"
+    },
+    "body-receiver-update": {
+      "in": "body",
+      "name": "receiver",
+      "required": true,
+      "schema": {
+        "$ref": "#/definitions/receiver"
+      },
+      "x-example": {
+        "receiveruri": "/mylocaltargeturifordontcare", 
+        "rts": []
+      }
+    },
+    "body-receivers-update": {
+      "in": "body",
+      "name": "receivers",
+      "required": true,
+      "schema": {
+        "$ref": "#/definitions/post-rw-request"
+      },
+      "x-example": {
+        "receivers": [
+          { 
+            "receiveruri": "/mylocaltargeturifordontcare", 
+            "rts": []
+          },
+          { 
+            "receiveruri": "/mylocaltargeturifordontcare-2", 
+            "rts": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "receiver": {
+      "description": "a definition of URIs at which push payloads may be received",
+      "type": "object",
+      "properties": {
+        "receiveruri": {
+          "format": "uri",
+          "type": "string"
+        },
+        "rts": {
+          "description": "The list of allowable Resource Types for this instance of a push receiver",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 0
+        }
+      },
+      "required": ["receiveruri", "rts"]
+    },
+    "receivers": {
+      "description": "Definitions of URIs at which push payloads may be received",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/receiver"
+      },
+      "minItems": 0
+    },
+    "get-rw-response": {
+      "type": "object",
+      "properties": {
+        "receivers": {
+          "$ref": "#/definitions/receivers"
+        }
+      },
+      "required": ["receivers"]
+    },
+    "get-baseline-response": {
+      "type": "object",
+      "properties": {
+        "rt": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "maxLength": 64,
+            "enum": ["oic.r.pushreceiver"]
+          }
+        },
+        "if": {
+          "description": "The OCF Interface set supported by this Resource",
+          "type": "array",
+          "minItems": 1,
+          "readOnly": true,
+          "items": {
+            "type": "string",
+            "maxLength": 64,
+            "enum": ["oic.if.rw", "oic.if.baseline"]
+          }
+        },
+        "n": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "id": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "receivers": {
+          "$ref": "#/definitions/receivers"
+        }
+      },
+      "required": [
+        "rt", "if", "receivers"
+      ]
+    },
+    "post-rw-request": {
+      "type": "object",
+      "properties": {
+        "receivers": {
+          "$ref": "#/definitions/receivers"
+        }
+      },
+      "required": ["receivers"]
+    }
+  }
+}

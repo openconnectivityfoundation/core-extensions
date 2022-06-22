@@ -1,0 +1,334 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Notification Selector-Push Proxy",
+    "version": "2022-06-15",
+    "license": {
+      "name": "OCF Data Model License",
+      "url": "https://github.com/openconnectivityfoundation/core/blob/e28a9e0a92e17042ba3e83661e4c0fbce8bdc4ba/LICENSE.md",
+      "x-copyright": "Copyright 2019 Open Connectivity Foundation, Inc. All rights reserved."
+    },
+    "termsOfService": "https://openconnectivityfoundation.github.io/core/DISCLAIMER.md"
+  },
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/NotificationSelectorPushproxyResURI?if=oic.if.rw" : {
+      "get": {
+        "description": "Resource that defines the selector for Push Notifications",
+        "parameters": [
+          {"$ref": "#/parameters/interface-rw"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "x-example": {
+              "phref": "/myAirquality",
+              "prt": [
+                "oic.r.airquality"
+              ],
+              "pushtarget" : "coaps://[2001::200]:49355/pushed-resource-airquality",
+              "sourcert": [
+                "oic.r.pushpayload"
+              ],
+              "state": "waitingforupdate"
+            },
+            "schema": { "$ref": "#/definitions/get-nspp-rw-response" }
+          }
+        }
+      },
+      "post": {
+        "description": "Updates the current notification selector information.\n",
+        "parameters": [
+          { "$ref": "#/parameters/interface-rw" },
+          { "$ref": "#/parameters/body-update" }
+        ],
+        "responses": {
+          "204": {
+            "description" : "the notification selector-push proxy is updated successfully\n"
+          }
+        }
+      }
+    },
+    "/NotificationSelectorPushproxyResURI?if=oic.if.baseline" : {
+      "get": {
+        "description": "Resource that defines the selector for Push Notifications",
+        "parameters": [
+          {"$ref": "#/parameters/interface-baseline"}
+        ],
+        "responses": {
+          "200": {
+            "description" : "",
+            "x-example": {
+              "rt": ["oic.r.notificationselector", "oic.r.pushproxy"],
+              "if": ["oic.if.rw", "oic.if.baseline"],
+              "phref": "/myAirquality",
+              "prt": [
+                "oic.r.airquality"
+              ],
+              "pushtarget" : "coaps://[2001::200]:49355/pushed-resource-airquality",
+              "sourcert": [
+                "oic.r.pushpayload"
+              ],
+              "state": "waitingforupdate"
+            },
+            "schema": { "$ref": "#/definitions/get-nspp-baseline-response" }
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "interface-rw" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.rw"]
+    },
+    "interface-baseline" : {
+      "in" : "query",
+      "name" : "if",
+      "type" : "string",
+      "enum" : ["oic.if.baseline"]
+    },
+    "body-update": {
+      "name": "notificationselector-pushproxy",
+      "in": "body",
+      "required": true,
+      "schema": { "$ref": "#/definitions/post-nspp-rw-request" },
+      "x-example": {
+        "phref": "/myFilterResURI",
+        "pushtarget" : "coaps://[2001::200]:49355/pushed-resource-filter",
+        "sourcert": [
+          "oic.r.pushpayload"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "get-nspp-baseline-response" : {
+	  "type": "object",
+      "properties": {
+        "rt": {
+          "description": "Resource Type of the Resource",
+          "items": {
+            "enum": ["oic.r.notificationselector", "oic.r.pushproxy"],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "readOnly": true,
+          "type": "array"
+        },
+        "if": {
+          "description": "The interface set supported by this resource",
+          "items": {
+            "enum": [
+              "oic.if.rw",
+              "oic.if.baseline"
+            ],
+            "type": "string",
+            "maxLength": 64
+          },
+          "minItems": 1,
+          "readOnly": true,
+          "uniqueItems": true,
+          "type": "array"
+        },
+        "n": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/n"
+        },
+        "id": {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.common.properties.core-schema.json#/definitions/id"
+        },
+        "phref" : {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+        },
+        "prt": {
+          "description": "Resource Type(s) of the Resource(s) to be pushed",
+          "type": "array",
+          "items" : {
+            "type" : "string",
+            "maxLength": 64
+          },
+          "minItems" : 1
+        },
+        "pif": {
+          "description": "The OCF Interface(s) of the Resource(s) to be pushed",
+          "type": "array",
+          "items": {
+            "type" : "string",
+            "enum" : ["oic.if.baseline", "oic.if.ll", "oic.if.b", "oic.if.lb", "oic.if.rw", "oic.if.r", "oic.if.a", "oic.if.s" ]
+          },
+          "minItems": 1
+        },
+        "pushtarget": {
+          "description": "Points to the target of the UPDATE operation sent as a notification",
+          "type": "string",
+          "maxLength": 256
+        },
+        "sourcert": {
+          "description" : "Always set to oic.r.pushpayload",
+          "type" : "array",
+          "uniqueItems" : true,
+          "items" : {
+            "type": "string",
+            "maxLength": 64,
+            "enum" : [
+              "oic.r.pushpayload"
+            ]
+          }
+        },
+        "state": {
+          "description": "Current state of the Push Proxy",
+          "type": "string",
+          "enum": [
+            "waitingforprovisioning",
+            "waitingforupdate",
+            "waitingforresponse",
+            "waitingforupdatemitigation",
+            "waitingforresponsemitigation",
+            "error",
+            "timeout"
+          ]
+        }
+      }, 
+      "required": [
+        "rt",
+        "if",
+        "pushtarget",
+        "sourcert",
+        "state"
+      ]
+    },
+    "get-nspp-rw-response" : {
+      "type": "object",
+      "properties": {
+        "phref" : {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+        },
+        "prt": {
+          "description": "Resource Type(s) of the Resource(s) to be pushed",
+          "type": "array",
+          "items" : {
+            "type" : "string",
+            "maxLength": 64
+          },
+          "minItems" : 1
+        },
+        "pif": {
+          "description": "The OCF Interface(s) of the Resource(s) to be pushed",
+          "type": "array",
+          "items": {
+            "type" : "string",
+            "enum" : ["oic.if.baseline", "oic.if.ll", "oic.if.b", "oic.if.lb", "oic.if.rw", "oic.if.r", "oic.if.a", "oic.if.s" ]
+          },
+          "minItems": 1
+        },
+        "pushtarget": {
+          "description": "Points to the target of the UPDATE operation sent as a notification",
+          "type": "string",
+          "maxLength": 256
+        },
+        "sourcert": {
+          "description" : "Always set to oic.r.pushpayload",
+          "type" : "array",
+          "uniqueItems" : true,
+          "items" : {
+            "type": "string",
+            "maxLength": 64,
+            "enum" : [
+              "oic.r.pushpayload"
+            ]
+          }
+        },
+        "state": {
+          "description": "Current state of the Push Proxy",
+          "type": "string",
+          "enum": [
+            "waitingforprovisioning",
+            "waitingforupdate",
+            "waitingforresponse",
+            "waitingforupdatemitigation",
+            "waitingforresponsemitigation",
+            "error",
+            "timeout"
+          ]
+        }
+      }, 
+      "required": [
+        "pushtarget",
+        "sourcert",
+        "state"
+      ]
+    },
+    "post-nspp-rw-request" : {
+      "type": "object",
+      "properties": {
+        "phref" : {
+          "$ref": "https://openconnectivityfoundation.github.io/core/schemas/oic.links.properties.core-schema.json#/definitions/href"
+        },
+        "prt": {
+          "description": "Resource Type(s) of the Resource(s) to be pushed",
+          "type": "array",
+          "items" : {
+            "type" : "string",
+            "maxLength": 64
+          },
+          "minItems" : 1
+        },
+        "pif": {
+          "description": "The OCF Interface(s) of the Resource(s) to be pushed",
+          "type": "array",
+          "items": {
+            "type" : "string",
+            "enum" : ["oic.if.baseline", "oic.if.ll", "oic.if.b", "oic.if.lb", "oic.if.rw", "oic.if.r", "oic.if.a", "oic.if.s" ]
+          },
+          "minItems": 1
+        },
+        "pushtarget": {
+          "description": "Points to the target of the UPDATE operation sent as a notification",
+          "type": "string",
+          "maxLength": 256
+        },
+        "sourcert": {
+          "description" : "Always set to oic.r.pushpayload",
+          "type" : "array",
+          "uniqueItems" : true,
+          "items" : {
+            "type": "string",
+            "maxLength": 64,
+            "enum" : [
+              "oic.r.pushpayload"
+            ]
+          }
+        },
+        "state": {
+          "description": "Current state of the Push Proxy",
+          "type": "string",
+          "enum": [
+            "waitingforprovisioning",
+            "waitingforupdate",
+            "waitingforresponse",
+            "waitingforupdatemitigation",
+            "waitingforresponsemitigation",
+            "error",
+            "timeout"
+          ]
+        }
+      }, 
+      "required": [
+        "pushtarget",
+        "sourcert"
+      ]
+    }
+  }
+}
