@@ -276,7 +276,7 @@
         }
       },
       "type" : "object",
-      "required":["swmt", "swf", "swat", "swet", "tnn", "wat", "wet"]
+      "required":["swmt", "swf", "tnn"]
     },
     "WiFiConfUpdate" : {
       "properties": {
@@ -312,7 +312,7 @@
         }
       },
       "type" : "object",
-      "required":["tnn", "wat", "wet"]
+      "required":["tnn"]
     }
   }
 }
