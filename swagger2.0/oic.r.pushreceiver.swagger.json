@@ -14,7 +14,7 @@
   "consumes": ["application/json"],
   "produces": ["application/json"],
   "paths": {
-    "/PushReceiverResURI": {
+    "/PushReceiverResURI?if=oic.if.rw": {
       "get": {
         "description": "Resource that defines the receiver for Push Notifications",
         "parameters": [
