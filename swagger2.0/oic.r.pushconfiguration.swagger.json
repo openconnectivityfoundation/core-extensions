@@ -20,7 +20,7 @@
     "application/json"
   ],
   "paths": {
-    "/PushConfigurationResURI" : {
+    "/PushConfigurationResURI?if=oic.if.ll" : {
       "get": {
         "description": "Collection of oic.r.notificationselector with associated push proxies.\nAllows a Server to be configured with one or more Push Notification destinations.\n",
         "parameters": [
